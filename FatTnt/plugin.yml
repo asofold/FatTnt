@@ -1,0 +1,7 @@
+name: FatTnt
+main: me.asofold.bukkit.fattnt.FatTnt
+version: 0.0.0
+commands:
+  fattnt:
+    description: 'Reload, enable, disable etc.'
+    usage: '/fattnt reload | /fattnt enable | /fattnt disable'
