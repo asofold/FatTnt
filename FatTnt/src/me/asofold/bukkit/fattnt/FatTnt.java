@@ -54,7 +54,7 @@ import org.bukkit.util.Vector;
  * ! Must add: make affected TNT-blocks primed !
  * ! Must add: fire, if fire is set.
  * ! The Shape of the explosion is not optimal:
- *      - Attempt made: Penalty for propagation in the same direction as before.
+ *      - Attempt made: Penalty for propagation in the same direction as before [pretty much ok].
  *      - Distance map
  *      - Direction map (precalculated, less realistic, more memory, faster)
  *      - Diagonal propagation (diag only, with penalty.)
@@ -592,7 +592,7 @@ public class FatTnt extends JavaPlugin implements Listener {
 					Location loc = block.getLocation().add(vCenter);
 					Item item = world.dropItemNaturally(loc, drop.clone());
 					if (item==null) continue;
-					addRandomVelocity(item, loc, x,y,z, realRadius);
+					//addRandomVelocity(item, loc, x,y,z, realRadius);
 				}
 			}
 			block.setTypeId(0, true);
