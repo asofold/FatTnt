@@ -49,6 +49,7 @@ import org.bukkit.util.Vector;
  * 
  * 
  * Issues:
+ * ! maybe do remove the entity before the explosion [check other code / CB ?]
  * ! Sand/TNT spazzing: First set blocks without physics, then later apply physics [physics might be scheduled to the next tick ...]?
  * ! Must add: make affected TNT-blocks primed !
  * ! Must add: fire, if fire is set.
@@ -63,6 +64,7 @@ import org.bukkit.util.Vector;
  * ? Allow arbitrary strength (but limit radius) ?
  * 
  * Planned:
+ * ! add configuration flag for enabled (need not be changed by commands).
  * ! Damage entities according to strength values of the array.
  * ? Damage or change  entities according to their type (TNT->Explode, ItemStacks - damage)
  * ! More fine grained vector manipulation 
@@ -659,9 +661,6 @@ public class FatTnt extends JavaPlugin implements Listener {
 	 */
 	final void propagate(final World w, final int cx, final int cy, final int cz, 
 			final int i, int dir, float realRadius, final List<Block> blocks){
-		// Matrix position:
-		sequence[i] = seqMax;
-		strength[i] = realRadius;
 		if ( cy<0 || cy > w.getMaxHeight()) return; // TODO: maybe +-1 ?
 		// World block position:
 		final Block block = w.getBlockAt(cx,cy,cz);
@@ -677,11 +676,20 @@ public class FatTnt extends JavaPlugin implements Listener {
 			dur = defaultResistance;
 			ign = true;
 		}
+		final boolean noAdd;
+		if ( sequence[i] == seqMax){
+			if ( strength[i] >= dur) noAdd = true;
+			else noAdd = false;
+		}
+		else noAdd = false;
+		// Matrix position:
+		sequence[i] = seqMax;
+		strength[i] = realRadius;
 //		if ( randDec > 0.0) dur += random.nextFloat()*randDec;
 		if ( dur > realRadius) return; // no propagation
 		realRadius -= dur;
 		// Add block or not:
-		if (!ign && id!=0) blocks.add(block);
+		if (id!=0 && !noAdd && !ign) blocks.add(block);
 		// propagate:
 		if (i<fZ || i>izMax) return;
 		// x-
