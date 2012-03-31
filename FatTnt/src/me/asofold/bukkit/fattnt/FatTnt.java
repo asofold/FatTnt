@@ -66,7 +66,7 @@ public class FatTnt extends JavaPlugin implements Listener {
 	
 	// config
 	public static final String cfgMultRadius = "multiplier.radius";
-	public static final String cfgMultDamage = "multiplier.radius";
+	public static final String cfgMultDamage = "multiplier.damage";
 	public static final String cfgIgnore = "ignore-blocks";
 	public static final String cfgInvertIgnored= "invert-ignored";
 	public static final String cfgResistence = "resistence";
