@@ -176,19 +176,21 @@ public class FatTnt extends JavaPlugin implements Listener {
 	public boolean onCommand(CommandSender sender, Command command,
 			String label, String[] args) {
 		label = label.toLowerCase();
-		if ( label.equals("reload")){
+		if ( !label.equals("fattnt")) return false;
+		int len = args.length;
+		if (len==1 && args[0].equalsIgnoreCase("reload")){
 			if ( !checkPerm(sender, "fattnt.cmd.reload")) return true;
 			reloadSettings();
 			send(sender, "Settings reloaded.");
 			return true;
 		} 
-		else if ( label.equals("enable")){
+		else if (len==1 && args[0].equalsIgnoreCase("enable")){
 			if ( !checkPerm(sender, "fattnt.cmd.enable")) return true;
 			setHandleExplosions(true);
 			send( sender, "Explosions will be handled by FatTnt."); 
 			return true;
 		}
-		else if (label.equals("disable")){
+		else if (len==1 && args[0].equalsIgnoreCase("disable")){
 			if ( !checkPerm(sender, "fattnt.cmd.disable")) return true;
 			setHandleExplosions(false);
 			send( sender, "Explosions are back to default behavior (disregarding other plugins)."); 
