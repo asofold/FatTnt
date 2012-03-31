@@ -8,7 +8,9 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -38,26 +40,40 @@ import org.bukkit.util.Vector;
  * Experimental plugin to replace explosions completely.
  * 
  * Features: 
- * - configure: block strength
- * - configure: item strength (?+damage value alteration ?)
  * - select what entities are handled (tnt, creeper?)
- * - modifier for explosion strength in general
- * - Let explosions go through blocks without destruction (configurable, defaults to: lava, water).
- * - Fire custom event (!)
- * - damage entities according to distance or to arriving strength 
- * - configure maximum radius to be handled and if to be aborted otherwise.
+ * - configure: block resistance (strength)
+ * - modifiers for explosion radius and damage
+ * - Let explosions go through blocks without destruction (configurable, defaults to: lava, water, bedrock, other).
+ * - Fires EntityExplodeEvent and EntityDamageEvent and allows canceling by other plugins.
+ * - API might be used by other events to trigger explosions.
  * 
+ * 
+ * Issues:
+ * ! Sand/TNT spazzing: First set blocks without physics, then later apply physics [physics might be scheduled to the next tick ...]?
+ * ! Must add: make affected TNT-blocks primed !
+ * ! Must add: fire, if fire is set.
+ * ! The Shape of the explosion is not optimal:
+ *      - Attempt made: Penalty for propagation in the same direction as before.
+ *      - Distance map
+ *      - Direction map (precalculated, less realistic, more memory, faster)
+ *      - Diagonal propagation (diag only, with penalty.)
+ * ! adjust default values to something realistic...
+ * ! Re-think event priorities and canceling to allow other plugins canceling the ExplosionPrimeEvent as well [Probably ok with highest].
+ * ! Re-think which events to intercept: [Currently for performance reason TNTPrimed is canceled always, to prevent calculations for the explosion being done by CraftBukkit or MC] 
+ * ? Allow arbitrary strength (but limit radius) ?
+ * 
+ * Planned:
+ * ! Damage entities according to strength values of the array.
+ * ? Damage or change  entities according to their type (TNT->Explode, ItemStacks - damage)
+ * ! More fine grained vector manipulation 
+ * ! Use velocity events where possible !
+ * 
+ * Maybe:
+ * ? More custom settings to allow for adding fire or whatever to certain or all explosions.
+ * ! Fire custom event allowing for adjusting manipulations in a more fine grained way (!)
+ * ? configure maximum radius to be handled and if to be aborted otherwise.
  * ? propagate explosion slowly ?
- * - use array with sequence number where has been checked already, + array with explosion strength
- * - use 2x1d arrays + access methods
- * 
- * - custom damage events ?
- * - schedule damage ?
- * - schedule velocity !
- * 
- * - configurable event type ! (EntityExplodeEvent -> then others like lockette can cancel or modify it ! Problem : no entity)
- * 
- * Some API to create custom explosions.
+ * ? Schedule TNT option (limit to n per tick)
  * 
  * @author mc_dev
  *
@@ -79,13 +95,14 @@ public class FatTnt extends JavaPlugin implements Listener {
 	public static final String cfgVelMin = "velocity.min";
 	public static final String cfgVelCen= "velocity.center";
 	public static final String cfgVelRan = "velocity.random";
+	public static final String cfgFStraight = "multiplier.straight";
 	
 	int[] defaultIgnoreBlocks = new int[]{
-			7, // bedrock
+//			7, // bedrock
 			8,9, // water
 			10,11, // lava
-			49,90, // obsidian/nether portal
-			119,120 // end portal / frame
+//			49,90, // obsidian/nether portal
+//			119,120 // end portal / frame
 			};
 	
 	int[] defaultLowResistance = new int[]{
@@ -100,8 +117,44 @@ public class FatTnt extends JavaPlugin implements Listener {
 	};
 	
 	int[] defaultStrongResistance = new int[]{
-			7, 49, 116, 
+			49, 116, 
 	};
+	
+	int[] defaultMaxResistance = new int[]{
+			7, // bedrock
+	};
+	
+//	/**
+//	 * opposite direction:
+//	 * 0:  no direction
+//	 * 1:  reserved: diagonal
+//	 * 2:  x+
+//	 * 3:  reserved: diagonal
+//	 * 4:  x-
+//	 * 5:  reserved: diagonal
+//	 * 6:  y+
+//	 * 7:  reserved: diagonal
+//	 * 8:  y-
+//	 * 9:  reserved: diagonal
+//	 * 10: z+
+//	 * 11: reserved: diagonal
+//	 * 12: z-
+//	 */
+//	private final static int[] oDir = new int[]{
+//		0,  // 0: no direction maps to no direction
+//		0,  // UNUSED
+//		4,  // x+ -> x-
+//		0,  // UNUSED
+//		2,  // x- -> x+
+//		0,  // UNUSED
+//		8,  // y+ -> y-
+//		0,  // UNUSED
+//		6,  // y- -> y+
+//		0,  // UNUSED
+//		12, // z+ -> z-
+//		0,  // UNUSED
+//		10, // z- -> z+
+//	} ;
 	
 	// other
 	/**
@@ -119,15 +172,20 @@ public class FatTnt extends JavaPlugin implements Listener {
 	float maxRadius = 20.0f;
 	public static final float radiusLock = 100.0f; 
 	
-	float radiusMultiplier = 2.0f;
+	float radiusMultiplier = 4.0f;
 	
-	float damageMultiplier = 7.0f;
+	float damageMultiplier = 5.0f;
 	
 	float defaultResistance = 2.0f;
+	
+	float fStraight = 0.85f;
 	
 	boolean invertIgnored = false;
 	
 	float randDec = 0.2f;
+	/**
+	 * If to not apply damage to primed tnt.
+	 */
 	boolean sparePrimed = true;
 	
 	ExplosionPrimeEvent waitingEP = null;
@@ -143,8 +201,8 @@ public class FatTnt extends JavaPlugin implements Listener {
 	
 	boolean velUse = true;
 	float velMin = 0.2f;
-	float velCen = 3.0f;
-	float velRan = 1.5f;
+	float velCen = 1.0f;
+	float velRan = 0.5f;
 	
 	boolean[] ignore = new boolean[4096];
 	float[] resistance = new float[4096];
@@ -253,10 +311,10 @@ public class FatTnt extends JavaPlugin implements Listener {
 			changed = true;
 		}
 		if ( !cfg.contains(cfgResistence)){
-			float[] v = new float[]{1.0f, 3.0f, 5.0f};
-			int[][] ids = new int[][]{defaultLowResistance, defaultHigherResistance, defaultStrongResistance};
-			String[] keys = new String[]{"low", "higher", "strongest"};
-			for ( int i = 0; i<3; i++){
+			float[] v = new float[]{1.0f, 4.0f, 20.0f, Float.MAX_VALUE};
+			int[][] ids = new int[][]{defaultLowResistance, defaultHigherResistance, defaultStrongResistance, defaultMaxResistance};
+			String[] keys = new String[]{"low", "higher", "strongest", "indestructible"};
+			for ( int i = 0; i<v.length; i++){
 				String base = cfgResistence+"."+keys[i];
 				List<Integer> l = new LinkedList<Integer>();
 				for ( int id: ids[i]) {
@@ -307,11 +365,14 @@ public class FatTnt extends JavaPlugin implements Listener {
 			cfg.set(cfgVelRan, 1.5);
 			changed = true;
 		}
+		if ( !cfg.contains(cfgFStraight)){
+			cfg.set(cfgFStraight, 0.85);
+			changed = true;
+		}
 		return changed;
 	}
 
 	void applySettings(Configuration cfg){
-		initBlockIds();
 		handledEntities.clear();
 		for ( String n : cfg.getStringList(cfgEntities)){
 			try{
@@ -333,25 +394,49 @@ public class FatTnt extends JavaPlugin implements Listener {
 		velMin = (float) cfg.getDouble(cfgVelMin);
 		velCen = (float) cfg.getDouble(cfgVelCen);
 		velRan = (float) cfg.getDouble(cfgVelRan);
+		fStraight = (float) cfg.getDouble(cfgFStraight);
 		
 		if ( maxRadius > radiusLock) maxRadius = radiusLock;
+		initBlockIds();
 		createArrays();
-		for (Integer i : cfg.getIntegerList(cfgIgnore)){
-			if ( i>0 && i<4096){
-				ignore[i] = !invertIgnored;
-			} else{
-				getServer().getLogger().warning(msgPrefix+"Bad ignore entry: "+i);
-			}
+		for (Integer i : getIdList(cfg, cfgIgnore)){
+			ignore[i] = !invertIgnored;
 		}
 		ConfigurationSection sec = cfg.getConfigurationSection(cfgResistence);
-		for (String key : sec.getKeys(false)){ 
+		for (String key : sec.getKeys(false)){
 			if ( "default".equalsIgnoreCase(key)) continue;
-			float val = (float) sec.getDouble("value", 1.0);
-			List<Integer> ids = sec.getIntegerList("ids");
-			for ( Integer i : ids){
-				strength[i] = val;
+			float val = (float) cfg.getDouble(cfgResistence+"."+key+".value", 1.0);
+			for ( Integer i : getIdList(cfg, cfgResistence+"."+key+".ids")){
+				resistance[i] = val;
 			}
 		}
+	}
+	
+	public static List<Integer> getIdList(Configuration cfg, String path){
+		List<Integer> out = new LinkedList<Integer>();
+		List<String> ref = cfg.getStringList(path);
+		for ( Object x : ref){
+			Integer id = null;
+			if ( x instanceof Number){
+				// just in case
+				id = ((Number) x).intValue();
+			} else if ( x instanceof String){
+				try{
+					id = Integer.parseInt((String) x);
+				} catch(NumberFormatException exc) {
+					Material mat = Material.matchMaterial((String) x);
+					if ( mat != null){
+						id = mat.getId();
+					}
+				}
+			}
+			if (id!=null){
+				if ( id>=0 && id<4096) out.add(id);
+				continue;
+			}
+			Bukkit.getServer().getLogger().warning(msgPrefix+"Bad item ("+path+"): "+x);
+		}
+		return out;
 	}
 	
 	private void initBlockIds() {
@@ -372,7 +457,6 @@ public class FatTnt extends JavaPlugin implements Listener {
 		strength = new float[sz];
 		for ( int i = 0; i<sz; i++){
 			sequence[i] = 0;
-			strength[i] = defaultResistance;
 		}
 	}
 
@@ -432,7 +516,6 @@ public class FatTnt extends JavaPlugin implements Listener {
 		Entity dummyEntity = world.spawnCreature(new Location(world,x,y,z), EntityType.CHICKEN);
 		if ( dummyEntity==null){
 			// TODO: maybe warn ?
-			System.out.println("CHECK ALL ENTITIES"); // TODO: REMOVE
 			nearbyEntities = new LinkedList<Entity>();
 			for ( Entity entity : world.getEntities() ){
 				Location ref = entity.getLocation();
@@ -558,7 +641,7 @@ public class FatTnt extends JavaPlugin implements Listener {
 		List<Block> blocks = new LinkedList<Block>();
 		seqMax ++; // new round !
 		// starting at center block decrease weight and check neighbor blocks recursively, while weight > durability continue, only check
-		propagate(world, (int)cx, (int)cy, (int)cz, center*(1+fY+fZ), realRadius, blocks);
+		propagate(world, (int)cx, (int)cy, (int)cz, center*(1+fY+fZ), 0, realRadius, blocks);
 		return blocks;
 	}
 	
@@ -575,7 +658,7 @@ public class FatTnt extends JavaPlugin implements Listener {
 	 * @param blocks
 	 */
 	final void propagate(final World w, final int cx, final int cy, final int cz, 
-			final int i, float realRadius, final List<Block> blocks){
+			final int i, int dir, float realRadius, final List<Block> blocks){
 		// Matrix position:
 		sequence[i] = seqMax;
 		strength[i] = realRadius;
@@ -591,28 +674,64 @@ public class FatTnt extends JavaPlugin implements Listener {
 			ign = ignore[id];
 		}
 		else{
-			dur = 1.0f;
+			dur = defaultResistance;
 			ign = true;
 		}
-		if ( randDec > 0.0) dur += random.nextFloat()*randDec;
+//		if ( randDec > 0.0) dur += random.nextFloat()*randDec;
 		if ( dur > realRadius) return; // no propagation
 		realRadius -= dur;
 		// Add block or not:
-		if (!ign) blocks.add(block);
+		if (!ign && id!=0) blocks.add(block);
 		// propagate:
 		if (i<fZ || i>izMax) return;
-		final int j1 = i - 1;
-		if (sequence[j1]!=seqMax || realRadius>strength[j1]) propagate(w, cx-1, cy, cz, j1, realRadius, blocks); 	
-		final int j2 = i + 1;
-		if (sequence[j2]!=seqMax || realRadius>strength[j2]) propagate(w, cx+1, cy, cz, j2, realRadius, blocks); 
-		final int j3 = i - fY;
-		if (sequence[j3]!=seqMax || realRadius>strength[j3]) propagate(w, cx, cy-1, cz, j3, realRadius, blocks); 
-		final int j4 = i + fY;
-		if (sequence[j4]!=seqMax || realRadius>strength[j4]) propagate(w, cx, cy+1, cz, j4, realRadius, blocks); 
-		final int j5 = i - fZ;
-		if (sequence[j5]!=seqMax || realRadius>strength[j5]) propagate(w, cx, cy, cz-1, j5, realRadius, blocks); 
-		final int j6 = i + fZ;
-		if (sequence[j6]!=seqMax || realRadius>strength[j6]) propagate(w, cx, cy, cz+1, j6, realRadius, blocks); 
+		// x-
+		if (dir != 2){
+			final float useR; // radius to be used.
+			if (dir==4) useR = realRadius * fStraight;
+			else useR = realRadius;
+			final int j1 = i - 1;
+			if (sequence[j1]!=seqMax || useR>strength[j1]) propagate(w, cx-1, cy, cz, j1, 4, useR, blocks);
+		}
+		// x+
+		if ( dir != 4){
+			final float useR; // radius to be used.
+			if (dir==2) useR = realRadius * fStraight;
+			else useR = realRadius;
+			final int j2 = i + 1;
+			if (sequence[j2]!=seqMax || useR>strength[j2]) propagate(w, cx+1, cy, cz, j2, 2, useR, blocks);
+		}
+		// y-
+		if (dir != 6){
+			final float useR; // radius to be used.
+			if (dir==8) useR = realRadius * fStraight;
+			else useR = realRadius;
+			final int j3 = i - fY;
+			if (sequence[j3]!=seqMax || useR>strength[j3]) propagate(w, cx, cy-1, cz, j3, 8, useR, blocks);
+		}
+		// y+
+		if (dir != 8){
+			final float useR; // radius to be used.
+			if (dir==6) useR = realRadius * fStraight;
+			else useR = realRadius;
+			final int j4 = i + fY;
+			if (sequence[j4]!=seqMax || useR>strength[j4]) propagate(w, cx, cy+1, cz, j4, 6, useR, blocks);
+		}
+		// z-
+		if (dir != 10){
+			final float useR; // radius to be used.
+			if (dir==12) useR = realRadius * fStraight;
+			else useR = realRadius;
+			final int j5 = i - fZ;
+			if (sequence[j5]!=seqMax || useR>strength[j5]) propagate(w, cx, cy, cz-1, j5, 12, useR, blocks);
+		}
+		// z+
+		if (dir!=12){
+			final float useR; // radius to be used.
+			if (dir==10) useR = realRadius * fStraight;
+			else useR = realRadius;
+			final int j6 = i + fZ;
+			if (sequence[j6]!=seqMax || useR>strength[j6]) propagate(w, cx, cy, cz+1, j6, 10, useR, blocks); 
+		}
 	}
 	
 }
