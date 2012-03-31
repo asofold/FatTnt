@@ -595,7 +595,7 @@ public class FatTnt extends JavaPlugin implements Listener {
 					//addRandomVelocity(item, loc, x,y,z, realRadius);
 				}
 			}
-			block.setTypeId(0, true);
+			block.setTypeId(0, true); // TODO: evaluate if still spazzing appears (if so: use false, and then iterate again for applying physics after block changes).
 		}
 		
 		// entities:
