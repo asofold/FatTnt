@@ -369,6 +369,7 @@ public class FatTnt extends JavaPlugin implements Listener {
 		strength = new float[sz];
 		for ( int i = 0; i<sz; i++){
 			sequence[i] = 0;
+			strength[i] = defaultResistance;
 		}
 	}
 	
