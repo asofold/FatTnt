@@ -630,7 +630,7 @@ public class FatTnt extends JavaPlugin implements Listener {
 		// Matrix position:
 		sequence[i] = seqMax;
 		strength[i] = realRadius;
-		if ( cy > w.getMaxHeight()) return; // TODO: maybe +-1 ?
+		if ( cy<0 || cy > w.getMaxHeight()) return; // TODO: maybe +-1 ?
 		// World block position:
 		final Block block = w.getBlockAt(cx,cy,cz);
 		final int id = block.getTypeId();
