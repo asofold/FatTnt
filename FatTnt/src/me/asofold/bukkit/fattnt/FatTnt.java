@@ -163,7 +163,6 @@ public class FatTnt extends JavaPlugin implements Listener {
 	public void onEnable() {
 		reloadSettings();
 		getServer().getPluginManager().registerEvents(this, this);
-		getCommand("fattnt").setExecutor(this);
 		System.out.println(msgPrefix+getDescription().getFullName()+" is enabled.");
 	}
 	
@@ -316,7 +315,9 @@ public class FatTnt extends JavaPlugin implements Listener {
 		handledEntities.clear();
 		for ( String n : cfg.getStringList(cfgEntities)){
 			try{
-				handledEntities.add(EntityType.fromName(n));
+				EntityType etp = EntityType.valueOf(n.toUpperCase());
+				if ( etp == null) throw new IllegalArgumentException();
+				handledEntities.add(etp);
 			} catch (Throwable t){
 				getServer().getLogger().warning(msgPrefix+"Bad entity: "+n);
 			}
@@ -374,58 +375,6 @@ public class FatTnt extends JavaPlugin implements Listener {
 			strength[i] = defaultResistance;
 		}
 	}
-	
-	/**
-	 * Get Sequence number.
-	 * @param x
-	 * @param y
-	 * @param z
-	 * @return
-	 */
-	final int getSeq(final int x, final int y, final int z){
-		return sequence[x+y*fY+z*fZ];
-	}
-	
-	/**
-	 * Set sequence number for the given position, if sequence
-	 * @param x
-	 * @param y
-	 * @param z
-	 * @param seq
-	 */
-	final void setSeq(final int x, final int y, final int z, final int seq){
-		sequence[x+y*fY+z*fZ] = seq;
-	}
-	
-	/**
-	 * Get strength.
-	 * @param x
-	 * @param y
-	 * @param z
-	 * @return
-	 */
-	final float getStr(final int x, final int y, final int z){
-		return strength[x+y*fY+z*fZ];
-	}
-	
-	/**
-	 * Increase strength to val, if val is higher.
-	 * @param x
-	 * @param y
-	 * @param z
-	 * @param val
-	 * @return If increased
-	 */
-	final boolean incStr(final int x, final int y, final int z, final float val){
-		final int i = x+y*fY+z*fZ;
-		final float ref = strength[i];
-		if ( ref < val){
-			strength[i] = val;
-			return true;
-		} else{
-			return false;
-		}
-	}
 
 	@EventHandler(priority=EventPriority.HIGHEST)
 	void onExplosionPrimeLowest(ExplosionPrimeEvent event){
@@ -435,16 +384,16 @@ public class FatTnt extends JavaPlugin implements Listener {
 		else if (!handledEntities.contains(event.getEntityType())) return;
 		// do prepare to handle this explosion:
 		event.setCancelled(true);
-		waitingEP = event;
-	}
-	
-	@EventHandler(priority=EventPriority.MONITOR)
-	void onExplosionPrime(ExplosionPrimeEvent event){
-		// check event 
-		if ( waitingEP != event) return;
-		waitingEP = null;
-		// event is to be handled:
-		if ( !event.isCancelled()) event.setCancelled(true); // just in case other plugins mess with this one.
+//		waitingEP = event;
+//	}
+//	
+//	@EventHandler(priority=EventPriority.MONITOR)
+//	void onExplosionPrime(ExplosionPrimeEvent event){
+//		// check event 
+//		if ( waitingEP != event) return;
+//		waitingEP = null;
+//		// event is to be handled:
+//		if ( !event.isCancelled()) event.setCancelled(true); // just in case other plugins mess with this one.
 		EntityType type = event.getEntityType();
 		Entity entity = event.getEntity();
 		Location loc = entity.getLocation().clone();
