@@ -62,6 +62,7 @@ import org.bukkit.util.Vector;
  * ! Re-think event priorities and canceling to allow other plugins canceling the ExplosionPrimeEvent as well [Probably ok with highest].
  * ! Re-think which events to intercept: [Currently for performance reason TNTPrimed is canceled always, to prevent calculations for the explosion being done by CraftBukkit or MC] 
  * ? Allow arbitrary strength (but limit radius) ?
+ * ? flag: alwaysIncludeTNT -> even if resistance of tnt is to high still add tnt.
  * 
  * Planned:
  * ! add configuration flag for enabled (need not be changed by commands).
@@ -500,6 +501,7 @@ public class FatTnt extends JavaPlugin implements Listener {
 		// create a fake explosion
 		World world = loc.getWorld();
 		world.createExplosion(loc, 0.0F);
+		if (radius==0.0f) return;
 		// calculate effects
 		// WORKAROUND:
 		float realRadius = radius*radiusMultiplier;
@@ -554,7 +556,7 @@ public class FatTnt extends JavaPlugin implements Listener {
 	}
 	
 	/**
-	 * 
+	 * (this method uses seqMax, such that it should not get manipulated anywhere but inside of getExplodingBlocks)
 	 * @param world
 	 * @param x
 	 * @param y
@@ -570,7 +572,7 @@ public class FatTnt extends JavaPlugin implements Listener {
 		if ( realRadius > maxRadius){
 			// TODO: setttings ?
 			realRadius = maxRadius;
-		}
+		} else if (realRadius == 0.0f) return;
 		Server server = getServer();
 		PluginManager pm = server.getPluginManager();
 		
@@ -599,20 +601,26 @@ public class FatTnt extends JavaPlugin implements Listener {
 		}
 		
 		// entities:
-		final double damBase = realRadius * damageMultiplier;
 		for ( Entity entity : nearbyEntities){
-			// TODO: damage entities according to type, + vector ?
 			// test damage:
-			double d = entity.getLocation().distance(new Location(world,x,y,z)); // TODO efficiency
-			// TODO: test the strength map depending on settings !
-			if ( d>realRadius) continue;
-			addRandomVelocity(entity, entity.getLocation(), x,y,z, realRadius);
+			final Location loc = entity.getLocation();
+			final int dx = center + loc.getBlockX() - (int)x;
+			final int dy = center + loc.getBlockY() - (int)y;
+			final int dz = center + loc.getBlockZ() - (int)z ;
+			final int index = dx+fY*dy+fZ*dz;
+			if ( index<0 || index>= strength.length) continue; // outside of possible bounds.
+			if ( sequence[index] != seqMax) continue; // unaffected // WARNING: this uses seqMax, which has been set in getExplodingBlocks !
+			final float effRad = strength[index]; // effective radius / strength
+			addRandomVelocity(entity, loc, x,y,z, effRad, realRadius);
 			if (sparePrimed && (entity instanceof TNTPrimed)) continue;
-			int damage = 1 + (int) (damBase/(d+1.0)) ;
+			// TODO: damage entities according to type
+			int damage = 1 + (int) (effRad*damageMultiplier) ;
+			// TODO: take into account armor, enchantments and such?
 			EntityDamageEvent event = new EntityDamageEvent(entity, DamageCause.ENTITY_EXPLOSION, damage);
 			pm.callEvent(event);
 			if (!event.isCancelled()){
 				if ( entity instanceof LivingEntity){
+					// This seems to work.
 					((LivingEntity) entity).setLastDamageCause(event);
 				}
 				else entity.setLastDamageCause(event); // TODO
@@ -622,13 +630,24 @@ public class FatTnt extends JavaPlugin implements Listener {
 		
 	}
 
+
+	/**
+	 * 
+	 * @param entity
+	 * @param loc
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param part part of radius (effective)
+	 * @param max max radius
+	 */
 	private void addRandomVelocity(Entity entity, Location loc, double x, double y,
-			double z, float realRadius) {
-		// TODO: make some things configurable !
+			double z, float part, float max) {
+		// TODO: make some things configurable, possible entity dependent and !
 		if (!velUse) return;
 		Vector v = entity.getVelocity();
 		Vector fromCenter = new Vector(loc.getX()-x,loc.getY()-y,loc.getZ()-z).normalize();
-		Vector rv = v.add(fromCenter.multiply(velMin+random.nextFloat()*velCen)).add(Vector.getRandom().multiply(velRan));
+		Vector rv = v.add((fromCenter.multiply(velMin+random.nextFloat()*velCen)).add(Vector.getRandom().multiply(velRan)).multiply(part/max));
 		if (entity instanceof LivingEntity) ((LivingEntity) entity).setVelocity(rv); 
 		else if (entity instanceof TNTPrimed) ((TNTPrimed) entity).setVelocity(rv);
 		else entity.setVelocity(rv);
