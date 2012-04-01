@@ -63,7 +63,10 @@ CHANGELOG (May show an unreleased version but only done changes.)
 
 *** [Beta/Dev stage]
 
-(0.1.5)
+(0.1.5-DEV)
+- (add) API, for later: ExplosionManager.createExplosionEffect 
+- (refactor) ExplosionManager: split applyExplosionEffects for blocks and entities.
+- (add)  API: allow damage multiplier as argument.
 - (adjust) default damage and radius multipliers.
 - (refactor) Put default values to Defaults, reference from Settings.
 - (refactor) Use custom event classes extending the standard events.
