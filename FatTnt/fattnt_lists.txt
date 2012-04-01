@@ -63,6 +63,9 @@ CHANGELOG (May show an unreleased version but only done changes.)
 
 *** [Beta/Dev stage]
 
+(0.1.3)
+- (Add) API: getInstance, static: getInstance for the Plugin.
+
 (0.1.2)
 - (add) API for explosion strength.
 - (refactor) Split some more code off plugin.
