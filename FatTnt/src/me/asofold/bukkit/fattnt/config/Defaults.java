@@ -43,8 +43,8 @@ public class Defaults {
 			59,	63, 75,76, 78, 83, 102, 104, 105, 106, 111,
 	};
 	public static final int[] defaultHigherResistance = new int[]{
-			1, 4, 22, 23, 41,42,45, 44, 48, 54, 57, 
-			98, 108, 109, 112, 95
+			23, 41,42, 45, 54, 57, 95,
+			98, 108, 109
 	};
 	public static final int[] defaultStrongResistance = new int[]{
 			49, 116, 
