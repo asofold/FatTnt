@@ -51,16 +51,10 @@ import org.bukkit.util.Vector;
  * 
  * Issues:
  * ! Velocity cap + maybe flags what to apply it to
- * ! Explosion is offset by one (x)?
+ * ! Explosion is offset somehow
  * ! maybe do remove the entity before the explosion [check other code / CB ?]
  * ! Sand/TNT spazzing: First set blocks without physics, then later apply physics [physics might be scheduled to the next tick ...]?
- * ! Must add: make affected TNT-blocks primed !
  * ! Must add: fire, if fire is set.
- * ! The Shape of the explosion is not optimal:
- *      - Attempt made: Penalty for propagation in the same direction as before [pretty much ok].
- *      - Distance map
- *      - Direction map (precalculated, less realistic, more memory, faster)
- *      - Diagonal propagation (diag only, with penalty.)
  * ! adjust default values to something realistic...
  * ! Re-think event priorities and canceling to allow other plugins canceling the ExplosionPrimeEvent as well [Probably ok with highest].
  * ! Re-think which events to intercept: [Currently for performance reason TNTPrimed is canceled always, to prevent calculations for the explosion being done by CraftBukkit or MC] 
@@ -77,6 +71,7 @@ import org.bukkit.util.Vector;
  * ! MAKE SETTINGE DETACHED , default, world specific, ... further ...
  * ! More events (+configurable if, also for the old ones !) like ItemSpawn or similar.
  * ! Random tick delay for primed tnt.
+ * ! direct explode feature (threshold + possibly with probabilities: 1. p(direct) -> if not... maybe prime)
  * 
  * Maybe:
  * ? More custom settings to allow for adding fire or whatever to certain or all explosions.
@@ -85,8 +80,8 @@ import org.bukkit.util.Vector;
  * ? propagate explosion slowly ?
  * ? Schedule TNT option (limit to n per tick)
  * ? use lock + exception later on for API access
- *  * ? Direct explosion feature / prime tnt from itm drops or when in fire?
- * 
+ * ? Direct explosion feature / prime tnt from itm drops or when in fire?
+ * ? other explosion shaping
  * @author mc_dev
  *
  */
