@@ -37,7 +37,7 @@ public class ArrayPropagation extends Propagation {
 	
 	float fStraight;
 	
-	float minStr;
+	float minRes;
 	
 	private static final int[] ortDir = new int[]{2,4,6,8,10,12};
 	
@@ -138,7 +138,7 @@ public class ArrayPropagation extends Propagation {
 	public ArrayPropagation(Settings settings) {
 		super(settings);
 		fStraight = settings.fStraight;
-		minStr = settings.minResistance;
+		minRes = settings.minResistance;
 		createArrays();
 		
 		// TODO: init on base of settings
@@ -185,7 +185,7 @@ public class ArrayPropagation extends Propagation {
 			List<Block> blocks = new LinkedList<Block>();
 			seqMax ++; // new round !
 			// starting at center block decrease weight and check neighbor blocks recursively, while weight > durability continue, only check
-			if (FatTnt.DEBUG) System.out.println(Defaults.msgPrefix+"Explosion at: "+cx+","+cy+","+cz);
+			if (FatTnt.DEBUG) System.out.println(Defaults.msgPrefix+"Explosion at: "+world.getName()+" / "+cx+","+cy+","+cz);
 			this.cx = Utils.floor(cx);
 			this.cy = Utils.floor(cy);
 			this.cz = Utils.floor(cz);
@@ -214,7 +214,7 @@ public class ArrayPropagation extends Propagation {
 		// Block type check (id):
 		final int id;
 		final Block block;
-		if ( y>=0 || y <= w.getMaxHeight()){// TODO: maybe +-1 ?
+		if ( y>=0 && y <= w.getMaxHeight()){// TODO: maybe +-1 ?
 			block = w.getBlockAt(x,y,z);
 			id = block.getTypeId();
 		} 
@@ -260,7 +260,7 @@ public class ArrayPropagation extends Propagation {
 			// Check penalty for propagation in the same direction again:
 			if ( nd == oDir[dir]) effStr = expStr * fStraight;
 			else effStr = expStr;
-			if (effStr<minStr) continue; // not strong enough to propagate through any further block.
+			if (effStr<minRes) continue; // not strong enough to propagate through any further block.
 			final int j = i + aInc[3];
 			if (sequence[j]!=seqMax || effStr>strength[j]) propagate(w, x+xInc[0], y+yInc[1], z+zInc[2], j, 4, effStr, blocks);
 		}
