@@ -63,6 +63,8 @@ CHANGELOG (May show an unreleased version but only done changes.)
 *** [Beta/Dev stage]
 
 (0.1.5)
+- (adjust) default damage and radius multipliers.
+- (refactor) Put default values to Defaults, reference from Settings.
 - (refactor) Use custom event classes extending the standard events.
 
 (0.1.4)

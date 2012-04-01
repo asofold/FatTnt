@@ -59,7 +59,46 @@ public class Defaults {
 	public static final String msgPrefix = "[FatTnt] ";
 	public static final float radiusLock = 100.0f;
 	
-	public static final Vector vCenter = new Vector(0.5,0.5,0.5); 
+	public static final Vector vCenter = new Vector(0.5,0.5,0.5);
+	
+	public static final int blockArraySize = 4096; 
+	
+	/**
+	 * Handle and alter explosions
+	 */
+	public static final boolean handleExplosions = true;
+	
+	public static final float maxRadius = 20.0f;
+	
+	public static final float radiusMultiplier = 6.0f;
+	
+	public static final float damageMultiplier = 4.0f;
+	
+	public static final float defaultResistance = 2.0f;
+	
+	public static final float fStraight = 0.85f;
+	
+	public static final boolean invertIgnored = false;
+	
+	public static final String[] handledEntities = new String[]{
+		"PRIMED_TNT",
+	};
+	
+	public static final float randDec = 0.2f;
+	/**
+	 * If to not apply damage to primed tnt.
+	 */
+	public static final boolean sparePrimed = true;
+	
+	public static final double thresholdTntDirect = 2.0;
+	
+	public static final boolean velUse = true;
+	public static final float velMin = 0.2f;
+	public static final float velCen = 1.0f;
+	public static final float velRan = 0.5f;
+	public static final boolean velOnPrime = false;
+
+	public static final  float defaultYield = 0.2f;
 	
 	
 //	/**
@@ -104,7 +143,9 @@ public class Defaults {
 		boolean changed = false;
 		if ( !cfg.contains(cfgEntities)){
 			List<String> l = new LinkedList<String>();
-			l.add("PRIMED_TNT");
+			for (String et : handledEntities){
+				l.add(et);
+			}
 			cfg.set(cfgEntities, l);
 			changed = true;
 		}

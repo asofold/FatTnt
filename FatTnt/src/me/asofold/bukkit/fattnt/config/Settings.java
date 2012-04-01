@@ -20,43 +20,43 @@ public class Settings {
 	/**
 	 * Handle and alter explosions
 	 */
-	public boolean handleExplosions = true;
+	public boolean handleExplosions = Defaults.handleExplosions;
 	
 	/**
 	 * Defaults to empty !
 	 */
 	public final Set<EntityType> handledEntities = new HashSet<EntityType>();
 	
-	public float maxRadius = 20.0f;
+	public float maxRadius = Defaults.maxRadius;
 	
-	public float radiusMultiplier = 4.0f;
+	public float radiusMultiplier = Defaults.radiusMultiplier;
 	
-	public float damageMultiplier = 5.0f;
+	public float damageMultiplier = Defaults.damageMultiplier;
 	
-	public float defaultResistance = 2.0f;
+	public float defaultResistance = Defaults.defaultResistance;
 	
-	public float fStraight = 0.85f;
+	public float fStraight = Defaults.fStraight;
 	
-	public boolean invertIgnored = false;
+	public boolean invertIgnored = Defaults.invertIgnored;
 	
-	public float randDec = 0.2f;
+	public float randDec = Defaults.randDec;
 	/**
 	 * If to not apply damage to primed tnt.
 	 */
-	public boolean sparePrimed = true;
+	public boolean sparePrimed = Defaults.sparePrimed;
 	
-	public double thresholdTntDirect = 2.0;
+	public double thresholdTntDirect = Defaults.thresholdTntDirect;
 	
-	public boolean velUse = true;
-	public float velMin = 0.2f;
-	public float velCen = 1.0f;
-	public float velRan = 0.5f;
-	public boolean velOnPrime = false;
-	
-	public boolean[] ignore = new boolean[4096];
-	public float[] resistance = new float[4096];
+	public boolean velUse = Defaults.velUse;
+	public float velMin = Defaults.velMin;
+	public float velCen = Defaults.velCen;
+	public float velRan = Defaults.velRan;
+	public boolean velOnPrime = Defaults.velOnPrime;
 
-	public  float defaultYield = 0.2f;
+	public  float defaultYield = Defaults.defaultYield;
+	
+	public boolean[] ignore = new boolean[Defaults.blockArraySize];
+	public float[] resistance = new float[Defaults.blockArraySize];
 	
 	public void applyConfig(Configuration cfg){
 		handledEntities.clear();
