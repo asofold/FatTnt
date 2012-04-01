@@ -95,4 +95,15 @@ public class Utils {
 		// TODO: maybe some destruction chance !
 	}
 
+	/**
+	 * Block coordinate for double, especially important for negative numbers.
+	 * (Adapted From Bukkit/NumberConversions.)
+	 * @param x
+	 * @return
+	 */
+	public static final int floor(final double x) {
+        final int floor = (int) x;
+        return (floor == x)? floor : floor - (int) (Double.doubleToRawLongBits(x) >>> 63);
+    }
+
 }
