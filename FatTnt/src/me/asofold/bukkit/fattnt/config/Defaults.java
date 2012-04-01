@@ -70,9 +70,9 @@ public class Defaults {
 	
 	public static final float maxRadius = 20.0f;
 	
-	public static final float radiusMultiplier = 6.0f;
+	public static final float radiusMultiplier = 3.0f;
 	
-	public static final float damageMultiplier = 4.0f;
+	public static final float damageMultiplier = 8.0f;
 	
 	public static final float defaultResistance = 2.0f;
 	
@@ -99,40 +99,6 @@ public class Defaults {
 	public static final boolean velOnPrime = false;
 
 	public static final  float defaultYield = 0.2f;
-	
-	
-//	/**
-//	 * opposite direction:
-//	 * 0:  no direction
-//	 * 1:  reserved: diagonal
-//	 * 2:  x+
-//	 * 3:  reserved: diagonal
-//	 * 4:  x-
-//	 * 5:  reserved: diagonal
-//	 * 6:  y+
-//	 * 7:  reserved: diagonal
-//	 * 8:  y-
-//	 * 9:  reserved: diagonal
-//	 * 10: z+
-//	 * 11: reserved: diagonal
-//	 * 12: z-
-//	 */
-//	private final static int[] oDir = new int[]{
-//		0,  // 0: no direction maps to no direction
-//		0,  // UNUSED
-//		4,  // x+ -> x-
-//		0,  // UNUSED
-//		2,  // x- -> x+
-//		0,  // UNUSED
-//		8,  // y+ -> y-
-//		0,  // UNUSED
-//		6,  // y- -> y+
-//		0,  // UNUSED
-//		12, // z+ -> z-
-//		0,  // UNUSED
-//		10, // z- -> z+
-//	} ;
-	
 	
 	/**
 	 * 
