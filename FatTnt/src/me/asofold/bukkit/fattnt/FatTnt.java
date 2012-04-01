@@ -10,6 +10,7 @@ import me.asofold.bukkit.fattnt.propagation.Propagation;
 import me.asofold.bukkit.fattnt.propagation.PropagationFactory;
 import me.asofold.bukkit.fattnt.utils.Utils;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -22,6 +23,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -250,6 +252,15 @@ public class FatTnt extends JavaPlugin implements Listener {
 		return propagation.getStrength(x, y, z);
 	}
 	
-
+	/**
+	 * Convenience.
+	 * (API)
+	 * @return
+	 */
+	public static FatTnt getInstance(){
+		Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("FatTnt");
+		if ( plugin instanceof FatTnt ) return  (FatTnt) plugin;
+		else return null;
+	}
 	
 }
