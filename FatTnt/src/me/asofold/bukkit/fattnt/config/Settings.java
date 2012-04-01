@@ -35,6 +35,11 @@ public class Settings {
 	
 	public float defaultResistance = Defaults.defaultResistance;
 	
+	/**
+	 * Set automatically according to settings;
+	 */
+	public float minResistance = 0.0f;
+	
 	public float fStraight = Defaults.fStraight;
 	
 	public boolean invertIgnored = Defaults.invertIgnored;
@@ -59,6 +64,7 @@ public class Settings {
 	public float[] resistance = new float[Defaults.blockArraySize];
 	
 	public void applyConfig(Configuration cfg){
+		minResistance = Float.MAX_VALUE;
 		handledEntities.clear();
 		for ( String n : cfg.getStringList(Defaults.cfgEntities)){
 			try{
@@ -73,6 +79,7 @@ public class Settings {
 		damageMultiplier = (float) cfg.getDouble(Defaults.cfgMultDamage);
 		invertIgnored = cfg.getBoolean(Defaults.cfgInvertIgnored);
 		defaultResistance = (float) cfg.getDouble(Defaults.cfgDefaultResistence);
+		minResistance = Math.min(minResistance, defaultResistance);
 		maxRadius = (float) cfg.getDouble(Defaults.cfgMaxRadius);
 		randDec = (float) cfg.getDouble(Defaults.cfgRandRadius);
 		defaultYield = (float) cfg.getDouble(Defaults.cfgYield);
@@ -94,6 +101,7 @@ public class Settings {
 		for (String key : sec.getKeys(false)){
 			if ( "default".equalsIgnoreCase(key)) continue;
 			float val = (float) cfg.getDouble(Defaults.cfgResistence+"."+key+".value", 1.0);
+			minResistance = Math.min(minResistance, val);
 			for ( Integer i : Defaults.getIdList(cfg, Defaults.cfgResistence+"."+key+".ids")){
 				resistance[i] = val;
 			}
