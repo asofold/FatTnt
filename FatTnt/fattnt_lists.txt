@@ -1,9 +1,8 @@
 FatTnt lists
 ---------------------------------------
 
-LICENSE
------------------
-[LICENSE PENDING]
+LICENSE [LICENSE PENDING]
+--------------------------
 Something minimal on top of what can be done with a Bukkit/CraftBukkit plugin.
 Supposedly this would range from public domain (probably not) to somewhere around MIT license.
 Actually it is safe to assume MIT license, but if the license can be "less", i will probably make it so.
@@ -63,6 +62,8 @@ CHANGELOG (May show an unreleased version but only done changes.)
 
 *** [Beta/Dev stage]
 
+(0.1.5)
+- (refactor) Use custom event classes extending the standard events.
 
 (0.1.4)
 - (bugfix) Remove debug output, add final debug flag to FatTnt.

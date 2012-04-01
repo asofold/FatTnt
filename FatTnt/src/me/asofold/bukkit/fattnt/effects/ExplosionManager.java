@@ -6,6 +6,8 @@ import java.util.Random;
 
 import me.asofold.bukkit.fattnt.config.Defaults;
 import me.asofold.bukkit.fattnt.config.Settings;
+import me.asofold.bukkit.fattnt.events.FatEntityDamageEvent;
+import me.asofold.bukkit.fattnt.events.FatEntityExplodeEvent;
 import me.asofold.bukkit.fattnt.propagation.Propagation;
 import me.asofold.bukkit.fattnt.utils.Utils;
 
@@ -62,7 +64,7 @@ public class ExplosionManager {
 		
 		// blocks:
 		List<Block> affected = propagation.getExplodingBlocks(world , x, y, z, realRadius);
-		EntityExplodeEvent exE = new EntityExplodeEvent(explEntity, new Location(world,x,y,z), affected, settings.defaultYield );
+		EntityExplodeEvent exE = new FatEntityExplodeEvent(explEntity, new Location(world,x,y,z), affected, settings.defaultYield );
 		pm.callEvent(exE);
 		if (exE.isCancelled()) return;
 		float yield = exE.getYield();
@@ -112,7 +114,7 @@ public class ExplosionManager {
 			// TODO: damage entities according to type
 			int damage = 1 + (int) (effRad*settings.damageMultiplier) ;
 			// TODO: take into account armor, enchantments and such?
-			EntityDamageEvent event = new EntityDamageEvent(entity, DamageCause.ENTITY_EXPLOSION, damage);
+			EntityDamageEvent event = new FatEntityDamageEvent(entity, DamageCause.ENTITY_EXPLOSION, damage);
 			pm.callEvent(event);
 			if (!event.isCancelled()){
 				Utils.damageEntity(event);
