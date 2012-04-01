@@ -3,6 +3,7 @@ package me.asofold.bukkit.fattnt.propagation;
 import java.util.LinkedList;
 import java.util.List;
 
+import me.asofold.bukkit.fattnt.FatTnt;
 import me.asofold.bukkit.fattnt.config.Settings;
 import me.asofold.bukkit.fattnt.utils.Utils;
 
@@ -76,7 +77,7 @@ public class ArrayPropagation extends Propagation {
 			List<Block> blocks = new LinkedList<Block>();
 			seqMax ++; // new round !
 			// starting at center block decrease weight and check neighbor blocks recursively, while weight > durability continue, only check
-			System.out.println("start at: "+cx+","+cy+","+cz);
+			if (FatTnt.DEBUG) System.out.println("start at: "+cx+","+cy+","+cz);
 			this.cx = Utils.floor(cx);
 			this.cy = Utils.floor(cy);
 			this.cz = Utils.floor(cz);
@@ -114,7 +115,7 @@ public class ArrayPropagation extends Propagation {
 			dur = defaultResistance;
 			ign = true;
 		}
-		System.out.println(x+","+y+","+z+" - "+expStr+" | "+id+":"+dur); // TODO: remove this
+		if (FatTnt.DEBUG) System.out.println(x+","+y+","+z+" - "+expStr+" | "+id+":"+dur); // TODO: remove this
 		final boolean noAdd;
 		if ( sequence[i] == seqMax){
 			if ( strength[i] >= dur) noAdd = true;
