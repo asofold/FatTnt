@@ -42,20 +42,20 @@ public class ArrayPropagation extends Propagation {
 	private static final int[] ortDir = new int[]{2,4,6,8,10,12};
 	
 	/**
-	 * opposite direction:
-	 * 0:  no direction
-	 * 1:  reserved: diagonal
-	 * 2:  x+
-	 * 3:  reserved: diagonal
-	 * 4:  x-
-	 * 5:  reserved: diagonal
-	 * 6:  y+
-	 * 7:  reserved: diagonal
-	 * 8:  y-
-	 * 9:  reserved: diagonal
-	 * 10: z+
-	 * 11: reserved: diagonal
-	 * 12: z-
+	 * opposite direction:<br>
+	 * 0:  no direction<br>
+	 * 1:  reserved: diagonal<br>
+	 * 2:  x+<br>
+	 * 3:  reserved: diagonal<br>
+	 * 4:  x-<br>
+	 * 5:  reserved: diagonal<br>
+	 * 6:  y+<br>
+	 * 7:  reserved: diagonal<br>
+	 * 8:  y-<br>
+	 * 9:  reserved: diagonal<br>
+	 * 10: z+<br>
+	 * 11: reserved: diagonal<br>
+	 * 12: z-<br>
 	 */
 	private static final int[] oDir = new int[]{
 		0,  // 0: no direction maps to no direction
@@ -233,7 +233,7 @@ public class ArrayPropagation extends Propagation {
 			dur = defaultResistance;
 			ign = true;
 		}
-		if (FatTnt.DEBUG) System.out.println(x+","+y+","+z+" - "+expStr+" | "+id+":"+dur); // TODO: remove this
+		if (FatTnt.DEBUG) System.out.println(x+","+y+","+z+" - "+expStr+" | "+id+"@"+dur); // TODO: remove this
 		final boolean noAdd;
 		if (block == null) noAdd = true;
 		else if ( sequence[i] == seqMax){
@@ -249,19 +249,18 @@ public class ArrayPropagation extends Propagation {
 		expStr -= dur; // decrease after setting the array
 		// Add block or not:
 		if (id!=0 && !noAdd && !ign) blocks.add(block);
-		
-		
 		// propagate:
 		if (i<fZ || i>izMax) return; // no propagation from edge on.
-		
-		for (int nd : ortDir){ 
+		for (int nd : ortDir){
 			// (iterate over orthogonal directions)
+			if (nd == oDir[dir]) continue; // prevent walking back.
 			final float effStr; // strength to be used.
 			// Check penalty for propagation in the same direction again:
-			if (nd == oDir[dir]) effStr = expStr * fStraight;
+			if (nd == dir) effStr = expStr * fStraight;
 			else effStr = expStr;
 			if (effStr<minRes) continue; // not strong enough to propagate through any further block.
-			final int j = i + aInc[3];
+			// Propagate if appropriate (not visited or with smaller strength).
+			final int j = i + aInc[nd];
 			if (sequence[j]!=seqMax || effStr>strength[j]) propagate(w, x+xInc[0], y+yInc[1], z+zInc[2], j, nd, effStr, blocks);
 		}
 	}
