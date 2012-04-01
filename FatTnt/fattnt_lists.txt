@@ -21,8 +21,8 @@ Actually it is safe to assume MIT license, but if the license can be "less", i w
  
  
  Issues:
- !! Explosion is offset somehow, or blocks dont get destroyed though should.
- ! Velocity cap + maybe flags what to apply it to
+! (bugfix) propagation differs concerning x / z !.
+ ! Velocity cap + maybe flags what to apply it to / when
  ! Sand/TNT spazzing: First set blocks without physics, then later apply physics [physics might be scheduled to the next tick ...]?
  ! Must add: fire, if fire is set.
  ! adjust default values to something realistic...
@@ -57,17 +57,21 @@ Actually it is safe to assume MIT license, but if the license can be "less", i w
 
 
 
-CHANGELOG
-------------------
+CHANGELOG (May show an unreleased version but only done changes.)
+-----------------------------------------------------------------
 
 
 *** [Beta/Dev stage]
+
+(0.1.2)
+- (add) API for explosion strength.
+- (refactor) Split some more code off plugin.
 
 (0.1.1)
 - (bugfix) Number conversion issue leading to an offset for the explosion.
 
 (0.1.0)
-- (refactor) Major refactoring, to split Settigns and propagation mopdel off the plugin class.
+- (refactor) Major refactoring, to split settings and propagation model off the plugin class.
 
 (0.0.4) 
 - Some fixes, including damage, damage strength, collected blocks, prime tnt blocks. 
