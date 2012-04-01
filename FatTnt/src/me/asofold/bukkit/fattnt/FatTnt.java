@@ -35,7 +35,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class FatTnt extends JavaPlugin implements Listener {
 	
-	public static final boolean DEBUG = false;
+	public static final boolean DEBUG = true;
 	
 //	ExplosionPrimeEvent waitingEP = null;
 	
