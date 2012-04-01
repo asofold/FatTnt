@@ -54,8 +54,9 @@ Maybe:
 
 SCHEDULE (Might include ideas, points to check.)
 -----------------------------------------------------------------
+! check way to reduce unnecessary multiple visits: a) park positions and continue later(minimum sphere) b) maybe use preset directions map 
 ! Make some settings dependent on entities (damage multiplier at least)
-
+! (add) The arrow effect possible !
 
 CHANGELOG (May show an unreleased version but only done changes.)
 -----------------------------------------------------------------
@@ -64,6 +65,9 @@ CHANGELOG (May show an unreleased version but only done changes.)
 *** [Beta/Dev stage]
 
 (0.1.5-DEV)
+- (refactor) propagation method: use minResistance and use preset increments to reduce structural code repetition [not necessarily faster but safer.]
+- (add) Use the minimum resistance value, calculated from settings to abort propagation faster.
+- (bugfix) Default values are now chosen as intended.
 - (add) API, for later: ExplosionManager.createExplosionEffect 
 - (refactor) ExplosionManager: split applyExplosionEffects for blocks and entities.
 - (add)  API: allow damage multiplier as argument.

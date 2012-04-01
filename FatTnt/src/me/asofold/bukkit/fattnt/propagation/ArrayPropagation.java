@@ -36,10 +36,109 @@ public class ArrayPropagation extends Propagation {
 	int cz = 0;
 	
 	float fStraight;
+	
+	float minStr;
+	
+	private static final int[] ortDir = new int[]{2,4,6,8,10,12};
+	
+	/**
+	 * opposite direction:
+	 * 0:  no direction
+	 * 1:  reserved: diagonal
+	 * 2:  x+
+	 * 3:  reserved: diagonal
+	 * 4:  x-
+	 * 5:  reserved: diagonal
+	 * 6:  y+
+	 * 7:  reserved: diagonal
+	 * 8:  y-
+	 * 9:  reserved: diagonal
+	 * 10: z+
+	 * 11: reserved: diagonal
+	 * 12: z-
+	 */
+	private static final int[] oDir = new int[]{
+		0,  // 0: no direction maps to no direction
+		0,  // UNUSED
+		4,  // x+ -> x-
+		0,  // UNUSED
+		2,  // x- -> x+
+		0,  // UNUSED
+		8,  // y+ -> y-
+		0,  // UNUSED
+		6,  // y- -> y+
+		0,  // UNUSED
+		12, // z+ -> z-
+		0,  // UNUSED
+		10, // z- -> z+
+	} ;
+	
+	/**
+	 * x increment by direction.
+	 */
+	private static final int[] xInc = new int[]{
+		0,  // 0: no direction maps to no direction
+		0,  // UNUSED
+		1,  // x+ 
+		0,  // UNUSED
+		-1,  // x-
+		0,  // UNUSED
+		0,  // y+ 
+		0,  // UNUSED
+		0,  // y- 
+		0,  // UNUSED
+		0, // z+ 
+		0,  // UNUSED
+		0, // z-
+	};
+	
+	/**
+	 * y increment by direction.
+	 */
+	private static final int[] yInc = new int[]{
+		0,  // 0: no direction maps to no direction
+		0,  // UNUSED
+		0,  // x+ 
+		0,  // UNUSED
+		0,  // x- 
+		0,  // UNUSED
+		1,  // y+ 
+		0,  // UNUSED
+		-1,  // y- 
+		0,  // UNUSED
+		0, // z+ 
+		0,  // UNUSED
+		0, // z- 
+	};
+	
+	/**
+	 * z increment by direction.
+	 */
+	private static final int[] zInc = new int[]{
+		0,  // 0: no direction maps to no direction
+		0,  // UNUSED
+		0,  // x+ 
+		0,  // UNUSED
+		0,  // x- 
+		0,  // UNUSED
+		0,  // y+ 
+		0,  // UNUSED
+		0,  // y- 
+		0,  // UNUSED
+		1, // z+ 
+		0,  // UNUSED
+		-1, // z- 
+	};
+	
+	/**
+	 * Array increments by direction.
+	 */
+	private static final int[] aInc =  new int[13];
 
 	public ArrayPropagation(Settings settings) {
 		super(settings);
 		fStraight = settings.fStraight;
+		minStr = settings.minResistance;
 		createArrays();
 		
 		// TODO: init on base of settings
@@ -58,6 +157,9 @@ public class ArrayPropagation extends Propagation {
 		strength = new float[sz];
 		for ( int i = 0; i<sz; i++){
 			sequence[i] = 0;
+		}
+		for (int i=0; i<aInc.length; i++){
+			aInc[i] = xInc[i] + yInc[i]*fY + zInc[i]*fZ;
 		}
 	}
 
@@ -143,60 +245,24 @@ public class ArrayPropagation extends Propagation {
 		sequence[i] = seqMax;
 		strength[i] = expStr;
 //		if ( randDec > 0.0) dur += random.nextFloat()*randDec;
-		if ( dur > expStr) return; // no propagation
+		if ( dur > expStr) return; // this block stopped this path of propagation.
 		expStr -= dur; // decrease after setting the array
 		// Add block or not:
 		if (id!=0 && !noAdd && !ign) blocks.add(block);
+		
+		
 		// propagate:
-		if (i<fZ || i>izMax) return;
-		// x-
-		if (dir != 2){
-			final float effStr; // radius to be used.
-			if (dir==4) effStr = expStr * fStraight;
+		if (i<fZ || i>izMax) return; // no propagation from edge on.
+		
+		for (int nd : ortDir){ 
+			// (iterate over orthogonal directions)
+			final float effStr; // strength to be used.
+			// Check penalty for propagation in the same direction again:
+			if ( nd == oDir[dir]) effStr = expStr * fStraight;
 			else effStr = expStr;
-			final int j1 = i - 1;
-			if (sequence[j1]!=seqMax || effStr>strength[j1]) propagate(w, x-1, y, z, j1, 4, effStr, blocks);
-		}
-		// x+
-		if ( dir != 4){
-			final float effStr; // radius to be used.
-			if (dir==2) effStr = expStr * fStraight;
-			else effStr = expStr;
-			final int j2 = i + 1;
-			if (sequence[j2]!=seqMax || effStr>strength[j2]) propagate(w, x+1, y, z, j2, 2, effStr, blocks);
-		}
-		// y-
-		if (dir != 6){
-			final float effStr; // radius to be used.
-			if (dir==8) effStr = expStr * fStraight;
-			else effStr = expStr;
-			final int j3 = i - fY;
-			if (sequence[j3]!=seqMax || effStr>strength[j3]) propagate(w, x, y-1, z, j3, 8, effStr, blocks);
-		}
-		// y+
-		if (dir != 8){
-			final float effStr; // radius to be used.
-			if (dir==6) effStr = expStr * fStraight;
-			else effStr = expStr;
-			final int j4 = i + fY;
-			if (sequence[j4]!=seqMax || effStr>strength[j4]) propagate(w, x, y+1, z, j4, 6, effStr, blocks);
-		}
-		// z-
-		if (dir != 10){
-			final float effStr; // radius to be used.
-			if (dir==12) effStr = expStr * fStraight;
-			else effStr = expStr;
-			final int j5 = i - fZ;
-			if (sequence[j5]!=seqMax || effStr>strength[j5]) propagate(w, x, y, z-1, j5, 12, effStr, blocks);
-		}
-		// z+
-		if (dir!=12){
-			final float effStr; // radius to be used.
-			if (dir==10) effStr = expStr * fStraight;
-			else effStr = expStr;
-			final int j6 = i + fZ;
-			if (sequence[j6]!=seqMax || effStr>strength[j6]) propagate(w, x, y, z+1, j6, 10, effStr, blocks); 
+			if (effStr<minStr) continue; // not strong enough to propagate through any further block.
+			final int j = i + aInc[3];
+			if (sequence[j]!=seqMax || effStr>strength[j]) propagate(w, x+xInc[0], y+yInc[1], z+zInc[2], j, 4, effStr, blocks);
 		}
 	}
-
 }
