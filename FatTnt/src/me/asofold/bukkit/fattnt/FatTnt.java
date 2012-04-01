@@ -45,14 +45,14 @@ import org.bukkit.util.Vector;
  * - configure: block resistance (strength)
  * - modifiers for explosion radius and damage
  * - Let explosions go through blocks without destruction (configurable, defaults to: lava, water, bedrock, other).
+ * - damage living entities according to the arriving strength of the explosion, not the distance to the center.
  * - Fires EntityExplodeEvent and EntityDamageEvent and allows canceling by other plugins.
  * - API might be used by other events to trigger explosions.
  * 
  * 
  * Issues:
+ * !! Explosion is offset somehow, or blocks dont get destroyed though should.
  * ! Velocity cap + maybe flags what to apply it to
- * ! Explosion is offset somehow
- * ! maybe do remove the entity before the explosion [check other code / CB ?]
  * ! Sand/TNT spazzing: First set blocks without physics, then later apply physics [physics might be scheduled to the next tick ...]?
  * ! Must add: fire, if fire is set.
  * ! adjust default values to something realistic...
@@ -62,15 +62,14 @@ import org.bukkit.util.Vector;
  * ? flag: alwaysIncludeTNT -> even if resistance of tnt is to high still add tnt.
  * 
  * Planned:
+ * ! Random tick delay for primed tnt.
  * ! add configuration flag for enabled (need not be changed by commands).
- * ! Damage entities according to strength values of the array.
+ * ! MAKE SETTINGE DETACHED , default, world specific, ... further ...
  * ? Damage or change  entities according to their type (TNT->Explode, ItemStacks - damage)
  * ! More fine grained vector manipulation 
- * ! Use velocity events where possible !
+ * ! Use velocity events if possible !
  * ! add explosions on water : do allow config option to only damage entities.
- * ! MAKE SETTINGE DETACHED , default, world specific, ... further ...
  * ! More events (+configurable if, also for the old ones !) like ItemSpawn or similar.
- * ! Random tick delay for primed tnt.
  * ! direct explode feature (threshold + possibly with probabilities: 1. p(direct) -> if not... maybe prime)
  * 
  * Maybe:
@@ -80,7 +79,7 @@ import org.bukkit.util.Vector;
  * ? propagate explosion slowly ?
  * ? Schedule TNT option (limit to n per tick)
  * ? use lock + exception later on for API access
- * ? Direct explosion feature / prime tnt from itm drops or when in fire?
+ * ? prime tnt from itm drops or when in fire?
  * ? other explosion shaping
  * @author mc_dev
  *
