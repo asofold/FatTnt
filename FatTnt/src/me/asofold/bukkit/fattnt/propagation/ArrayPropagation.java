@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import me.asofold.bukkit.fattnt.FatTnt;
+import me.asofold.bukkit.fattnt.config.Defaults;
 import me.asofold.bukkit.fattnt.config.Settings;
 import me.asofold.bukkit.fattnt.utils.Utils;
 
@@ -21,6 +22,11 @@ public class ArrayPropagation extends Propagation {
 	int fZ = 0;
 	int izMax = 0;
 	int iCenter = -1;
+	
+	/**
+	 * Stats: number of visited blocks (some count double)
+	 */
+	int n = 0;
 	
 	/**
 	 * Explosion center block coords.
@@ -77,11 +83,13 @@ public class ArrayPropagation extends Propagation {
 			List<Block> blocks = new LinkedList<Block>();
 			seqMax ++; // new round !
 			// starting at center block decrease weight and check neighbor blocks recursively, while weight > durability continue, only check
-			if (FatTnt.DEBUG) System.out.println("start at: "+cx+","+cy+","+cz);
+			if (FatTnt.DEBUG) System.out.println(Defaults.msgPrefix+"Explosion at: "+cx+","+cy+","+cz);
 			this.cx = Utils.floor(cx);
 			this.cy = Utils.floor(cy);
 			this.cz = Utils.floor(cz);
+			n = 0;
 			propagate(world, this.cx, this.cy, this.cz, iCenter, 0, realRadius, blocks);
+			if (FatTnt.DEBUG) System.out.println(Defaults.msgPrefix+"Strength="+realRadius+", visited="+n+", blocks="+blocks.size());
 			return blocks;
 		}
 	}
@@ -100,6 +108,7 @@ public class ArrayPropagation extends Propagation {
 	 */
 	final void propagate(final World w, final int x, final int y, final int z, 
 			final int i, final int dir, float expStr, final List<Block> blocks){
+		n ++;
 		if ( y<0 || y > w.getMaxHeight()) return; // TODO: maybe +-1 ?
 		// World block position:
 		final Block block = w.getBlockAt(x,y,z);
