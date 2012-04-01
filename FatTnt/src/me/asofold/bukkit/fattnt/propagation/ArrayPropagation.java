@@ -191,7 +191,7 @@ public class ArrayPropagation extends Propagation {
 			this.cz = Utils.floor(cz);
 			n = 0;
 			propagate(world, this.cx, this.cy, this.cz, iCenter, 0, realRadius, blocks);
-			if (FatTnt.DEBUG) System.out.println(Defaults.msgPrefix+"Strength="+realRadius+", visited="+n+", blocks="+blocks.size());
+			if (FatTnt.DEBUG) System.out.println(Defaults.msgPrefix+"Strength="+realRadius+"("+maxRadius+"/"+minRes+"), visited="+n+", blocks="+blocks.size());
 			return blocks;
 		}
 	}
@@ -258,11 +258,11 @@ public class ArrayPropagation extends Propagation {
 			// (iterate over orthogonal directions)
 			final float effStr; // strength to be used.
 			// Check penalty for propagation in the same direction again:
-			if ( nd == oDir[dir]) effStr = expStr * fStraight;
+			if (nd == oDir[dir]) effStr = expStr * fStraight;
 			else effStr = expStr;
 			if (effStr<minRes) continue; // not strong enough to propagate through any further block.
 			final int j = i + aInc[3];
-			if (sequence[j]!=seqMax || effStr>strength[j]) propagate(w, x+xInc[0], y+yInc[1], z+zInc[2], j, 4, effStr, blocks);
+			if (sequence[j]!=seqMax || effStr>strength[j]) propagate(w, x+xInc[0], y+yInc[1], z+zInc[2], j, nd, effStr, blocks);
 		}
 	}
 }
