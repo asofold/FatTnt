@@ -102,8 +102,9 @@ public class FatTnt extends JavaPlugin implements Listener {
 	public static final String cfgVelMin = "velocity.min";
 	public static final String cfgVelCen= "velocity.center";
 	public static final String cfgVelRan = "velocity.random";
-	public static final String cfgVelOnPrime = "velocity.tnt-prime";
+	public static final String cfgVelOnPrime = "velocity.tnt-primed";
 	public static final String cfgFStraight = "multiplier.straight";
+	public static final String cfgThresholdTntDirect = "tnt.thresholds.direct-explode";
 	
 	int[] defaultIgnoreBlocks = new int[]{
 //			7, // bedrock
@@ -195,6 +196,8 @@ public class FatTnt extends JavaPlugin implements Listener {
 	 * If to not apply damage to primed tnt.
 	 */
 	boolean sparePrimed = true;
+	
+	double thresholdTntDirect = 2.0;
 	
 	ExplosionPrimeEvent waitingEP = null;
 	
@@ -383,6 +386,10 @@ public class FatTnt extends JavaPlugin implements Listener {
 			cfg.set(cfgVelOnPrime, false);
 			changed = true;
 		}
+		if ( !cfg.contains(cfgThresholdTntDirect)){
+			cfg.set(cfgThresholdTntDirect, 2.0);
+			changed = true;
+		}
 		return changed;
 	}
 
@@ -410,6 +417,7 @@ public class FatTnt extends JavaPlugin implements Listener {
 		velRan = (float) cfg.getDouble(cfgVelRan);
 		fStraight = (float) cfg.getDouble(cfgFStraight);
 		velOnPrime = cfg.getBoolean(cfgVelOnPrime);
+		thresholdTntDirect = cfg.getDouble(cfgThresholdTntDirect);
 		
 		if ( maxRadius > radiusLock) maxRadius = radiusLock;
 		initBlockIds();
@@ -500,8 +508,8 @@ public class FatTnt extends JavaPlugin implements Listener {
 		double x = loc.getX();
 		double y = loc.getY();
 		double z = loc.getZ();
-		createExplosion(loc.getWorld(), x, y, z, event.getRadius(), event.getFire(), entity, type);
 		if (!entity.isDead()) entity.remove();
+		createExplosion(loc.getWorld(), x, y, z, event.getRadius(), event.getFire(), entity, type);
 	}
 	
 	/**
@@ -625,14 +633,26 @@ public class FatTnt extends JavaPlugin implements Listener {
 		pm.callEvent(exE);
 		if (exE.isCancelled()) return;
 		float yield = exE.getYield();
+//		final List<block> directExplode = new LinkedList<block>(); // if set in config. - maybe later (split method to avoid recursion !)
 		for ( Block block : exE.blockList()){
 			if (block.getType() == Material.TNT){
 				block.setTypeId(0, true);
 				Location loc = block.getLocation().add(vCenter);
-				Entity entity = world.spawn(loc, CraftTNTPrimed.class);
 				final float effRad = getStrength(loc, x, y, z); // effective strength/radius
-				if ( effRad == 0.0f) continue; // not affected
-				if (velOnPrime) addRandomVelocity(entity, loc, x,y,z, effRad, realRadius);
+//				if ( effRad > thresholdTntDirect){
+//					directExplode.add(block);
+//					continue;
+//				}
+				// do spawn tnt-primed
+				try{
+					Entity entity = world.spawn(loc, CraftTNTPrimed.class);
+					if (entity == null) continue;
+					if ( !(entity instanceof TNTPrimed)) continue;
+					if ( effRad == 0.0f) continue; // not affected
+					if (velOnPrime) addRandomVelocity(entity, loc, x,y,z, effRad, realRadius);
+				} catch( Throwable t){
+					// maybe later log
+				}
 				continue;
 			}
 			// All other blocks:
@@ -662,15 +682,27 @@ public class FatTnt extends JavaPlugin implements Listener {
 			EntityDamageEvent event = new EntityDamageEvent(entity, DamageCause.ENTITY_EXPLOSION, damage);
 			pm.callEvent(event);
 			if (!event.isCancelled()){
-				if ( entity instanceof LivingEntity){
-					// This seems to work.
-					((LivingEntity) entity).setLastDamageCause(event);
-				}
-				else entity.setLastDamageCause(event); // TODO
+				damageEntity(event);
 			}
 		}
 		
 		
+	}
+
+	private void damageEntity(EntityDamageEvent event) {
+		int damage = event.getDamage();
+		if ( damage == 0) return;
+		Entity entity = event.getEntity();
+		if (entity == null) return; // impossible ?
+		if (entity.isDead()) return;
+		EntityType type = entity.getType();
+		entity.setLastDamageCause(event); 
+		if ( type.isAlive()){
+			// TODO: armor !
+			((LivingEntity) entity).damage(damage);
+		} 
+		// TODO: some stuff with different entity types (vehicles, items, paintings).
+		// TODO: maybe some destruction chance !
 	}
 
 	/**
