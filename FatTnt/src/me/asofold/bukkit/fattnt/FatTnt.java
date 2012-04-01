@@ -150,12 +150,12 @@ public class FatTnt extends JavaPlugin implements Listener {
 	 * @param z
 	 * @param radius As in World.createExplosion
 	 * @param fire
-	 * @param explEntity
+	 * @param explEntity Not sure what happens if this is null: the events use this.
 	 * @param entityType May be null, might be unused.
 	 */
 	public void createExplosion(World world, double x, double y, double z, float radius, boolean fire, Entity explEntity, EntityType entityType){
 		// create a fake explosion
-		world.createExplosion(new Location(world,x,y,z), 0.0F); 
+		ExplosionManager.createExplosionEffect(world, x, y, z, radius, fire);
 		if (radius==0.0f) return;
 		// calculate effects
 		// WORKAROUND:
@@ -205,7 +205,28 @@ public class FatTnt extends JavaPlugin implements Listener {
 	 */
 	public void applyExplosionEffects(World world, double x, double y, double z, float realRadius, boolean fire, Entity explEntity, EntityType entityType,
 			List<Entity> nearbyEntities) {
-		ExplosionManager.applyExplosionEffects(world, x, y, z, realRadius, fire, explEntity, entityType, nearbyEntities, settings, propagation);
+		ExplosionManager.applyExplosionEffects(world, x, y, z, realRadius, fire, explEntity, entityType, nearbyEntities, 1.0f, settings, propagation);
+	}
+	
+	/**
+	 * This method only considers the given entities for damage, but allows for specification of an extra damage multiplier.
+	 * API
+	 * (used internally)
+	 * (this method uses seqMax, such that it should not get manipulated anywhere but inside of getExplodingBlocks)
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param realRadius
+	 * @param fire
+	 * @param explEntity
+	 * @param entityType
+	 * @param nearbyEntities
+	 * @param damageMultiplier
+	 */
+	public void applyExplosionEffects(World world, double x, double y, double z, float realRadius, boolean fire, Entity explEntity, EntityType entityType,
+			List<Entity> nearbyEntities, float damageMultiplier) {
+		
 	}
 
 	/**

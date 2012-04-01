@@ -14,7 +14,6 @@ import me.asofold.bukkit.fattnt.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.entity.CraftTNTPrimed;
@@ -49,27 +48,46 @@ public class ExplosionManager {
 	 * @param fire
 	 * @param explEntity
 	 * @param entityType
-	 * @param nearbyEntities
+	 * @param nearbyEntities can be null
 	 * @param settings
 	 * @param propagation
 	 */
 	public static void applyExplosionEffects(World world, double x, double y, double z, float realRadius, boolean fire, Entity explEntity, EntityType entityType,
-			List<Entity> nearbyEntities, Settings settings, Propagation propagation) {
+			List<Entity> nearbyEntities, float damageMultiplier, Settings settings, Propagation propagation) {
 		if ( realRadius > settings.maxRadius){
-			// TODO: setttings ?
+			// TODO: settings ?
 			realRadius = settings.maxRadius;
 		} else if (realRadius == 0.0f) return;
-		Server server = Bukkit.getServer();
-		PluginManager pm = server.getPluginManager();
+		PluginManager pm = Bukkit.getPluginManager();
 		
 		// blocks:
 		List<Block> affected = propagation.getExplodingBlocks(world , x, y, z, realRadius);
 		EntityExplodeEvent exE = new FatEntityExplodeEvent(explEntity, new Location(world,x,y,z), affected, settings.defaultYield );
 		pm.callEvent(exE);
 		if (exE.isCancelled()) return;
-		float yield = exE.getYield();
+		// block effects:
+		applyBlockEffects(world, x, y, z, realRadius, exE.blockList(), exE.getYield(), settings, propagation);
+		// entities:
+		if ( nearbyEntities != null) applyEntityEffects(world, x, y, z, realRadius, nearbyEntities, damageMultiplier, settings, propagation);
+		
+		
+	}
+	
+	/**
+	 * Block manuipulations for explosions.
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param realRadius
+	 * @param blocks
+	 * @param defaultYield
+	 * @param settings
+	 * @param propagation
+	 */
+	public static void applyBlockEffects(World world, double x, double y, double z, float realRadius, List<Block> blocks, float defaultYield, Settings settings, Propagation propagation){
 //		final List<block> directExplode = new LinkedList<block>(); // if set in config. - maybe later (split method to avoid recursion !)
-		for ( Block block : exE.blockList()){
+		for ( Block block : blocks){
 			if (block.getType() == Material.TNT){
 				block.setTypeId(0, true);
 				Location loc = block.getLocation().add(Defaults.vCenter);
@@ -93,7 +111,7 @@ public class ExplosionManager {
 			// All other blocks:
 			Collection<ItemStack> drops = block.getDrops();
 			for (ItemStack drop : drops){
-				if ( random.nextFloat()<=yield){
+				if ( random.nextFloat()<=defaultYield){
 					Location loc = block.getLocation().add(Defaults.vCenter);
 					Item item = world.dropItemNaturally(loc, drop.clone());
 					if (item==null) continue;
@@ -102,7 +120,26 @@ public class ExplosionManager {
 			}
 			block.setTypeId(0, true); // TODO: evaluate if still spazzing appears (if so: use false, and then iterate again for applying physics after block changes).
 		}
-		
+	}
+	
+	/**
+	 * Entity manipulations for explosions.
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param realRadius
+	 * @param nearbyEntities
+	 * @param damageMultiplier
+	 * @param settings
+	 * @param propagation
+	 */
+	public static void applyEntityEffects(World world, double x, double y, double z, float realRadius, List<Entity> nearbyEntities, float damageMultiplier, Settings settings, Propagation propagation) {
+		if ( realRadius > settings.maxRadius){
+			// TODO: settings ?
+			realRadius = settings.maxRadius;
+		} else if (realRadius == 0.0f) return;
+		PluginManager pm = Bukkit.getPluginManager();
 		// entities:
 		for ( Entity entity : nearbyEntities){
 			// test damage:
@@ -112,7 +149,7 @@ public class ExplosionManager {
 			addRandomVelocity(entity, loc, x,y,z, effRad, realRadius, settings);
 			if (settings.sparePrimed && (entity instanceof TNTPrimed)) continue;
 			// TODO: damage entities according to type
-			int damage = 1 + (int) (effRad*settings.damageMultiplier) ;
+			int damage = 1 + (int) (effRad*settings.damageMultiplier*damageMultiplier) ;
 			// TODO: take into account armor, enchantments and such?
 			EntityDamageEvent event = new FatEntityDamageEvent(entity, DamageCause.ENTITY_EXPLOSION, damage);
 			pm.callEvent(event);
@@ -120,21 +157,19 @@ public class ExplosionManager {
 				Utils.damageEntity(event);
 			}
 		}
-		
-		
 	}
 	
 	/**
-	 * 
+	 * Add velocity according to settings
 	 * @param entity
 	 * @param loc
 	 * @param x
 	 * @param y
 	 * @param z
-	 * @param part part of radius (effective)
+	 * @param part part of radius (effective), as with FatTnt.getExplosionStrength
 	 * @param max max radius
 	 */
-	private static void addRandomVelocity(Entity entity, Location loc, double x, double y,
+	public static void addRandomVelocity(Entity entity, Location loc, double x, double y,
 			double z, float part, float max, Settings settings) {
 		// TODO: make some things configurable, possible entity dependent and !
 		if (!settings.velUse) return;
@@ -144,5 +179,21 @@ public class ExplosionManager {
 		if (entity instanceof LivingEntity) ((LivingEntity) entity).setVelocity(rv); 
 		else if (entity instanceof TNTPrimed) ((TNTPrimed) entity).setVelocity(rv);
 		else entity.setVelocity(rv);
+	}
+
+	/**
+	 * Apply the explosion effect in that world, 
+	 * currently this simply delegates to create an explosion with radius 0,
+	 * later it might add other effects.
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param radius
+	 * @param fire
+	 */
+	public static void createExplosionEffect(World world, double x, double y,
+			double z, float radius, boolean fire) {
+		world.createExplosion(new Location(world,x,y,z), 0.0F); 
 	}
 }
