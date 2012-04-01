@@ -109,10 +109,17 @@ public class ArrayPropagation extends Propagation {
 	final void propagate(final World w, final int x, final int y, final int z, 
 			final int i, final int dir, float expStr, final List<Block> blocks){
 		n ++;
-		if ( y<0 || y > w.getMaxHeight()) return; // TODO: maybe +-1 ?
-		// World block position:
-		final Block block = w.getBlockAt(x,y,z);
-		final int id = block.getTypeId();
+		// Block type check (id):
+		final int id;
+		final Block block;
+		if ( y>=0 || y <= w.getMaxHeight()){// TODO: maybe +-1 ?
+			block = w.getBlockAt(x,y,z);
+			id = block.getTypeId();
+		} 
+		else{
+			id = 0;
+			block = null;
+		}
 		// Resistance check:
 		float dur ; // AIR
 		final boolean ign;
@@ -126,7 +133,8 @@ public class ArrayPropagation extends Propagation {
 		}
 		if (FatTnt.DEBUG) System.out.println(x+","+y+","+z+" - "+expStr+" | "+id+":"+dur); // TODO: remove this
 		final boolean noAdd;
-		if ( sequence[i] == seqMax){
+		if (block == null) noAdd = true;
+		else if ( sequence[i] == seqMax){
 			if ( strength[i] >= dur) noAdd = true;
 			else noAdd = false;
 		}
