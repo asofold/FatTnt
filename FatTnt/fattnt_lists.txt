@@ -30,6 +30,7 @@ Actually it is safe to assume MIT license, but if the license can be "less", i w
  ! Re-think which events to intercept: [Currently for performance reason TNTPrimed is canceled always, to prevent calculations for the explosion being done by CraftBukkit or MC] 
  ? Allow arbitrary strength (but limit radius) ?
  ? flag: alwaysIncludeTNT -> even if resistance of tnt is to high still add tnt.
+ ! flag: only apply velocity if damage event is not canceled !
  
  Planned:
  ! Random tick delay for primed tnt.
@@ -62,8 +63,11 @@ CHANGELOG
 
 *** [Beta/Dev stage]
 
+(0.1.1)
+- (bugfix) Number conversion issue leading to an offset for the explosion.
+
 (0.1.0)
-- Major refactoring, to split Settigns and propagation mopdel off the plugin class.
+- (refactor) Major refactoring, to split Settigns and propagation mopdel off the plugin class.
 
 (0.0.4) 
 - Some fixes, including damage, damage strength, collected blocks, prime tnt blocks. 
