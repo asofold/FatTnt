@@ -158,7 +158,7 @@ public class Defaults {
 			changed = true;
 		}
 		if ( !cfg.contains(cfgInvertIgnored)){
-			cfg.set(cfgInvertIgnored, false);
+			cfg.set(cfgInvertIgnored, invertIgnored);
 			changed = true;
 		}
 		if ( !cfg.contains(cfgResistence)){
@@ -177,55 +177,55 @@ public class Defaults {
 			changed = true;
 		}
 		if ( !cfg.contains(cfgDefaultResistence)){
-			cfg.set(cfgDefaultResistence, 2.0);
+			cfg.set(cfgDefaultResistence, defaultResistance);
 			changed = true;
 		}
 		if ( !cfg.contains(cfgMaxRadius)){
-			cfg.set(cfgMaxRadius, 20.0);
+			cfg.set(cfgMaxRadius, maxRadius);
 			changed = true;
 		}
 		if ( !cfg.contains(cfgMultDamage)){
-			cfg.set(cfgMultDamage, 7.0);
+			cfg.set(cfgMultDamage, damageMultiplier);
 			changed = true;
 		}
 		if ( !cfg.contains(cfgMultRadius)){
-			cfg.set(cfgMultRadius, 2.0);
+			cfg.set(cfgMultRadius, radiusMultiplier);
 			changed = true;
 		}
 		if ( !cfg.contains(cfgRandRadius)){
-			cfg.set(cfgRandRadius, 0.2);
+			cfg.set(cfgRandRadius, randDec); // TODO DEPRECATED ?
 			changed = true;
 		}
 		if ( !cfg.contains(cfgYield)){
-			cfg.set(cfgYield, 0.2);
+			cfg.set(cfgYield, defaultYield);
 			changed = true;
 		}
 		if ( !cfg.contains(cfgVelUse)){
-			cfg.set(cfgVelUse, true);
+			cfg.set(cfgVelUse, velUse);
 			changed = true;
 		}
 		if ( !cfg.contains(cfgVelMin)){
-			cfg.set(cfgVelMin, 0.2);
+			cfg.set(cfgVelMin, velMin);
 			changed = true;
 		}
 		if ( !cfg.contains(cfgVelCen)){
-			cfg.set(cfgVelCen, 3.0);
+			cfg.set(cfgVelCen, velCen);
 			changed = true;
 		}
 		if ( !cfg.contains(cfgVelRan)){
-			cfg.set(cfgVelRan, 1.5);
+			cfg.set(cfgVelRan, velRan);
 			changed = true;
 		}
 		if ( !cfg.contains(cfgFStraight)){
-			cfg.set(cfgFStraight, 0.85);
+			cfg.set(cfgFStraight, fStraight);
 			changed = true;
 		}
 		if ( !cfg.contains(cfgVelOnPrime)){
-			cfg.set(cfgVelOnPrime, false);
+			cfg.set(cfgVelOnPrime, velOnPrime);
 			changed = true;
 		}
 		if ( !cfg.contains(cfgThresholdTntDirect)){
-			cfg.set(cfgThresholdTntDirect, 2.0);
+			cfg.set(cfgThresholdTntDirect, thresholdTntDirect);
 			changed = true;
 		}
 		return changed;
