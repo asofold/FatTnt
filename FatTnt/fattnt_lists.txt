@@ -1,0 +1,69 @@
+FatTnt lists
+---------------------------------------
+
+LICENSE
+-----------------
+[LICENSE PENDING]
+Something minimal on top of what can be done with a Bukkit/CraftBukkit plugin.
+Supposedly this would range from public domain (probably not) to somewhere around MIT license.
+Actually it is safe to assume MIT license, but if the license can be "less", i will probably make it so.
+
+
+
+ Features: 
+ - select what entities are handled (tnt, creeper?)
+ - configure: block resistance (strength)
+ - modifiers for explosion radius and damage
+ - Let explosions go through blocks without destruction (configurable, defaults to: lava, water, bedrock, other).
+ - damage living entities according to the arriving strength of the explosion, not the distance to the center.
+ - Fires EntityExplodeEvent and EntityDamageEvent and allows canceling by other plugins.
+ - API might be used by other events to trigger explosions.
+ 
+ 
+ Issues:
+ !! Explosion is offset somehow, or blocks dont get destroyed though should.
+ ! Velocity cap + maybe flags what to apply it to
+ ! Sand/TNT spazzing: First set blocks without physics, then later apply physics [physics might be scheduled to the next tick ...]?
+ ! Must add: fire, if fire is set.
+ ! adjust default values to something realistic...
+ ! Re-think event priorities and canceling to allow other plugins canceling the ExplosionPrimeEvent as well [Probably ok with highest].
+ ! Re-think which events to intercept: [Currently for performance reason TNTPrimed is canceled always, to prevent calculations for the explosion being done by CraftBukkit or MC] 
+ ? Allow arbitrary strength (but limit radius) ?
+ ? flag: alwaysIncludeTNT -> even if resistance of tnt is to high still add tnt.
+ 
+ Planned:
+ ! Random tick delay for primed tnt.
+ ! add configuration flag for enabled (need not be changed by commands).
+ ! MAKE SETTINGE DETACHED , default, world specific, ... further ...
+ ? Damage or change  entities according to their type (TNT->Explode, ItemStacks - damage)
+ ! More fine grained vector manipulation 
+ ! Use velocity events if possible !
+ ! add explosions on water : do allow config option to only damage entities.
+ ! More events (+configurable if, also for the old ones !) like ItemSpawn or similar.
+ ! direct explode feature (threshold + possibly with probabilities: 1. p(direct) -> if not... maybe prime)
+ ! Explosion API: add call with exploding entitytype as argument [exists already], but with flag to create that entity temporarily
+ 
+ Maybe:
+ ? More custom settings to allow for adding fire or whatever to certain or all explosions.
+ ! Fire custom event allowing for adjusting manipulations in a more fine grained way (!)
+ ? configure maximum radius to be handled and if to be aborted otherwise.
+ ? propagate explosion slowly ?
+ ? Schedule TNT option (limit to n per tick)
+ ? use lock + exception later on for API access
+ ? prime tnt from itm drops or when in fire?
+ ? other explosion shaping
+
+
+
+
+CHANGELOG
+------------------
+
+
+*** [Beta/Dev stage]
+
+(0.1.0)
+- Major refactoring, to split Settigns and propagation mopdel off the plugin class.
+
+(0.0.4) 
+- Some fixes, including damage, damage strength, collected blocks, prime tnt blocks. 
