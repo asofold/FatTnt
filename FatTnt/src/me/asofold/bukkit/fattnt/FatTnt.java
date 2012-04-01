@@ -263,4 +263,14 @@ public class FatTnt extends JavaPlugin implements Listener {
 		else return null;
 	}
 	
+	/**
+	 * Get the default settings in use.
+	 * HANDLE WITH CARE, DO NOT MANIPULATE.
+	 * (API)
+	 * @return
+	 */
+	public Settings getSettings(){
+		return settings;
+	}
+	
 }
