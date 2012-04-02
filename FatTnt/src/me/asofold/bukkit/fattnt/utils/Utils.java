@@ -86,21 +86,24 @@ public class Utils {
 	 * Deal the damage to the entity.
 	 * (might be aiming at explosions currently)
 	 * @param event
+	 * @return damage dealt, 0 if none or if not applicable.
 	 */
-	public static  void damageEntity(EntityDamageEvent event) {
+	public static  int damageEntity(EntityDamageEvent event) {
 		int damage = event.getDamage();
-		if ( damage == 0) return;
+		if ( damage == 0) return 0;
 		Entity entity = event.getEntity();
-		if (entity == null) return; // impossible ?
-		if (entity.isDead()) return;
+		if (entity == null) return 0; // impossible ?
+		if (entity.isDead()) return 0;
 		EntityType type = entity.getType();
 		entity.setLastDamageCause(event); 
 		if ( type.isAlive()){
 			// TODO: armor !
 			((LivingEntity) entity).damage(damage);
+			return damage;
 		} 
 		// TODO: some stuff with different entity types (vehicles, items, paintings).
 		// TODO: maybe some destruction chance !
+		return 0;
 	}
 
 	/**
