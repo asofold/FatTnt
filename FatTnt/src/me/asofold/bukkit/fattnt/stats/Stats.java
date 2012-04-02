@@ -5,6 +5,8 @@ import java.text.DecimalFormatSymbols;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.bukkit.ChatColor;
+
 public class Stats {
 	private static final class Entry{
 		public long dur = 0;
@@ -82,8 +84,15 @@ public class Stats {
 		for ( Integer id : entries.keySet()){
 			if ( !first) b.append(" | ");
 			Entry entry = entries.get(id);
-			long av = entry.dur / entry.n;
-			b.append(getKey(id)+" av="+f.format(av)+" n="+f.format(entry.n));
+			String av = f.format(entry.dur / entry.n);
+			String key = getKey(id);
+			String n = f.format(entry.n);
+			if (colors){
+				key = ChatColor.GREEN + key + ChatColor.WHITE;
+				n = ChatColor.AQUA + n + ChatColor.WHITE;
+				av = ChatColor.YELLOW + av + ChatColor.WHITE;
+			}
+			b.append(key+" av="+av+" n="+n);
 			if ( showRange) b.append(" rg="+f.format(entry.min)+"..."+f.format(entry.max));
 			first = false;
 		}
