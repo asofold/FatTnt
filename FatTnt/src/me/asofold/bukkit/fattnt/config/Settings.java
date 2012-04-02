@@ -3,6 +3,8 @@ package me.asofold.bukkit.fattnt.config;
 import java.util.HashSet;
 import java.util.Set;
 
+import me.asofold.bukkit.fattnt.stats.Stats;
+
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
@@ -16,7 +18,7 @@ import org.bukkit.entity.EntityType;
  *
  */
 public class Settings {
-	
+	public final Stats stats;
 	/**
 	 * Handle and alter explosions
 	 */
@@ -62,6 +64,10 @@ public class Settings {
 	
 	public boolean[] ignore = new boolean[Defaults.blockArraySize];
 	public float[] resistance = new float[Defaults.blockArraySize];
+	
+	public Settings(Stats stats){
+		this.stats = stats;
+	}
 	
 	public void applyConfig(Configuration cfg){
 		minResistance = Float.MAX_VALUE;

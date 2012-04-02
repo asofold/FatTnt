@@ -3,6 +3,7 @@ package me.asofold.bukkit.fattnt.propagation;
 import java.util.List;
 
 import me.asofold.bukkit.fattnt.config.Settings;
+import me.asofold.bukkit.fattnt.stats.Stats;
 
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -23,11 +24,14 @@ public abstract class Propagation {
 	
 	// TODO: add axplosion center into this
 	
+	final Stats stats;
+	
 	public Propagation(Settings settings){
 		this.defaultResistance = settings.defaultResistance;
 		this.resistance = settings.resistance;
 		this.ignore = settings.ignore;
 		this.maxRadius = settings.maxRadius;
+		this.stats = settings.stats;
 	}
 	
 	/**

@@ -68,22 +68,43 @@ public class Defaults {
 	 */
 	public static final boolean handleExplosions = true;
 	
+	/**
+	 * Explosion strength is cut off there.
+	 */
 	public static final float maxRadius = 20.0f;
 	
-	public static final float radiusMultiplier = 3.0f;
+	/**
+	 * Multiplier for strength (radius)
+	 */
+	public static final float radiusMultiplier = 2.0f;
 	
-	public static final float damageMultiplier = 8.0f;
+	/**
+	 * Multiplier for entity damage.
+	 */
+	public static final float damageMultiplier = 12.0f;
 	
+	/**
+	 * Default explosion  resistance value for all materials that are not in one of the resistance-lists.
+	 */
 	public static final float defaultResistance = 2.0f;
 	
+	/**
+	 * Strength changes with this factor, for explosion paths advancing in the same direction again.
+	 */
 	public static final float fStraight = 0.85f;
 	
+	/**
+	 * Use ignored settings inverted, i.e. blacklist (not-ignored).
+	 */
 	public static final boolean invertIgnored = false;
 	
 	public static final String[] handledEntities = new String[]{
 		"PRIMED_TNT",
 	};
 	
+	/**
+	 * UNUSED (was: random resistance added to blocks)
+	 */
 	public static final float randDec = 0.2f;
 	/**
 	 * If to not apply damage to primed tnt.

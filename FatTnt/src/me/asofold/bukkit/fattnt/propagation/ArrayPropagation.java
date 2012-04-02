@@ -140,9 +140,6 @@ public class ArrayPropagation extends Propagation {
 		fStraight = settings.fStraight;
 		minRes = settings.minResistance;
 		createArrays();
-		
-		// TODO: init on base of settings
-		
 	}
 	
 	private void createArrays() {
@@ -192,6 +189,7 @@ public class ArrayPropagation extends Propagation {
 			n = 0;
 			propagate(world, this.cx, this.cy, this.cz, iCenter, 0, realRadius, blocks);
 			if (FatTnt.DEBUG) System.out.println(Defaults.msgPrefix+"Strength="+realRadius+"("+maxRadius+"/"+minRes+"), visited="+n+", blocks="+blocks.size());
+			stats.addStats(FatTnt.statsBlocksVisited, n);
 			return blocks;
 		}
 	}
@@ -233,7 +231,7 @@ public class ArrayPropagation extends Propagation {
 			dur = defaultResistance;
 			ign = true;
 		}
-		if (FatTnt.DEBUG) System.out.println(x+","+y+","+z+" - "+expStr+" | "+id+"@"+dur); // TODO: remove this
+		if (FatTnt.DEBUG_LOTS) System.out.println(x+","+y+","+z+" - "+expStr+" | "+id+"@"+dur); // TODO: remove this
 		final boolean noAdd;
 		if (block == null) noAdd = true;
 		else if ( sequence[i] == seqMax){
@@ -251,7 +249,7 @@ public class ArrayPropagation extends Propagation {
 		if (id!=0 && !noAdd && !ign) blocks.add(block);
 		// propagate:
 		if (i<fZ || i>izMax) return; // no propagation from edge on.
-		for (int nd : ortDir){
+		for (final int nd : ortDir){
 			// (iterate over orthogonal directions)
 			if (nd == oDir[dir]) continue; // prevent walking back.
 			final float effStr; // strength to be used.
@@ -261,7 +259,7 @@ public class ArrayPropagation extends Propagation {
 			if (effStr<minRes) continue; // not strong enough to propagate through any further block.
 			// Propagate if appropriate (not visited or with smaller strength).
 			final int j = i + aInc[nd];
-			if (sequence[j]!=seqMax || effStr>strength[j]) propagate(w, x+xInc[0], y+yInc[1], z+zInc[2], j, nd, effStr, blocks);
+			if (sequence[j]!=seqMax || effStr>strength[j]) propagate(w, x+xInc[nd], y+yInc[nd], z+zInc[nd], j, nd, effStr, blocks);
 		}
 	}
 }

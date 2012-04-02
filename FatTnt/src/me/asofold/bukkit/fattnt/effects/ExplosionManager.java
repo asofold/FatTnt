@@ -4,11 +4,13 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
+import me.asofold.bukkit.fattnt.FatTnt;
 import me.asofold.bukkit.fattnt.config.Defaults;
 import me.asofold.bukkit.fattnt.config.Settings;
 import me.asofold.bukkit.fattnt.events.FatEntityDamageEvent;
 import me.asofold.bukkit.fattnt.events.FatEntityExplodeEvent;
 import me.asofold.bukkit.fattnt.propagation.Propagation;
+import me.asofold.bukkit.fattnt.stats.Stats;
 import me.asofold.bukkit.fattnt.utils.Utils;
 
 import org.bukkit.Bukkit;
@@ -38,6 +40,8 @@ public class ExplosionManager {
 	
 	public static final Random random = new Random(System.currentTimeMillis()-1256875);
 	
+	private static Stats stats = null;
+	
 	/**
 	 * This does not create the explosion effect !
 	 * @param world
@@ -61,14 +65,24 @@ public class ExplosionManager {
 		PluginManager pm = Bukkit.getPluginManager();
 		
 		// blocks:
+		long ms = System.nanoTime();
 		List<Block> affected = propagation.getExplodingBlocks(world , x, y, z, realRadius);
+		stats.addStats(FatTnt.statsGetBlocks, System.nanoTime()-ms);
+		stats.addStats(FatTnt.statsBlocksCollected, affected.size());
+		stats.addStats(FatTnt.statsStrength, (long) realRadius);
 		EntityExplodeEvent exE = new FatEntityExplodeEvent(explEntity, new Location(world,x,y,z), affected, settings.defaultYield );
 		pm.callEvent(exE);
 		if (exE.isCancelled()) return;
 		// block effects:
+		ms = System.nanoTime();
 		applyBlockEffects(world, x, y, z, realRadius, exE.blockList(), exE.getYield(), settings, propagation);
+		stats.addStats(FatTnt.statsApplyBlocks, System.nanoTime()-ms);
 		// entities:
-		if ( nearbyEntities != null) applyEntityEffects(world, x, y, z, realRadius, nearbyEntities, damageMultiplier, settings, propagation);
+		if ( nearbyEntities != null){
+			ms = System.nanoTime();
+			applyEntityEffects(world, x, y, z, realRadius, nearbyEntities, damageMultiplier, settings, propagation);
+			stats.addStats(FatTnt.statsApplyEntities, System.nanoTime()-ms);
+		}
 		
 		
 	}
@@ -195,5 +209,9 @@ public class ExplosionManager {
 	public static void createExplosionEffect(World world, double x, double y,
 			double z, float radius, boolean fire) {
 		world.createExplosion(new Location(world,x,y,z), 0.0F); 
+	}
+	
+	public static void setStats(Stats stats){
+		ExplosionManager.stats = stats;
 	}
 }

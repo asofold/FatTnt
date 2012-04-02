@@ -8,6 +8,7 @@ import me.asofold.bukkit.fattnt.config.Settings;
 import me.asofold.bukkit.fattnt.effects.ExplosionManager;
 import me.asofold.bukkit.fattnt.propagation.Propagation;
 import me.asofold.bukkit.fattnt.propagation.PropagationFactory;
+import me.asofold.bukkit.fattnt.stats.Stats;
 import me.asofold.bukkit.fattnt.utils.Utils;
 
 import org.bukkit.Bukkit;
@@ -35,13 +36,31 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class FatTnt extends JavaPlugin implements Listener {
 	
-	public static final boolean DEBUG = true;
+	public static final boolean DEBUG = false;
+	public static final boolean DEBUG_LOTS = false;
+	
+	private static final Stats stats = new Stats();
+	public static final Integer statsGetBlocks = stats.getNewId("get_blocks");
+	public static final Integer statsApplyBlocks = stats.getNewId("apply_blocks");
+	public static final Integer statsApplyEntities = stats.getNewId("apply_entities");
+	public static final Integer statsNearbyEntities = stats.getNewId("nearby_entities");
+	public static final Integer statsBlocksVisited = stats.getNewId("blocks_visited");
+	public static final Integer statsBlocksCollected = stats.getNewId("blocks_collected");
+	public static final Integer statsStrength = stats.getNewId("strength");
+	public static final Integer statsAll = stats.getNewId("all");
+	static {
+		ExplosionManager.setStats(stats);
+	}
 	
 //	ExplosionPrimeEvent waitingEP = null;
 	
-	private final Settings settings = new Settings();
+	private final Settings settings = new Settings(stats);
 	
 	private Propagation propagation = null;
+	
+	public FatTnt(){
+		super();
+	}
 	
 	@Override
 	public void onEnable() {
@@ -77,6 +96,17 @@ public class FatTnt extends JavaPlugin implements Listener {
 			if ( !Utils.checkPerm(sender, "fattnt.cmd.disable")) return true;
 			settings.setHandleExplosions(false);
 			Utils.send( sender, "Explosions are back to default behavior (disregarding other plugins)."); 
+			return true;
+		}
+		else if (len==1 && args[0].equalsIgnoreCase("stats")){
+			if ( !Utils.checkPerm(sender, "fattnt.cmd.stats.see")) return true;
+			Utils.send(sender, stats.getStatsStr(true));
+			return true;
+		}
+		else if (len==2 && args[0].equalsIgnoreCase("stats") && args[1].equalsIgnoreCase("reset")){
+			if ( !Utils.checkPerm(sender, "fattnt.cmd.stats.reset")) return true;
+			stats.clear();
+			Utils.send(sender, "Stats reset.");
 			return true;
 		}
 		return false;
@@ -161,8 +191,10 @@ public class FatTnt extends JavaPlugin implements Listener {
 		// WORKAROUND:
 		float realRadius = radius*settings.radiusMultiplier;
 		List<Entity> nearbyEntities;
+		long ms = System.nanoTime();
 		if (explEntity==null) nearbyEntities = Utils.getNearbyEntities(world, x,y,z, realRadius);
 		else nearbyEntities = explEntity.getNearbyEntities(realRadius, realRadius, realRadius);
+		stats.addStats(statsNearbyEntities, System.nanoTime()-ms);
 		applyExplosionEffects(world, x, y, z, realRadius, fire, explEntity, entityType, nearbyEntities);
 	}
 
@@ -205,7 +237,7 @@ public class FatTnt extends JavaPlugin implements Listener {
 	 */
 	public void applyExplosionEffects(World world, double x, double y, double z, float realRadius, boolean fire, Entity explEntity, EntityType entityType,
 			List<Entity> nearbyEntities) {
-		ExplosionManager.applyExplosionEffects(world, x, y, z, realRadius, fire, explEntity, entityType, nearbyEntities, 1.0f, settings, propagation);
+		applyExplosionEffects(world, x, y, z, realRadius, fire, explEntity, entityType, nearbyEntities, 1.0f);
 	}
 	
 	/**
@@ -226,7 +258,9 @@ public class FatTnt extends JavaPlugin implements Listener {
 	 */
 	public void applyExplosionEffects(World world, double x, double y, double z, float realRadius, boolean fire, Entity explEntity, EntityType entityType,
 			List<Entity> nearbyEntities, float damageMultiplier) {
-		
+		long ns = System.nanoTime();
+		ExplosionManager.applyExplosionEffects(world, x, y, z, realRadius, fire, explEntity, entityType, nearbyEntities, damageMultiplier, settings, propagation);
+		stats.addStats(statsAll, System.nanoTime()-ns);
 	}
 
 	/**

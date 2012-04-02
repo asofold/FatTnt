@@ -57,6 +57,8 @@ SCHEDULE (Might include ideas, points to check.)
 ! check way to reduce unnecessary multiple visits: a) park positions and continue later(minimum sphere) b) maybe use preset directions map 
 ! Make some settings dependent on entities (damage multiplier at least)
 ! (add) The arrow effect possible !
+! (add) EntityDamageByEntity event ?
+! (add) blocks that let the explosion through but can be destroyed (alter to ignore, destructible)
 
 CHANGELOG (May show an unreleased version but only done changes.)
 -----------------------------------------------------------------
@@ -64,7 +66,8 @@ CHANGELOG (May show an unreleased version but only done changes.)
 
 *** [Beta/Dev stage]
 
-(0.1.5-DEV)
+(0.1.5)
+- (add) Stats (from RSP), with command "stats" and "stats reset", for various parts of the calculations (time and other)
 - (refactor) propagation method: use minResistance and use preset increments to reduce structural code repetition [not necessarily faster but safer.]
 - (add) Use the minimum resistance value, calculated from settings to abort propagation faster.
 - (bugfix) Default values are now chosen as intended.
@@ -74,6 +77,7 @@ CHANGELOG (May show an unreleased version but only done changes.)
 - (adjust) default damage and radius multipliers.
 - (refactor) Put default values to Defaults, reference from Settings.
 - (refactor) Use custom event classes extending the standard events.
+- (bugfix) API method was empty.
 
 (0.1.4)
 - (bugfix) Remove debug output, add final debug flag to FatTnt.
