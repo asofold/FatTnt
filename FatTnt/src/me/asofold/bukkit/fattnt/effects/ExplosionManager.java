@@ -166,7 +166,7 @@ public class ExplosionManager {
 			boolean addVelocity = true;
 			boolean useDamage = true;
 			if (settings.sparePrimed && (entity instanceof TNTPrimed)){
-				addVelocity = false;
+				addVelocity = true;
 				useDamage = false;
 			}
 			if (useDamage){
