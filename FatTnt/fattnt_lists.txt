@@ -84,6 +84,8 @@ CHANGELOG (May show an unreleased version but only done changes.)
 *** [Beta/Dev stage]
 
 (0.1.6)
+- (add) Made path multiplier configurable.
+- (adjust) Cleanups and small improvements for propagation methods.
 - (bugfix) Configuration reloading behavior.
 - (add) Color to stats output.
 - (adjust) When velocity and damage are applied to entities (few visible effects).
