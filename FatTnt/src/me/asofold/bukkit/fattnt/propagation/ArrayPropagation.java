@@ -42,6 +42,11 @@ public class ArrayPropagation extends Propagation {
 	private static final int[] ortDir = new int[]{2,4,6,8,10,12};
 	
 	/**
+	 * Blocks destroyed by the xplosion.
+	 */
+	List<Block> blocks = null;
+	
+	/**
 	 * opposite direction:<br>
 	 * 0:  no direction<br>
 	 * 1:  reserved: diagonal<br>
@@ -133,7 +138,7 @@ public class ArrayPropagation extends Propagation {
 	/**
 	 * Array increments by direction.
 	 */
-	private static final int[] aInc =  new int[13];
+	private final int[] aInc =  new int[13];
 
 	public ArrayPropagation(Settings settings) {
 		super(settings);
@@ -179,7 +184,8 @@ public class ArrayPropagation extends Propagation {
 				// TODO: setttings ?
 				realRadius = maxRadius;
 			}
-			List<Block> blocks = new LinkedList<Block>();
+			if ( blocks != null) blocks.clear(); // maybe gc :), should only happen on errors.
+			blocks = new LinkedList<Block>(); // could change this to an array, but ....
 			seqMax ++; // new round !
 			// starting at center block decrease weight and check neighbor blocks recursively, while weight > durability continue, only check
 			if (FatTnt.DEBUG) System.out.println(Defaults.msgPrefix+"Explosion at: "+world.getName()+" / "+cx+","+cy+","+cz);
@@ -187,7 +193,7 @@ public class ArrayPropagation extends Propagation {
 			this.cy = Utils.floor(cy);
 			this.cz = Utils.floor(cz);
 			n = 0;
-			propagate(world, this.cx, this.cy, this.cz, iCenter, 0, realRadius, blocks);
+			propagate(world, this.cx, this.cy, this.cz, iCenter, 0, 1+(int)(realRadius*1.7), realRadius);
 			if (FatTnt.DEBUG) System.out.println(Defaults.msgPrefix+"Strength="+realRadius+"("+maxRadius+"/"+minRes+"), visited="+n+", blocks="+blocks.size());
 			stats.addStats(FatTnt.statsBlocksVisited, n);
 			return blocks;
@@ -202,12 +208,14 @@ public class ArrayPropagation extends Propagation {
 	 * @param y
 	 * @param z
 	 * @param i index of  array
+	 * @param dir Last direction taken to this point
+	 * @param mpl maximum path length allowed from here.
 	 * @param expStr Strength of explosion, or radius
 	 * @param seq
 	 * @param blocks
 	 */
 	final void propagate(final World w, final int x, final int y, final int z, 
-			final int i, final int dir, float expStr, final List<Block> blocks){
+			final int i, final int dir, int mpl, float expStr){
 		n ++;
 		// Block type check (id):
 		final int id;
@@ -247,8 +255,11 @@ public class ArrayPropagation extends Propagation {
 		expStr -= dur; // decrease after setting the array
 		// Add block or not:
 		if (id!=0 && !noAdd && !ign) blocks.add(block);
-		// propagate:
+		// Checks for propagation:
+		if (mpl==0) return;	
 		if (i<fZ || i>izMax) return; // no propagation from edge on.
+		// TODO: use predefined directions + check here if maximum number of dirction changes is reached !
+		// propagate:
 		for (final int nd : ortDir){
 			// (iterate over orthogonal directions)
 			if (nd == oDir[dir]) continue; // prevent walking back.
@@ -259,7 +270,7 @@ public class ArrayPropagation extends Propagation {
 			if (effStr<minRes) continue; // not strong enough to propagate through any further block.
 			// Propagate if appropriate (not visited or with smaller strength).
 			final int j = i + aInc[nd];
-			if (sequence[j]!=seqMax || effStr>strength[j]) propagate(w, x+xInc[nd], y+yInc[nd], z+zInc[nd], j, nd, effStr, blocks);
+			if (sequence[j]!=seqMax || effStr>strength[j]) propagate(w, x+xInc[nd], y+yInc[nd], z+zInc[nd], j, nd, mpl-1, effStr);
 		}
 	}
 }
