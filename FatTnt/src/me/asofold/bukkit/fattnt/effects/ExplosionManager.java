@@ -177,7 +177,6 @@ public class ExplosionManager {
 			if (useDamage){
 				// TODO: damage entities according to type
 				int damage = 1 + (int) (effRad*settings.damageMultiplier*damageMultiplier) ;
-				System.out.println(damage+"|"+effRad+","+ settings.damageMultiplier+","+damageMultiplier);
 				// TODO: take into account armor, enchantments and such?
 				EntityDamageEvent event = new FatEntityDamageEvent(entity, DamageCause.ENTITY_EXPLOSION, damage, specs);
 				pm.callEvent(event);
