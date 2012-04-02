@@ -39,6 +39,8 @@ Planned:
  ! direct explode feature (threshold + possibly with probabilities: 1. p(direct) -> if not... maybe prime)
  ! Explosion API: add call with exploding entitytype as argument [exists already], but with flag to create that entity temporarily
   ? flag: alwaysIncludeTNT -> even if resistance of tnt is to high still add tnt.
+  - Option to prevent explosion events for certain configurations, if they slipped past the net of FatTnt.
+  - Check for creative mode on players (seems not to cancel damage events but have effect).
   
 Maybe:
 ? Allow to delay tnt explosion on ExplosionPrimeEvents
@@ -54,6 +56,7 @@ Maybe:
 
 SCHEDULE (Might include ideas, points to check.)
 -----------------------------------------------------------------
+! Configurable: path length multiplier
 ! Damage multiplier: Does lead to way to high damage, though md*mr == 24 
 ! Velocity cap + maybe flags what to apply it to / when
 ! check way to reduce unnecessary multiple visits: 
@@ -80,7 +83,8 @@ CHANGELOG (May show an unreleased version but only done changes.)
 
 *** [Beta/Dev stage]
 
-(0.1.6-DEV)
+(0.1.6)
+- (bugfix) Configuration reloading behavior.
 - (add) Color to stats output.
 - (adjust) When velocity and damage are applied to entities (few visible effects).
 - (add) API: Shaped how to set up events (has few effects, yet)

@@ -177,6 +177,7 @@ public class ExplosionManager {
 			if (useDamage){
 				// TODO: damage entities according to type
 				int damage = 1 + (int) (effRad*settings.damageMultiplier*damageMultiplier) ;
+				System.out.println(damage+"|"+effRad+","+ settings.damageMultiplier+","+damageMultiplier);
 				// TODO: take into account armor, enchantments and such?
 				EntityDamageEvent event = new FatEntityDamageEvent(entity, DamageCause.ENTITY_EXPLOSION, damage, specs);
 				pm.callEvent(event);
@@ -185,9 +186,9 @@ public class ExplosionManager {
 						// (declined: consider using "effective damage" for stats.)
 						// (but:) Only include >0 damage (that might lose some armored players later, but prevents including invalid entities. 
 						stats.addStats(FatTnt.statsDamage, damage); 
-					} 
+					}
 					addVelocity = true;
-				} 
+				}
 			}
 			if (addVelocity) addRandomVelocity(entity, loc, x,y,z, effRad, realRadius, settings);
 		}
