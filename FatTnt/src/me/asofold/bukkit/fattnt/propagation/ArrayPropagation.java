@@ -184,7 +184,7 @@ public class ArrayPropagation extends Propagation {
 				// TODO: setttings ?
 				realRadius = maxRadius;
 			}
-			if ( this.blocks != null) blocks.clear(); // maybe gc :), should only happen on errors.
+			if ( this.blocks != null) this.blocks.clear(); // maybe gc :), should only happen on errors.
 			List<Block> blocks = new LinkedList<Block>(); // could change this to an array, but ....
 			this.blocks = blocks;
 			seqMax ++; // new round !
@@ -221,34 +221,31 @@ public class ArrayPropagation extends Propagation {
 		n ++;
 		// Block type check (id):
 		final int id;
-		final Block block;
-		if ( y>=0 && y <= w.getMaxHeight()){// TODO: maybe +-1 ?
-			block = w.getBlockAt(x,y,z);
-			id = block.getTypeId();
-		} 
-		else{
-			id = 0;
-			block = null;
-		}
-		// Resistance check:
 		float dur ; // AIR
 		final boolean ign;
-		if (id>=0 && id<4096){
-			dur = resistance[id];
-			ign = ignore[id];
-		}
+		if ( y>=0 && y <= w.getMaxHeight()){// TODO: maybe +-1 ?
+			id = w.getBlockTypeIdAt(x,y,z);
+			if ( id == 0 ){
+				ign = true;
+				dur = resistance[id];
+			}
+			else if (id>0 && id<4096){
+				dur = resistance[id];
+				if ( sequence[i] == seqMax && strength[i] >= dur) ign = true; // TODO: might be unnecessary
+				else ign = ignore[id];
+			}
+			else{
+				dur = defaultResistance;
+				ign = true;
+			}
+		} 
 		else{
-			dur = defaultResistance;
+			dur = resistance[0];
+			id = 0;
 			ign = true;
 		}
+		// Resistance check:
 		if (FatTnt.DEBUG_LOTS) System.out.println(x+","+y+","+z+" - "+expStr+" | "+id+"@"+dur); // TODO: remove this
-		final boolean noAdd;
-		if (block == null) noAdd = true;
-		else if ( sequence[i] == seqMax){
-			if ( strength[i] >= dur) noAdd = true;
-			else noAdd = false;
-		}
-		else noAdd = false;
 		// Matrix position:
 		sequence[i] = seqMax;
 		strength[i] = expStr;
@@ -256,7 +253,7 @@ public class ArrayPropagation extends Propagation {
 		if ( dur > expStr) return; // this block stopped this path of propagation.
 		expStr -= dur; // decrease after setting the array
 		// Add block or not:
-		if (id!=0 && !noAdd && !ign) blocks.add(block);
+		if (!ign) blocks.add(w.getBlockAt(x,y,z));
 		// Checks for propagation:
 		if (mpl==0) return;	
 		if (i<fZ || i>izMax) return; // no propagation from edge on.
