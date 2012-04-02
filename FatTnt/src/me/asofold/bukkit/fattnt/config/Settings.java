@@ -1,5 +1,6 @@
 package me.asofold.bukkit.fattnt.config;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -107,12 +108,15 @@ public class Settings {
 			ignore[i] = !invertIgnored;
 		}
 		ConfigurationSection sec = cfg.getConfigurationSection(Defaults.cfgResistence);
-		for (String key : sec.getKeys(false)){
-			if ( "default".equalsIgnoreCase(key)) continue;
-			float val = (float) cfg.getDouble(Defaults.cfgResistence+"."+key+".value", 1.0);
-			minResistance = Math.min(minResistance, val);
-			for ( Integer i : Defaults.getIdList(cfg, Defaults.cfgResistence+"."+key+".ids")){
-				resistance[i] = val;
+		Collection<String> keys = sec.getKeys(false);
+		if ( keys != null){
+			for (String key : keys){
+				if ( "default".equalsIgnoreCase(key)) continue;
+				float val = (float) cfg.getDouble(Defaults.cfgResistence+"."+key+".value", 1.0);
+				minResistance = Math.min(minResistance, val);
+				for ( Integer i : Defaults.getIdList(cfg, Defaults.cfgResistence+"."+key+".ids")){
+					resistance[i] = val;
+				}
 			}
 		}
 	}
