@@ -70,17 +70,18 @@ public class ExplosionManager {
 		stats.addStats(FatTnt.statsGetBlocks, System.nanoTime()-ms);
 		stats.addStats(FatTnt.statsBlocksCollected, affected.size());
 		stats.addStats(FatTnt.statsStrength, (long) realRadius);
-		EntityExplodeEvent exE = new FatEntityExplodeEvent(explEntity, new Location(world,x,y,z), affected, settings.defaultYield );
+		FatExplosionSpecs specs = new FatExplosionSpecs();
+		EntityExplodeEvent exE = new FatEntityExplodeEvent(explEntity, new Location(world,x,y,z), affected, settings.defaultYield , specs);
 		pm.callEvent(exE);
 		if (exE.isCancelled()) return;
 		// block effects:
 		ms = System.nanoTime();
-		applyBlockEffects(world, x, y, z, realRadius, exE.blockList(), exE.getYield(), settings, propagation);
+		applyBlockEffects(world, x, y, z, realRadius, exE.blockList(), exE.getYield(), settings, propagation, specs);
 		stats.addStats(FatTnt.statsApplyBlocks, System.nanoTime()-ms);
 		// entities:
 		if ( nearbyEntities != null){
 			ms = System.nanoTime();
-			applyEntityEffects(world, x, y, z, realRadius, nearbyEntities, damageMultiplier, settings, propagation);
+			applyEntityEffects(world, x, y, z, realRadius, nearbyEntities, damageMultiplier, settings, propagation, specs);
 			stats.addStats(FatTnt.statsApplyEntities, System.nanoTime()-ms);
 		}
 		
@@ -98,8 +99,9 @@ public class ExplosionManager {
 	 * @param defaultYield
 	 * @param settings
 	 * @param propagation
+	 * @param specs 
 	 */
-	public static void applyBlockEffects(World world, double x, double y, double z, float realRadius, List<Block> blocks, float defaultYield, Settings settings, Propagation propagation){
+	public static void applyBlockEffects(World world, double x, double y, double z, float realRadius, List<Block> blocks, float defaultYield, Settings settings, Propagation propagation, FatExplosionSpecs specs){
 //		final List<block> directExplode = new LinkedList<block>(); // if set in config. - maybe later (split method to avoid recursion !)
 		for ( Block block : blocks){
 			if (block.getType() == Material.TNT){
@@ -147,8 +149,9 @@ public class ExplosionManager {
 	 * @param damageMultiplier
 	 * @param settings
 	 * @param propagation
+	 * @param specs 
 	 */
-	public static void applyEntityEffects(World world, double x, double y, double z, float realRadius, List<Entity> nearbyEntities, float damageMultiplier, Settings settings, Propagation propagation) {
+	public static void applyEntityEffects(World world, double x, double y, double z, float realRadius, List<Entity> nearbyEntities, float damageMultiplier, Settings settings, Propagation propagation, FatExplosionSpecs specs) {
 		if ( realRadius > settings.maxRadius){
 			// TODO: settings ?
 			realRadius = settings.maxRadius;
@@ -160,16 +163,27 @@ public class ExplosionManager {
 			final Location loc = entity.getLocation();
 			final float effRad = propagation.getStrength(loc); // effective strength/radius
 			if ( effRad == 0.0f) continue; // not affected
-			addRandomVelocity(entity, loc, x,y,z, effRad, realRadius, settings);
-			if (settings.sparePrimed && (entity instanceof TNTPrimed)) continue;
-			// TODO: damage entities according to type
-			int damage = 1 + (int) (effRad*settings.damageMultiplier*damageMultiplier) ;
-			// TODO: take into account armor, enchantments and such?
-			EntityDamageEvent event = new FatEntityDamageEvent(entity, DamageCause.ENTITY_EXPLOSION, damage);
-			pm.callEvent(event);
-			if (!event.isCancelled()){
-				Utils.damageEntity(event);
+			boolean addVelocity = true;
+			boolean useDamage = true;
+			if (settings.sparePrimed && (entity instanceof TNTPrimed)){
+				addVelocity = false;
+				useDamage = false;
 			}
+			if (useDamage){
+				// TODO: damage entities according to type
+				int damage = 1 + (int) (effRad*settings.damageMultiplier*damageMultiplier) ;
+				// TODO: take into account armor, enchantments and such?
+				EntityDamageEvent event = new FatEntityDamageEvent(entity, DamageCause.ENTITY_EXPLOSION, damage, specs);
+				pm.callEvent(event);
+				if (!event.isCancelled()){
+					if (Utils.damageEntity(event) > 0){
+						// (declined: consider using "effective damage" for stats.)
+						// (but:) Only include >0 damage (that might lose some armored players later, but prevents including invalid entities. 
+						stats.addStats(FatTnt.statsDamage, damage); 
+					}
+				} 
+			}
+			if (addVelocity) addRandomVelocity(entity, loc, x,y,z, effRad, realRadius, settings);
 		}
 	}
 	

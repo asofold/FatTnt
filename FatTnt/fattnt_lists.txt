@@ -55,17 +55,19 @@ Maybe:
 SCHEDULE (Might include ideas, points to check.)
 -----------------------------------------------------------------
 ! check way to reduce unnecessary multiple visits: 
-    a) park positions and continue later(minimum sphere) 
-    b) maybe use preset directions map
-    c) maximum path length for propagation
-    d) maximum number of direction changes
-    e) all in one method, no recursion (at the cost of permanently used memory, though) 
-    f) if e) used: one might release the memory if not used, so the next explosion will take more time. [RATHER NOT]
+    a) (.) park positions and continue later(minimum sphere) 
+    b) (.) maybe use preset directions map
+    c) (x) maximum path length for propagation [Less blocks visited by recursion]
+    d) (.) maximum number of direction changes
+    e) (.) all in one method, no recursion (at the cost of permanently used memory, though) 
+    f) (.) if e) used: one might release the memory if not used, so the next explosion will take more time. [RATHER NOT]
 ! Make some settings dependent on entities (damage multiplier at least)
 ! (add) The arrow effect possible ! (possibly splash potions too ?)
 ! (add) spare entities instead of a spare tnt flag. [maybe as part of specific configurations]
 ! (add) EntityDamageByEntity event ?
 ! (add) blocks that let the explosion through but can be destroyed (alter to ignore, destructible)
+! (add) various options to manipulate tnt that gets primed: randomized duration, fast explode (fixed start), decrease of duration (fixed) 
+- (add) Configure world specific settings (and defaults), at least: disable certain worlds. 
 
 CHANGELOG (May show an unreleased version but only done changes.)
 -----------------------------------------------------------------
@@ -74,6 +76,8 @@ CHANGELOG (May show an unreleased version but only done changes.)
 *** [Beta/Dev stage]
 
 (0.1.6-DEV)
+- (add) API: Shaped how to set up events (has few effects, yet)
+- (add) Stats entries, such as damage, ...
 - (adjust) Damage multiplier to 3.0 (forgot the initial radius is greater than 1)
 
 (0.1.5)

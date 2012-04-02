@@ -227,7 +227,7 @@ public class ArrayPropagation extends Propagation {
 			id = w.getBlockTypeIdAt(x,y,z);
 			if ( id == 0 ){
 				ign = true;
-				dur = resistance[id];
+				dur = resistance[0];
 			}
 			else if (id>0 && id<4096){
 				dur = resistance[id];
