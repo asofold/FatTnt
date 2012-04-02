@@ -78,7 +78,7 @@ public class FatTnt extends JavaPlugin implements Listener {
 	public boolean onCommand(CommandSender sender, Command command,
 			String label, String[] args) {
 		label = label.toLowerCase();
-		if ( !label.equals("fattnt")) return false;
+		if ( !label.equals("fattnt") && !label.equals("ftnt")) return false;
 		int len = args.length;
 		if (len==1 && args[0].equalsIgnoreCase("reload")){
 			if ( !Utils.checkPerm(sender, "fattnt.cmd.reload")) return true;
