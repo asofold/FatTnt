@@ -53,6 +53,7 @@ Maybe:
  ? use lock + exception later on for API access
  ? prime tnt from itm drops or when in fire?
  ? other explosion shaping
+!(add) Chance for tnt getting disabled under certain circumstances (not go off in water, or not getting primed there).
 
 SCHEDULE (Might include ideas, points to check.)
 -----------------------------------------------------------------
