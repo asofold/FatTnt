@@ -5,3 +5,5 @@ commands:
   fattnt:
     description: 'Reload, enable, disable etc.'
     usage: '/fattnt reload | /fattnt enable | /fattnt disable | /fattnt stats | /fattnt stats reset |'
+    aliases:
+    - ftnt
