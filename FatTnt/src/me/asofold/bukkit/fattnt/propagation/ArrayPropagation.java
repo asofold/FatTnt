@@ -184,8 +184,9 @@ public class ArrayPropagation extends Propagation {
 				// TODO: setttings ?
 				realRadius = maxRadius;
 			}
-			if ( blocks != null) blocks.clear(); // maybe gc :), should only happen on errors.
-			blocks = new LinkedList<Block>(); // could change this to an array, but ....
+			if ( this.blocks != null) blocks.clear(); // maybe gc :), should only happen on errors.
+			List<Block> blocks = new LinkedList<Block>(); // could change this to an array, but ....
+			this.blocks = blocks;
 			seqMax ++; // new round !
 			// starting at center block decrease weight and check neighbor blocks recursively, while weight > durability continue, only check
 			if (FatTnt.DEBUG) System.out.println(Defaults.msgPrefix+"Explosion at: "+world.getName()+" / "+cx+","+cy+","+cz);
@@ -196,6 +197,7 @@ public class ArrayPropagation extends Propagation {
 			propagate(world, this.cx, this.cy, this.cz, iCenter, 0, 1+(int)(realRadius*1.7), realRadius);
 			if (FatTnt.DEBUG) System.out.println(Defaults.msgPrefix+"Strength="+realRadius+"("+maxRadius+"/"+minRes+"), visited="+n+", blocks="+blocks.size());
 			stats.addStats(FatTnt.statsBlocksVisited, n);
+			this.blocks = null;
 			return blocks;
 		}
 	}
