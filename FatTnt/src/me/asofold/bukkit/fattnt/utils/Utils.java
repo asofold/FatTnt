@@ -98,11 +98,16 @@ public class Utils {
 		entity.setLastDamageCause(event); 
 		if ( type.isAlive()){
 			// TODO: armor !
-			((LivingEntity) entity).damage(damage);
-			return damage;
+			// TODO: set damager if possible. [Needs EntityDamageByEntityEvent]
+			LivingEntity living = (LivingEntity) entity;
+			living.damage(damage);
 		} 
-		// TODO: some stuff with different entity types (vehicles, items, paintings).
-		// TODO: maybe some destruction chance !
+		else{
+			// TODO: some stuff with different entity types (vehicles, items, paintings).
+			// TODO: maybe some destruction chance !
+			damage = 0;
+		}
+		
 		return 0;
 	}
 
