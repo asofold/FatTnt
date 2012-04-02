@@ -135,6 +135,7 @@ public class FatTnt extends JavaPlugin implements Listener {
 		if (!settings.handleExplosions) return;
 		else if (event.isCancelled()) return;
 		else if (!settings.handledEntities.contains(event.getEntityType())) return;
+		// TODO: maybe apply delay setting here ...
 		// do prepare to handle this explosion:
 		event.setCancelled(true);
 //		waitingEP = event;
