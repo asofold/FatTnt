@@ -163,11 +163,16 @@ public class ExplosionManager {
 			final Location loc = entity.getLocation();
 			final float effRad = propagation.getStrength(loc); // effective strength/radius
 			if ( effRad == 0.0f) continue; // not affected
-			boolean addVelocity = true;
+			boolean addVelocity = false;
 			boolean useDamage = true;
 			if (settings.sparePrimed && (entity instanceof TNTPrimed)){
 				addVelocity = true;
 				useDamage = false;
+			} 
+			else if (entity instanceof Item){
+				addVelocity = false;
+				useDamage = false;
+				// TODO: either use yield here or let damageEntity decide bout removal !
 			}
 			if (useDamage){
 				// TODO: damage entities according to type
@@ -180,17 +185,9 @@ public class ExplosionManager {
 						// (declined: consider using "effective damage" for stats.)
 						// (but:) Only include >0 damage (that might lose some armored players later, but prevents including invalid entities. 
 						stats.addStats(FatTnt.statsDamage, damage); 
-					} else{
-						// CURRENTLY, MIGHT BE CHANGED
-						addVelocity = false;
-					}
-				} else{
-					// CURRENTLY, MIGHT BE CHANGED
-					addVelocity = false;
-				}
-			} else{
-				// CURRENTLY, MIGHT BE CHANGED
-				addVelocity = false;
+					} 
+					addVelocity = true;
+				} 
 			}
 			if (addVelocity) addRandomVelocity(entity, loc, x,y,z, effRad, realRadius, settings);
 		}
