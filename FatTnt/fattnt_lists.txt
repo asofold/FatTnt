@@ -54,7 +54,13 @@ Maybe:
 
 SCHEDULE (Might include ideas, points to check.)
 -----------------------------------------------------------------
-! check way to reduce unnecessary multiple visits: a) park positions and continue later(minimum sphere) b) maybe use preset directions map 
+! check way to reduce unnecessary multiple visits: 
+    a) park positions and continue later(minimum sphere) 
+    b) maybe use preset directions map
+    c) maximum path length for propagation
+    d) maximum number of direction changes
+    e) all in one method, no recursion (at the cost of permanently used memory, though) 
+    f) if e) used: one might release the memory if not used, so the next explosion will take more time. [RATHER NOT]
 ! Make some settings dependent on entities (damage multiplier at least)
 ! (add) The arrow effect possible ! (possibly splash potions too ?)
 ! (add) spare entities instead of a spare tnt flag. [maybe as part of specific configurations]
