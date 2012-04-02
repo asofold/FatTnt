@@ -117,10 +117,10 @@ public class FatTnt extends JavaPlugin implements Listener {
 	public void reloadSettings() {
 		File file = new File (getDataFolder(), "config.yml");
 		boolean exists = file.exists();
-		if ( exists) reloadConfig();
+		reloadConfig();
 		FileConfiguration cfg = getConfig();
-		if (Defaults.addDefaultSettings(cfg)) saveConfig();
-		else if (!exists) saveConfig();
+		boolean changed = Defaults.addDefaultSettings(cfg);
+		if (!exists || changed) saveConfig();
 		settings.applyConfig(cfg);
 		// TODO: propagation pbased on config (Factory)
 		propagation = PropagationFactory.getPropagation(settings);
