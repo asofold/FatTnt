@@ -20,8 +20,14 @@ public class Stats {
 	private boolean showRange = true;
 	private final Map<Integer, Entry> entries = new HashMap<Integer, Stats.Entry>();
 	private final DecimalFormat f;
+	private final String label;
 	
 	public Stats(){
+		this("[Stats]");
+	}
+	
+	public Stats(String label){
+		this.label = label;
 		f = new DecimalFormat();
 		f.setGroupingUsed(true);
 		f.setGroupingSize(3);
@@ -71,7 +77,7 @@ public class Stats {
 	
 	public final String getStatsStr(boolean colors) {
 		StringBuilder b = new StringBuilder(400);
-		b.append("Stats:   ");
+		b.append(label+" ");
 		boolean first = true;
 		for ( Integer id : entries.keySet()){
 			if ( !first) b.append(" | ");
