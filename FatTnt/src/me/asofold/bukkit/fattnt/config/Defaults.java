@@ -81,7 +81,7 @@ public class Defaults {
 	/**
 	 * Multiplier for entity damage.
 	 */
-	public static final float damageMultiplier = 12.0f;
+	public static final float damageMultiplier = 3.0f;
 	
 	/**
 	 * Default explosion  resistance value for all materials that are not in one of the resistance-lists.

@@ -20,17 +20,15 @@ Features:
  
 Issues:
 ! propagation differs slightly concerning x / z !.
- ! Velocity cap + maybe flags what to apply it to / when
  ! Sand/TNT spazzing: First set blocks without physics, then later apply physics [physics might be scheduled to the next tick ...]?
- ! Must add: fire, if fire is set.
  ! adjust default values to something realistic...
  ! Re-think event priorities and canceling to allow other plugins canceling the ExplosionPrimeEvent as well [Probably ok with highest].
  ! Re-think which events to intercept: [Currently for performance reason TNTPrimed is canceled always, to prevent calculations for the explosion being done by CraftBukkit or MC] 
- ? Allow arbitrary strength (but limit radius) ?
- ? flag: alwaysIncludeTNT -> even if resistance of tnt is to high still add tnt.
- ! flag: only apply velocity if damage event is not canceled !
  
 Planned:
+ ! flag: only apply velocity if damage event is not canceled !
+ ! Must add: fire, if fire is set.
+ ! Velocity cap + maybe flags what to apply it to / when
  ! Random tick delay for primed tnt.
  ! add configuration flag for enabled (need not be changed by commands).
  ! MAKE SETTINGE DETACHED , default, world specific, ... further ...
@@ -41,8 +39,10 @@ Planned:
  ! More events (+configurable if, also for the old ones !) like ItemSpawn or similar.
  ! direct explode feature (threshold + possibly with probabilities: 1. p(direct) -> if not... maybe prime)
  ! Explosion API: add call with exploding entitytype as argument [exists already], but with flag to create that entity temporarily
- 
+  ? flag: alwaysIncludeTNT -> even if resistance of tnt is to high still add tnt.
+  
 Maybe:
+ ? Allow arbitrary strength (but limit radius) ?
  ? More custom settings to allow for adding fire or whatever to certain or all explosions.
  ! Fire custom event allowing for adjusting manipulations in a more fine grained way (!)
  ? configure maximum radius to be handled and if to be aborted otherwise.
@@ -56,7 +56,8 @@ SCHEDULE (Might include ideas, points to check.)
 -----------------------------------------------------------------
 ! check way to reduce unnecessary multiple visits: a) park positions and continue later(minimum sphere) b) maybe use preset directions map 
 ! Make some settings dependent on entities (damage multiplier at least)
-! (add) The arrow effect possible !
+! (add) The arrow effect possible ! (possibly splash potions too ?)
+! (add) spare entities instead of a spare tnt flag. [maybe as part of specific configurations]
 ! (add) EntityDamageByEntity event ?
 ! (add) blocks that let the explosion through but can be destroyed (alter to ignore, destructible)
 
@@ -65,6 +66,9 @@ CHANGELOG (May show an unreleased version but only done changes.)
 
 
 *** [Beta/Dev stage]
+
+(0.1.6-DEV)
+- (adjust) Damage multiplier to 3.0 (forgot the initial radius is greater than 1)
 
 (0.1.5)
 - (add) Stats (from RSP), with command "stats" and "stats reset", for various parts of the calculations (time and other)
