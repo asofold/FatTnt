@@ -35,6 +35,8 @@ public class Settings {
 	
 	public float damageMultiplier = Defaults.damageMultiplier;
 	
+	public float maxPathMultiplier = Defaults.maxPathMultiplier;
+	
 	public float defaultResistance = Defaults.defaultResistance;
 	
 	/**
@@ -83,6 +85,7 @@ public class Settings {
 		}
 		radiusMultiplier = (float) cfg.getDouble(Defaults.cfgMultRadius);
 		damageMultiplier = (float) cfg.getDouble(Defaults.cfgMultDamage);
+		maxPathMultiplier = (float) cfg.getDouble(Defaults.cfgMultMaxPath);
 		invertIgnored = cfg.getBoolean(Defaults.cfgInvertIgnored);
 		defaultResistance = (float) cfg.getDouble(Defaults.cfgDefaultResistence);
 		minResistance = Math.min(minResistance, defaultResistance);

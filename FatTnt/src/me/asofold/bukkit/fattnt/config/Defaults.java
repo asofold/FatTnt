@@ -9,11 +9,18 @@ import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.util.Vector;
 
+/**
+ * Default settings and values:
+ * TODO: for simply members: move values back to Settings and use newSettings() to get the default value ! [spares double defs] 
+ * @author mc_dev
+ *
+ */
 public class Defaults {
 
 	// config
 	public static final String cfgMultRadius = "multiplier.radius";
 	public static final String cfgMultDamage = "multiplier.damage";
+	public static final String cfgMultMaxPath = "multiplier.max-path";
 	public static final String cfgIgnore = "ignore-blocks";
 	public static final String cfgInvertIgnored= "invert-ignored";
 	public static final String cfgResistence = "resistence";
@@ -82,6 +89,9 @@ public class Defaults {
 	 * Multiplier for entity damage.
 	 */
 	public static final float damageMultiplier = 3.0f;
+	
+	
+	public static final float maxPathMultiplier = 1.7f;
 	
 	/**
 	 * Default explosion  resistance value for all materials that are not in one of the resistance-lists.
@@ -177,6 +187,10 @@ public class Defaults {
 		}
 		if ( !cfg.contains(cfgMultRadius)){
 			cfg.set(cfgMultRadius, radiusMultiplier);
+			changed = true;
+		}
+		if ( !cfg.contains(cfgMultMaxPath)){
+			cfg.set(cfgMultMaxPath, maxPathMultiplier);
 			changed = true;
 		}
 		if ( !cfg.contains(cfgRandRadius)){

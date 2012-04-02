@@ -39,6 +39,8 @@ public class ArrayPropagation extends Propagation {
 	
 	float minRes;
 	
+	float maxPath;
+	
 	private static final int[] ortDir = new int[]{2,4,6,8,10,12};
 	
 	/**
@@ -144,6 +146,7 @@ public class ArrayPropagation extends Propagation {
 		super(settings);
 		fStraight = settings.fStraight;
 		minRes = settings.minResistance;
+		maxPath = settings.maxPathMultiplier;
 		createArrays();
 	}
 	
@@ -194,7 +197,7 @@ public class ArrayPropagation extends Propagation {
 			this.cy = Utils.floor(cy);
 			this.cz = Utils.floor(cz);
 			n = 0;
-			propagate(world, this.cx, this.cy, this.cz, iCenter, 0, 1+(int)(realRadius*1.7), realRadius);
+			propagate(world, this.cx, this.cy, this.cz, iCenter, 0, 1+(int)(realRadius*maxPath), realRadius);
 			if (FatTnt.DEBUG) System.out.println(Defaults.msgPrefix+"Strength="+realRadius+"("+maxRadius+"/"+minRes+"), visited="+n+", blocks="+blocks.size());
 			stats.addStats(FatTnt.statsBlocksVisited, n);
 			this.blocks = null;
