@@ -108,7 +108,7 @@ public class Utils {
 			damage = 0;
 		}
 		
-		return 0;
+		return damage;
 	}
 
 	/**
