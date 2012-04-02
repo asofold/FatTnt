@@ -39,7 +39,7 @@ public class FatTnt extends JavaPlugin implements Listener {
 	public static final boolean DEBUG = false;
 	public static final boolean DEBUG_LOTS = false;
 	
-	private static final Stats stats = new Stats();
+	private static final Stats stats = new Stats(Defaults.msgPrefix.trim()+"[STATS]");
 	public static final Integer statsGetBlocks = stats.getNewId("get_blocks");
 	public static final Integer statsApplyBlocks = stats.getNewId("apply_blocks");
 	public static final Integer statsApplyEntities = stats.getNewId("apply_entities");
@@ -49,6 +49,7 @@ public class FatTnt extends JavaPlugin implements Listener {
 	public static final Integer statsStrength = stats.getNewId("strength");
 	public static final Integer statsAll = stats.getNewId("all");
 	static {
+		stats.setLogStats(DEBUG);
 		ExplosionManager.setStats(stats);
 	}
 	
@@ -100,7 +101,7 @@ public class FatTnt extends JavaPlugin implements Listener {
 		}
 		else if (len==1 && (args[0].equalsIgnoreCase("stats") || args[0].equalsIgnoreCase("st"))){
 			if ( !Utils.checkPerm(sender, "fattnt.cmd.stats.see")) return true;
-			Utils.send(sender, stats.getStatsStr(true));
+			Utils.send(sender, stats.getStatsStr(true), false);
 			return true;
 		}
 		else if (len==2 && (args[0].equalsIgnoreCase("stats") || args[0].equalsIgnoreCase("st")) && args[1].equalsIgnoreCase("reset")){
