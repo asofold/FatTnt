@@ -98,12 +98,12 @@ public class FatTnt extends JavaPlugin implements Listener {
 			Utils.send( sender, "Explosions are back to default behavior (disregarding other plugins)."); 
 			return true;
 		}
-		else if (len==1 && args[0].equalsIgnoreCase("stats")){
+		else if (len==1 && (args[0].equalsIgnoreCase("stats") || args[0].equalsIgnoreCase("st"))){
 			if ( !Utils.checkPerm(sender, "fattnt.cmd.stats.see")) return true;
 			Utils.send(sender, stats.getStatsStr(true));
 			return true;
 		}
-		else if (len==2 && args[0].equalsIgnoreCase("stats") && args[1].equalsIgnoreCase("reset")){
+		else if (len==2 && (args[0].equalsIgnoreCase("stats") || args[0].equalsIgnoreCase("st")) && args[1].equalsIgnoreCase("reset")){
 			if ( !Utils.checkPerm(sender, "fattnt.cmd.stats.reset")) return true;
 			stats.clear();
 			Utils.send(sender, "Stats reset.");
