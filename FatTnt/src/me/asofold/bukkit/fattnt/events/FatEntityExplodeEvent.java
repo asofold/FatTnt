@@ -2,16 +2,26 @@ package me.asofold.bukkit.fattnt.events;
 
 import java.util.List;
 
+import me.asofold.bukkit.fattnt.effects.FatExplosionSpecs;
+
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.entity.EntityExplodeEvent;
 
-public class FatEntityExplodeEvent extends EntityExplodeEvent {
+public class FatEntityExplodeEvent extends EntityExplodeEvent implements FatExplodeEvent{
+
+	private final FatExplosionSpecs specs;
 
 	public FatEntityExplodeEvent(Entity what, Location location,
-			List<Block> blocks, float yield) {
+			List<Block> blocks, float yield, FatExplosionSpecs specs) {
 		super(what, location, blocks, yield);
+		this.specs = specs;
+	}
+
+	@Override
+	public FatExplosionSpecs getExplosionSpecs() {
+		return specs;
 	}
 
 }
