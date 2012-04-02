@@ -18,7 +18,7 @@ Features:
 - Let explosions go through blocks without destruction (configurable, defaults to: lava, water, bedrock, other).
 - damage living entities according to the arriving strength of the explosion, not the distance to the center.
 - Fires EntityExplodeEvent and EntityDamageEvent and allows canceling by other plugins.
-- API might be used by other events to trigger explosions.
+- API might be used by other plugins to trigger explosions.
  
 Issues:
 ! Sand/TNT spazzing: First set blocks without physics, then later apply physics [physics might be scheduled to the next tick ...]?
