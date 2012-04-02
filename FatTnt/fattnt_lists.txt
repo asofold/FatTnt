@@ -8,25 +8,26 @@ Supposedly this would range from public domain (probably not) to somewhere aroun
 Actually it is safe to assume MIT license, but if the license can be "less", i will probably make it so.
 
 
+ACTUAL LISTS
+----------------
 
 Features: 
- - select what entities are handled (tnt, creeper?)
- - configure: block resistance (strength)
- - modifiers for explosion radius and damage
- - Let explosions go through blocks without destruction (configurable, defaults to: lava, water, bedrock, other).
- - damage living entities according to the arriving strength of the explosion, not the distance to the center.
- - Fires EntityExplodeEvent and EntityDamageEvent and allows canceling by other plugins.
- - API might be used by other events to trigger explosions.
+- select what entities are handled (tnt, creeper?)
+- configure: block resistance (strength)
+- modifiers for explosion radius and damage
+- Let explosions go through blocks without destruction (configurable, defaults to: lava, water, bedrock, other).
+- damage living entities according to the arriving strength of the explosion, not the distance to the center.
+- Fires EntityExplodeEvent and EntityDamageEvent and allows canceling by other plugins.
+- API might be used by other events to trigger explosions.
  
 Issues:
-! propagation differs slightly concerning x / z !.
- ! Sand/TNT spazzing: First set blocks without physics, then later apply physics [physics might be scheduled to the next tick ...]?
- ! adjust default values to something realistic...
- ! Re-think event priorities and canceling to allow other plugins canceling the ExplosionPrimeEvent as well [Probably ok with highest].
- ! Re-think which events to intercept: [Currently for performance reason TNTPrimed is canceled always, to prevent calculations for the explosion being done by CraftBukkit or MC] 
- 
+! Sand/TNT spazzing: First set blocks without physics, then later apply physics [physics might be scheduled to the next tick ...]?
+! Re-think event priorities and canceling to allow other plugins canceling the ExplosionPrimeEvent as well [Probably ok with highest].
+! Re-think which events to intercept: [Currently for performance reason TNTPrimed is canceled always, to prevent calculations for the explosion being done by CraftBukkit or MC]
+? propagation differs slightly concerning x / z ? [Will change anyway, seems to be about right now.] 
+! ALWAYS: keep adjusting  default values to something realistic...
+  
 Planned:
- ! flag: only apply velocity if damage event is not canceled !
  ! Must add: fire, if fire is set.
  ! Random tick delay for primed tnt.
  ! add configuration flag for enabled (need not be changed by commands).
@@ -36,29 +37,33 @@ Planned:
  ! Use velocity events if possible !
  ! add explosions on water : do allow config option to only damage entities.
  ! More events (+configurable if, also for the old ones !) like ItemSpawn or similar.
- ! direct explode feature (threshold + possibly with probabilities: 1. p(direct) -> if not... maybe prime)
+ ! direct explode feature (threshold + possibly with probabilities: 1. p(direct) -> if not... maybe prime) [Might better be a lower ignition value for primed tnt, rather than exploding it directly]
  ! Explosion API: add call with exploding entitytype as argument [exists already], but with flag to create that entity temporarily
   ? flag: alwaysIncludeTNT -> even if resistance of tnt is to high still add tnt.
   - Option to prevent explosion events for certain configurations, if they slipped past the net of FatTnt.
   - Check for creative mode on players (seems not to cancel damage events but have effect).
   
 Maybe:
-? Allow to delay tnt explosion on ExplosionPrimeEvents
- ? Allow arbitrary strength (but limit radius) ?
- ? More custom settings to allow for adding fire or whatever to certain or all explosions.
- ! Fire custom event allowing for adjusting manipulations in a more fine grained way (!)
- ? configure maximum radius to be handled and if to be aborted otherwise.
- ? propagate explosion slowly ?
- ? Schedule TNT option (limit to n per tick)
- ? use lock + exception later on for API access
- ? prime tnt from itm drops or when in fire?
- ? other explosion shaping
+? Allow to delay tnt explosion on ExplosionPrimeEvents (schedule new or st primed for later)
+? Allow arbitrary strength (but limit radius) ?
+? configure maximum radius to be handled and if to be aborted otherwisec or log/warn.
+? propagate explosion slowly ?
+? Schedule TNT option (limit to n per tick)
+? use lock + exception later on for API access
+? prime tnt from itm drops or when in fire?
+? other explosion shaping
 !(add) Chance for tnt getting disabled under certain circumstances (not go off in water, or not getting primed there).
 
 SCHEDULE (Might include ideas, points to check.)
 -----------------------------------------------------------------
-! Configurable: path length multiplier
-! Damage multiplier: Does lead to way to high damage, though md*mr == 24 
+! Add good explanation of what i will do / when, what the plugins does/not.
+    - (i will not try to find the BEST configuration that is CLOSEST to Vanilla, 
+      but i will add one if someone claims to have found it and others confirm it).
+    - Do point out where are differnces to vanilla and which will certainly be adjusted to be close to vanilla if wanted.
+    - Performance implications (Memory, CPU) + example stats.
+    - ...
+! Config option to let TNT-Items be changed to primed tnt if hit by the explosion (+extra resistance for that)!
+! Config option to allo tnt to be dropped as item with probability, also add probability for actually destroying tnt items as well.
 ! Velocity cap + maybe flags what to apply it to / when
 ! check way to reduce unnecessary multiple visits: 
     a) (.) park positions and continue later(minimum sphere) 
@@ -69,14 +74,16 @@ SCHEDULE (Might include ideas, points to check.)
     f) (.) if e) used: one might release the memory if not used, so the next explosion will take more time. [RATHER NOT]
     g) (.) decrease direction changes with each step anyway but keep at some minimum if going into the same direction !
     h) (.) Use direction change and path length independently (decrease on base of what happens, change or stay).
-    i) (...) Boil all down to some algorithm that does it in another way, just faster :)
+    j) (.) Add moving heuristic, that gives possible continuations according to already chosen path !
+    z) (...) Boil all down to some algorithm that does it in another way, just faster :)
 ! Make some settings dependent on entities (damage multiplier at least)
 ! (add) The arrow effect possible ! (possibly splash potions too ?)
 ! (add) spare entities instead of a spare tnt flag. [maybe as part of specific configurations]
 ! (add) EntityDamageByEntity event ?
 ! (add) blocks that let the explosion through but can be destroyed (alter to ignore, destructible)
 ! (add) various options to manipulate tnt that gets primed: randomized duration, fast explode (fixed start), decrease of duration (fixed) 
-- (add) Configure world specific settings (and defaults), at least: disable certain worlds. 
+! (add) Configure world specific settings (and defaults), at least: disable certain worlds. 
+! Fire custom events (with content) allowing for adjusting manipulations in a more fine grained way (!) [Basic design done: just adds an object, later convenience method, that check if given FatExplosionSpecs do have the property and return accordingly instead of an exception]
 
 CHANGELOG (May show an unreleased version but only done changes.)
 -----------------------------------------------------------------
