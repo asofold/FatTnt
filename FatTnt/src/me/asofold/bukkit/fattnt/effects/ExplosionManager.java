@@ -180,8 +180,17 @@ public class ExplosionManager {
 						// (declined: consider using "effective damage" for stats.)
 						// (but:) Only include >0 damage (that might lose some armored players later, but prevents including invalid entities. 
 						stats.addStats(FatTnt.statsDamage, damage); 
+					} else{
+						// CURRENTLY, MIGHT BE CHANGED
+						addVelocity = false;
 					}
-				} 
+				} else{
+					// CURRENTLY, MIGHT BE CHANGED
+					addVelocity = false;
+				}
+			} else{
+				// CURRENTLY, MIGHT BE CHANGED
+				addVelocity = false;
 			}
 			if (addVelocity) addRandomVelocity(entity, loc, x,y,z, effRad, realRadius, settings);
 		}
