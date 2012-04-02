@@ -28,7 +28,6 @@ Issues:
 Planned:
  ! flag: only apply velocity if damage event is not canceled !
  ! Must add: fire, if fire is set.
- ! Velocity cap + maybe flags what to apply it to / when
  ! Random tick delay for primed tnt.
  ! add configuration flag for enabled (need not be changed by commands).
  ! MAKE SETTINGE DETACHED , default, world specific, ... further ...
@@ -42,6 +41,7 @@ Planned:
   ? flag: alwaysIncludeTNT -> even if resistance of tnt is to high still add tnt.
   
 Maybe:
+? Allow to delay tnt explosion on ExplosionPrimeEvents
  ? Allow arbitrary strength (but limit radius) ?
  ? More custom settings to allow for adding fire or whatever to certain or all explosions.
  ! Fire custom event allowing for adjusting manipulations in a more fine grained way (!)
@@ -54,6 +54,8 @@ Maybe:
 
 SCHEDULE (Might include ideas, points to check.)
 -----------------------------------------------------------------
+! Damage multiplier: Does lead to way to high damage, though md*mr == 24 
+! Velocity cap + maybe flags what to apply it to / when
 ! check way to reduce unnecessary multiple visits: 
     a) (.) park positions and continue later(minimum sphere) 
     b) (.) maybe use preset directions map
@@ -61,6 +63,9 @@ SCHEDULE (Might include ideas, points to check.)
     d) (.) maximum number of direction changes
     e) (.) all in one method, no recursion (at the cost of permanently used memory, though) 
     f) (.) if e) used: one might release the memory if not used, so the next explosion will take more time. [RATHER NOT]
+    g) (.) decrease direction changes with each step anyway but keep at some minimum if going into the same direction !
+    h) (.) Use direction change and path length independently (decrease on base of what happens, change or stay).
+    i) (...) Boil all down to some algorithm that does it in another way, just faster :)
 ! Make some settings dependent on entities (damage multiplier at least)
 ! (add) The arrow effect possible ! (possibly splash potions too ?)
 ! (add) spare entities instead of a spare tnt flag. [maybe as part of specific configurations]
@@ -76,6 +81,8 @@ CHANGELOG (May show an unreleased version but only done changes.)
 *** [Beta/Dev stage]
 
 (0.1.6-DEV)
+- (add) Color to stats output.
+- (adjust) When velocity and damage are applied to entities (few visible effects).
 - (add) API: Shaped how to set up events (has few effects, yet)
 - (add) Stats entries, such as damage, ...
 - (adjust) Damage multiplier to 3.0 (forgot the initial radius is greater than 1)
