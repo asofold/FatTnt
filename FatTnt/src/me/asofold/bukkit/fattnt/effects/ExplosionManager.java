@@ -132,7 +132,7 @@ public class ExplosionManager {
 		}
 		if (settings.stepPhysics){
 			for ( Block block : blocks){
-				block.setTypeId(0, true);
+				block.getState().update();
 			}
 		}
 	}

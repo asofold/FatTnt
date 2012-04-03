@@ -98,7 +98,7 @@ CHANGELOG (May show an unreleased version but only done changes.)
 *** [Beta/Dev stage]
 
 (0.1.7) ["almost vanilla"]
-- (add) step-physics option, which currently removes blocks without applying physics on explosions [experimental, probably not recommendable]
+- (add) step-physics option, which currently removes blocks without applying physics on explosions [inoperable, just does not apply any physics]
 - (add) randomized tnt ignition (min-prime, max-prime) [currently only if hit by explosion]
 - (add) max-items setting to spawn multiple but not arbitrarily many if an item stack has more...
 - (add) Projectiles hit by explosion get affected.
