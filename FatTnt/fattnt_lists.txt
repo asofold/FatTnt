@@ -92,6 +92,7 @@ SCHEDULE (Might include ideas, points to check.)
 ! Fire custom events (with content) allowing for adjusting manipulations in a more fine grained way (!) [Basic design done: just adds an object, later convenience method, that check if given FatExplosionSpecs do have the property and return accordingly instead of an exception]
 ! add PriorityValue etc. from swgt for configuration.
 ! smarter reload: Propagation.applySettings (maybe factory method for replacing, invoking necessary checks)
+! add option: placing tnt to replace lava or fire could result in primed tnt too ...
 
 CHANGELOG (May show an unreleased version but only done changes.)
 -----------------------------------------------------------------
@@ -99,7 +100,7 @@ CHANGELOG (May show an unreleased version but only done changes.)
 
 *** [Beta/Dev stage]
 
-(0.1.8-DEV)
+(0.1.8-DEV-X)
 - (bugfix) Randomized fuse ticks: min-prime and max-prime are now correctly used: either <= 0 will be default Minecraft fuse ticks, otherwise from ... to.
 
 (0.1.7) ["almost vanilla"]
