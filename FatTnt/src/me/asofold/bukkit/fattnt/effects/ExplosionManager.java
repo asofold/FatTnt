@@ -344,9 +344,10 @@ public class ExplosionManager {
 	}
 
 	/**
-	 * Apply the explosion effect in that world, 
+	 * Show the explosion effect in that world, 
 	 * currently this simply delegates to create an explosion with radius 0,
-	 * later it might add other effects.
+	 * later it might add other effects, depending on radius and fire.<br>
+	 * This does not explode anything it just creates the effect.
 	 * @param world
 	 * @param x
 	 * @param y

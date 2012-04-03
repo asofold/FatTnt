@@ -42,7 +42,7 @@ Planned:
 ? flag: alwaysIncludeTNT -> even if resistance of tnt is to high still add tnt.
 ! Option to prevent explosion events for certain configurations, if they slipped past the net of FatTnt.
 ! Check for creative mode on players (seems not to cancel damage events but have effect).
-! creation of entities from blocks: eneric defs for velocity etc.
+! creation of entities from blocks: generic defs for velocity etc.
 ! Transformations for entities (hit) ... also generic setups, from(conditions, minStr, entity specific)...ro(velocity, entity specific, removal)
 ? (add) EntityCombust for tnt : create primed tnt for item
   
@@ -75,7 +75,7 @@ SCHEDULE (Might include ideas, points to check.)
 ! check way to reduce unnecessary multiple visits: 
     a) (.) park positions and continue later(minimum sphere) 
     b) (.) maybe use preset directions map
-    c) (x) maximum path length for propagation [Less blocks visited by recursion]
+    c) (x) maximum path length for propagation [Less blocks visited by recursion - actually ineffective with default settings!]
     d) (.) maximum number of direction changes
     e) (.) all in one method, no recursion (at the cost of permanently used memory, though) 
     f) (.) if e) used: one might release the memory if not used, so the next explosion will take more time. [RATHER NOT]
@@ -93,6 +93,7 @@ SCHEDULE (Might include ideas, points to check.)
 ! add PriorityValue etc. from swgt for configuration.
 ! smarter reload: Propagation.applySettings (maybe factory method for replacing, invoking necessary checks)
 ! add option: placing tnt to replace lava or fire could result in primed tnt too ...
+! (add) Two greedy config flags: handle-all-explosions (greedy-1) and prevent-other-explosions (greedy-2) [1 applies to explosion prime, 2 prevents Explosion events that bypassed explosion prime.]
 
 CHANGELOG (May show an unreleased version but only done changes.)
 -----------------------------------------------------------------
