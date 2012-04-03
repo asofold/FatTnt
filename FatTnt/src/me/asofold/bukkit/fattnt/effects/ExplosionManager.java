@@ -107,21 +107,7 @@ public class ExplosionManager {
 			if (block.getType() == Material.TNT){
 				block.setTypeId(0, true);
 				Location loc = block.getLocation().add(Defaults.vCenter);
-				final float effRad = propagation.getStrength(loc); // effective strength/radius
-//				if ( effRad > thresholdTntDirect){
-//					directExplode.add(block);
-//					continue;
-//				}
-				// do spawn tnt-primed
-				try{
-					Entity entity = world.spawn(loc, CraftTNTPrimed.class);
-					if (entity == null) continue;
-					if ( !(entity instanceof TNTPrimed)) continue;
-					if ( effRad == 0.0f) continue; // not affected
-					if (settings.velOnPrime) addRandomVelocity(entity, loc, x,y,z, effRad, realRadius, settings);
-				} catch( Throwable t){
-					// maybe later log
-				}
+				addTNTPrimed(world, x, y, z, loc, realRadius, settings, propagation);
 				continue;
 			}
 			// All other blocks:
@@ -138,6 +124,31 @@ public class ExplosionManager {
 		}
 	}
 	
+	private static TNTPrimed addTNTPrimed(World world, double x, double y, double z,
+			Location loc, float realRadius, Settings settings, Propagation propagation) {
+		final float effRad = propagation.getStrength(loc); // effective strength/radius
+//		if ( effRad > thresholdTntDirect){
+//			directExplode.add(block);
+//			continue;
+//		}
+		// do spawn tnt-primed
+		
+		try{
+			Entity entity = world.spawn(loc, CraftTNTPrimed.class);
+			if (entity == null) return null;
+			if ( !(entity instanceof TNTPrimed)){
+				entity.remove();
+				return null;
+			}
+			if ( effRad == 0.0f) return (TNTPrimed) entity; // not affected
+			if (settings.velOnPrime) addRandomVelocity(entity, loc, x,y,z, effRad, realRadius, settings);
+			return (TNTPrimed) entity;
+		} catch( Throwable t){
+			// maybe later log
+			return null;
+		}
+	}
+
 	/**
 	 * Entity manipulations for explosions.
 	 * @param world
