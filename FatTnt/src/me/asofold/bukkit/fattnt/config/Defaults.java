@@ -29,6 +29,7 @@ public class Defaults {
 	public static final String cfgRandRadius = "radius.random";
 	public static final String cfgEntities= "entities";
 	public static final String cfgYield = "yield";
+	public static final String cfgEntityYield = "entity-yield";
 	public static final String cfgVelUse = "velocity.use";
 	public static final String cfgVelMin = "velocity.min";
 	public static final String cfgVelCen= "velocity.center";
@@ -37,6 +38,7 @@ public class Defaults {
 	public static final String cfgVelCap = "velocity.cap";
 	public static final String cfgFStraight = "multiplier.straight";
 	public static final String cfgThresholdTntDirect = "tnt.thresholds.direct-explode";
+	public static final String cfgItemTnt = "item-tnt";
 	
 	public static final int[] defaultIgnoreBlocks = new int[]{
 	//			7, // bedrock
@@ -124,6 +126,8 @@ public class Defaults {
 	
 	public static final double thresholdTntDirect = 2.0;
 	
+	public static final boolean itemTnt = false;
+	
 	public static final boolean velUse = true;
 	public static final float velMin = 0.2f;
 	public static final float velCen = 1.0f;
@@ -131,7 +135,14 @@ public class Defaults {
 	public static final boolean velOnPrime = false;
 	public static float velCap = 3.0f;
 
-	public static final  float defaultYield = 0.2f;
+	/**
+	 * Drop chance.
+	 */
+	public static final  float yield = 0.2f;
+	/**
+	 * Survival chance.
+	 */
+	public static final  float entityYield = 0.2f;
 	
 	/**
 	 * 
@@ -200,7 +211,11 @@ public class Defaults {
 			changed = true;
 		}
 		if ( !cfg.contains(cfgYield)){
-			cfg.set(cfgYield, defaultYield);
+			cfg.set(cfgYield, yield);
+			changed = true;
+		}
+		if ( !cfg.contains(cfgEntityYield)){
+			cfg.set(cfgEntityYield, entityYield);
 			changed = true;
 		}
 		if ( !cfg.contains(cfgVelUse)){
@@ -233,6 +248,10 @@ public class Defaults {
 		}
 		if ( !cfg.contains(cfgThresholdTntDirect)){
 			cfg.set(cfgThresholdTntDirect, thresholdTntDirect);
+			changed = true;
+		}
+		if ( !cfg.contains(cfgItemTnt)){
+			cfg.set(cfgItemTnt, itemTnt);
 			changed = true;
 		}
 		return changed;

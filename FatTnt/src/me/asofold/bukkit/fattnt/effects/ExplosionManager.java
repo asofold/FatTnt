@@ -21,9 +21,11 @@ import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.entity.CraftTNTPrimed;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.FallingSand;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.TNTPrimed;
+import org.bukkit.entity.Vehicle;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityExplodeEvent;
@@ -71,7 +73,7 @@ public class ExplosionManager {
 		stats.addStats(FatTnt.statsBlocksCollected, affected.size());
 		stats.addStats(FatTnt.statsStrength, (long) realRadius);
 		FatExplosionSpecs specs = new FatExplosionSpecs();
-		EntityExplodeEvent exE = new FatEntityExplodeEvent(explEntity, new Location(world,x,y,z), affected, settings.defaultYield , specs);
+		EntityExplodeEvent exE = new FatEntityExplodeEvent(explEntity, new Location(world,x,y,z), affected, settings.yield , specs);
 		pm.callEvent(exE);
 		if (exE.isCancelled()) return;
 		// block effects:
@@ -176,17 +178,35 @@ public class ExplosionManager {
 			if ( effRad == 0.0f) continue; // not affected
 			boolean addVelocity = false;
 			boolean useDamage = true;
+			boolean applyEntityYield = false;
 			if (settings.sparePrimed && (entity instanceof TNTPrimed)){
 				addVelocity = true;
 				useDamage = false;
 			} 
 			else if (entity instanceof Item){
-				addVelocity = false;
-				useDamage = false;
+				Item item = (Item) entity;
+				final Material mat = item.getItemStack().getType();
+				if ( mat == Material.TNT && settings.itemTnt){
+					// create primed tnt according to settings
+					item.remove();
+					addTNTPrimed(world, x, y, z, loc.add(new Vector(0.0,0.5,0.0)), realRadius, settings, propagation);
+					continue;
+				} else{
+					applyEntityYield = true;
+				}
 				// TODO: either use yield here or let damageEntity decide bout removal !
+			} else if (entity instanceof Vehicle){
+				// TODO: StorageMinecart ?
+				applyEntityYield = true;
+			} else if (entity instanceof FallingSand){
+				applyEntityYield = true;
+			}
+			if ( applyEntityYield){
+				if ( random.nextFloat()>settings.entityYield) entity.remove();
+				continue;
 			}
 			if (useDamage){
-				// TODO: damage entities according to type
+				// TODO: damage entities according to type [currently almost only living entities]
 				int damage = 1 + (int) (effRad*settings.damageMultiplier*damageMultiplier) ;
 				// TODO: take into account armor, enchantments and such?
 				EntityDamageEvent event = new FatEntityDamageEvent(entity, DamageCause.ENTITY_EXPLOSION, damage, specs);

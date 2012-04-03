@@ -50,6 +50,8 @@ public class Settings {
 	public boolean invertIgnored = Defaults.invertIgnored;
 	
 	public float randDec = Defaults.randDec;
+	
+	public boolean itemTnt = Defaults.itemTnt;
 	/**
 	 * If to not apply damage to primed tnt.
 	 */
@@ -64,7 +66,8 @@ public class Settings {
 	public boolean velOnPrime = Defaults.velOnPrime;
 	public float velCap = Defaults.velCap;
 
-	public  float defaultYield = Defaults.defaultYield;
+	public  float yield = Defaults.yield;
+	public  float entityYield = Defaults.entityYield;
 	
 	public boolean[] ignore = new boolean[Defaults.blockArraySize];
 	public float[] resistance = new float[Defaults.blockArraySize];
@@ -93,7 +96,7 @@ public class Settings {
 		minResistance = Math.min(minResistance, defaultResistance);
 		maxRadius = (float) cfg.getDouble(Defaults.cfgMaxRadius);
 		randDec = (float) cfg.getDouble(Defaults.cfgRandRadius);
-		defaultYield = (float) cfg.getDouble(Defaults.cfgYield);
+		yield = (float) cfg.getDouble(Defaults.cfgYield);
 		velUse = cfg.getBoolean(Defaults.cfgVelUse);
 		velMin = (float) cfg.getDouble(Defaults.cfgVelMin);
 		velCen = (float) cfg.getDouble(Defaults.cfgVelCen);
@@ -102,6 +105,8 @@ public class Settings {
 		velOnPrime = cfg.getBoolean(Defaults.cfgVelOnPrime);
 		thresholdTntDirect = cfg.getDouble(Defaults.cfgThresholdTntDirect);
 		velCap = (float) cfg.getDouble(Defaults.cfgVelCap);
+		itemTnt = cfg.getBoolean(Defaults.cfgItemTnt);
+		entityYield = (float) cfg.getDouble(Defaults.cfgEntityYield);
 		
 		if ( maxRadius > Defaults.radiusLock) maxRadius = Defaults.radiusLock; // safety check
 		

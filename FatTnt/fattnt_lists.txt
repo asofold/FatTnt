@@ -44,6 +44,7 @@ Planned:
 ! Check for creative mode on players (seems not to cancel damage events but have effect).
 ! creation of entities from blocks: eneric defs for velocity etc.
 ! Transformations for entities (hit) ... also generic setups, from(conditions, minStr, entity specific)...ro(velocity, entity specific, removal)
+? (add) EntityCombust for tnt : create primed tnt for item
   
 Maybe:
 ! Config option to allo tnt to be dropped as item with probability, also add probability for actually destroying tnt items as well.
@@ -60,11 +61,10 @@ Maybe:
 
 SCHEDULE (Might include ideas, points to check.)
 -----------------------------------------------------------------
-! try update blockstate after setting with physics = false
 ! add randomized tnt ignition (min, max)
 ! add entity-yield (temporary): applies to vehicles, items.
-! Config option to let TNT-Items be changed to primed tnt if hit by the explosion (+extra resistance for that)!
 ! (add) The arrow effect possible ! (possibly splash potions too ?)
+! try update blockstate after setting with physics = false
 *** ["almost vanilla"]
 ! Add good explanation of what i will do / when, what the plugins does/not.
     - (i will not try to find the BEST configuration that is CLOSEST to Vanilla, 
@@ -100,6 +100,9 @@ CHANGELOG (May show an unreleased version but only done changes.)
 *** [Beta/Dev stage]
 
 (0.1.7-DEV)
+- (add) Option to destroy items, boats, falling sand: item-yield [To be more fine grained later on, probably]
+- !(add) Option to let burned tnt items explode (fire only: burned-tnt). 
+- (add) Option to let TNT-Items be changed to primed tnt if hit by the explosion (item-tnt).
 - (add) Velocity cap (not applied if <= 0).
 
 (0.1.6)
