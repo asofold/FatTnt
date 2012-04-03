@@ -46,6 +46,7 @@ Planned:
 ! Transformations for entities (hit) ... also generic setups, from(conditions, minStr, entity specific)...ro(velocity, entity specific, removal)
   
 Maybe:
+! Config option to allo tnt to be dropped as item with probability, also add probability for actually destroying tnt items as well.
 ? Allow to delay tnt explosion on ExplosionPrimeEvents (schedule new or st primed for later)
 ? Allow arbitrary strength (but limit radius) ?
 ? configure maximum radius to be handled and if to be aborted otherwisec or log/warn.
@@ -61,14 +62,16 @@ SCHEDULE (Might include ideas, points to check.)
 -----------------------------------------------------------------
 ! try update blockstate after setting with physics = false
 ! add randomized tnt ignition (min, max)
+! add entity-yield (temporary): applies to vehicles, items.
+! Config option to let TNT-Items be changed to primed tnt if hit by the explosion (+extra resistance for that)!
+! (add) The arrow effect possible ! (possibly splash potions too ?)
+*** ["almost vanilla"]
 ! Add good explanation of what i will do / when, what the plugins does/not.
     - (i will not try to find the BEST configuration that is CLOSEST to Vanilla, 
       but i will add one if someone claims to have found it and others confirm it).
     - Do point out where are differnces to vanilla and which will certainly be adjusted to be close to vanilla if wanted.
     - Performance implications (Memory, CPU) + example stats.
     - ...
-! Config option to let TNT-Items be changed to primed tnt if hit by the explosion (+extra resistance for that)!
-! Config option to allo tnt to be dropped as item with probability, also add probability for actually destroying tnt items as well.
 ! check way to reduce unnecessary multiple visits: 
     a) (.) park positions and continue later(minimum sphere) 
     b) (.) maybe use preset directions map
@@ -81,7 +84,6 @@ SCHEDULE (Might include ideas, points to check.)
     j) (.) Add moving heuristic, that gives possible continuations according to already chosen path !
     z) (...) Boil all down to some algorithm that does it in another way, just faster :)
 ! Make some settings dependent on entities (damage multiplier at least)
-! (add) The arrow effect possible ! (possibly splash potions too ?)
 ! (add) spare entities instead of a spare tnt flag. [maybe as part of specific configurations]
 ! (add) EntityDamageByEntity event ?
 ! (add) blocks that let the explosion through but can be destroyed (alter to ignore, destructible)
