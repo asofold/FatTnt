@@ -18,12 +18,16 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.craftbukkit.entity.CraftArrow;
 import org.bukkit.craftbukkit.entity.CraftTNTPrimed;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.FallingSand;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Projectile;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.entity.Vehicle;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -107,7 +111,8 @@ public class ExplosionManager {
 //		final List<block> directExplode = new LinkedList<block>(); // if set in config. - maybe later (split method to avoid recursion !)
 		for ( Block block : blocks){
 			if (block.getType() == Material.TNT){
-				block.setTypeId(0, true);
+				if( settings.stepPhysics) block.setTypeId(0, false);
+				else block.setTypeId(0, true);
 				Location loc = block.getLocation().add(Defaults.vCenter);
 				addTNTPrimed(world, x, y, z, loc, realRadius, settings, propagation);
 				continue;
@@ -122,11 +127,17 @@ public class ExplosionManager {
 					//addRandomVelocity(item, loc, x,y,z, realRadius);
 				}
 			}
-			block.setTypeId(0, true); // TODO: evaluate if still spazzing appears (if so: use false, and then iterate again for applying physics after block changes).
+			if( settings.stepPhysics) block.setTypeId(0, false);
+			else block.setTypeId(0, true); 
+		}
+		if (settings.stepPhysics){
+			for ( Block block : blocks){
+				block.setTypeId(0, true);
+			}
 		}
 	}
 	
-	private static TNTPrimed addTNTPrimed(World world, double x, double y, double z,
+	public static TNTPrimed addTNTPrimed(World world, double x, double y, double z,
 			Location loc, float realRadius, Settings settings, Propagation propagation) {
 		final float effRad = propagation.getStrength(loc); // effective strength/radius
 //		if ( effRad > thresholdTntDirect){
@@ -134,7 +145,28 @@ public class ExplosionManager {
 //			continue;
 //		}
 		// do spawn tnt-primed
-		
+		TNTPrimed tnt = spawnTNTPrimed(world, loc);
+		if ( tnt == null) return null;
+		if (settings.minPrime != settings.maxPrime){
+			int fuseTicks = settings.minPrime + random.nextInt((settings.maxPrime-settings.minPrime+1));
+			try{
+				tnt.setFuseTicks(fuseTicks);
+			} catch (Throwable t){
+				// because of quick addition
+			}
+		}
+		if ( effRad == 0.0f) return tnt; // not affected
+		if (settings.velOnPrime) addRandomVelocity(tnt, loc, x,y,z, effRad, realRadius, settings);
+		return tnt;
+	}
+	
+	/**
+	 * Just spawn it.
+	 * @param world
+	 * @param loc
+	 * @return
+	 */
+	public static TNTPrimed spawnTNTPrimed(World world, Location loc){
 		try{
 			Entity entity = world.spawn(loc, CraftTNTPrimed.class);
 			if (entity == null) return null;
@@ -142,9 +174,41 @@ public class ExplosionManager {
 				entity.remove();
 				return null;
 			}
-			if ( effRad == 0.0f) return (TNTPrimed) entity; // not affected
-			if (settings.velOnPrime) addRandomVelocity(entity, loc, x,y,z, effRad, realRadius, settings);
 			return (TNTPrimed) entity;
+		} catch( Throwable t){
+			// maybe later log
+			return null;
+		}
+	}
+	
+	public static Arrow addArrow(World world, double x, double y,
+			double z, Location loc, float realRadius, Settings settings,
+			Propagation propagation) {
+		final float effRad = propagation.getStrength(loc); // effective strength/radius
+//		if ( effRad > thresholdTntDirect){
+//			directExplode.add(block);
+//			continue;
+//		}
+		// do spawn tnt-primed
+		if ( effRad == 0.0f) return null; // not affected
+		Arrow arrow = spawnArrow(world, loc);
+		if ( arrow == null) return null;
+		Vector fromCenter = new Vector(loc.getX()-x,loc.getY()-y,loc.getZ()-z).normalize().multiply(0.5);
+		if ( loc.getBlock().getRelative(BlockFace.DOWN).getType()!=Material.AIR) fromCenter.setY(Math.abs(fromCenter.getY())+0.7);
+		arrow.setVelocity(fromCenter);
+		if (settings.velOnPrime) addRandomVelocity(arrow, loc, x,y,z, effRad, realRadius, settings);
+		return arrow;
+	}
+
+	public  static Arrow spawnArrow(World world, Location loc) {
+		try{
+			Entity entity = world.spawn(loc, CraftArrow.class);
+			if (entity == null) return null;
+			if ( !(entity instanceof Arrow)){
+				entity.remove();
+				return null;
+			}
+			return (Arrow) entity;
 		} catch( Throwable t){
 			// maybe later log
 			return null;
@@ -185,13 +249,24 @@ public class ExplosionManager {
 			} 
 			else if (entity instanceof Item){
 				Item item = (Item) entity;
-				final Material mat = item.getItemStack().getType();
+				ItemStack stack = item.getItemStack();
+				final Material mat = stack.getType();
 				if ( mat == Material.TNT && settings.itemTnt){
 					// create primed tnt according to settings
 					item.remove();
-					addTNTPrimed(world, x, y, z, loc.add(new Vector(0.0,0.5,0.0)), realRadius, settings, propagation);
+					for ( int i = 0; i< Math.min(settings.maxItems, stack.getAmount()); i++){
+						addTNTPrimed(world, x, y, z, loc.add(new Vector(0.0,0.5,0.0)), realRadius, settings, propagation);
+					}
 					continue;
-				} else{
+				} 
+				else if (mat == Material.ARROW && settings.itemArrows){
+					item.remove();
+					for ( int i = 0; i< Math.min(settings.maxItems, stack.getAmount()); i++){
+						addArrow(world, x, y, z, loc, realRadius, settings, propagation);
+					}
+				} 
+				// TODO: maybe splash potions !
+				else{
 					applyEntityYield = true;
 				}
 				// TODO: either use yield here or let damageEntity decide bout removal !
@@ -200,6 +275,22 @@ public class ExplosionManager {
 				applyEntityYield = true;
 			} else if (entity instanceof FallingSand){
 				applyEntityYield = true;
+			} else if (entity instanceof Projectile){
+				if ( settings.projectiles){
+					if ( entity instanceof Arrow){
+						Arrow arrow = (Arrow) entity;
+						if ( arrow.isDead() || arrow.getVelocity().length()<0.25){
+							entity.remove();
+							addArrow(world, x, y, z, loc, realRadius, settings, propagation);
+							continue;
+						}
+					}
+					useDamage = false;
+					addVelocity = true;
+				} else{
+					useDamage = false;
+					addVelocity = false;
+				}
 			}
 			if ( applyEntityYield){
 				if ( random.nextFloat()>settings.entityYield) entity.remove();
@@ -223,7 +314,7 @@ public class ExplosionManager {
 			if (addVelocity) addRandomVelocity(entity, loc, x,y,z, effRad, realRadius, settings);
 		}
 	}
-	
+
 	/**
 	 * Add velocity according to settings
 	 * @param entity
@@ -244,6 +335,7 @@ public class ExplosionManager {
 		if( settings.velCap>0){
 			if (rv.lengthSquared()>settings.velCap*settings.velCap) rv = rv.normalize().multiply(settings.velCap);
 		}
+		if ( entity instanceof Projectile) rv = rv.multiply(settings.projectileMultiplier);
 		if (entity instanceof LivingEntity) ((LivingEntity) entity).setVelocity(rv); 
 		else if (entity instanceof TNTPrimed) ((TNTPrimed) entity).setVelocity(rv);
 		else entity.setVelocity(rv);
@@ -267,5 +359,16 @@ public class ExplosionManager {
 	
 	public static void setStats(Stats stats){
 		ExplosionManager.stats = stats;
+	}
+
+	/**
+	 * Remove item and put TNTPrimed there, according to settings;
+	 * @param item
+	 */
+	public static TNTPrimed replaceByTNTPrimed(Item item) {
+		Location loc = item.getLocation().add(new Vector(0.0,0.5,0.0));
+		item.remove();
+		World world = item.getWorld();
+		return spawnTNTPrimed(world, loc);
 	}
 }

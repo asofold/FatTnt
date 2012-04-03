@@ -65,12 +65,23 @@ public class Settings {
 	public float velRan = Defaults.velRan;
 	public boolean velOnPrime = Defaults.velOnPrime;
 	public float velCap = Defaults.velCap;
+	
+	public int maxItems = Defaults.maxItems;
 
 	public  float yield = Defaults.yield;
 	public  float entityYield = Defaults.entityYield;
 	
+	public boolean itemArrows = Defaults.itemArrows;
+	public boolean projectiles = Defaults.projectiles;
+	
 	public boolean[] ignore = new boolean[Defaults.blockArraySize];
 	public float[] resistance = new float[Defaults.blockArraySize];
+	
+	public int minPrime = Defaults.minPrime;
+	public int maxPrime = Defaults.maxPrime;
+	public boolean stepPhysics = Defaults.stepPhysics;
+	
+	public float projectileMultiplier = Defaults.projectileMultiplier;
 	
 	public Settings(Stats stats){
 		this.stats = stats;
@@ -107,6 +118,13 @@ public class Settings {
 		velCap = (float) cfg.getDouble(Defaults.cfgVelCap);
 		itemTnt = cfg.getBoolean(Defaults.cfgItemTnt);
 		entityYield = (float) cfg.getDouble(Defaults.cfgEntityYield);
+		maxItems = cfg.getInt(Defaults.cfgMaxItems);
+		itemArrows = cfg.getBoolean(Defaults.cfgItemArrows);
+		projectiles = cfg.getBoolean(Defaults.cfgProjectiles);
+		minPrime = cfg.getInt(Defaults.cfgMinPrime);
+		maxPrime = cfg.getInt(Defaults.cfgMaxPrime);
+		stepPhysics = cfg.getBoolean(Defaults.cfgStepPhysics);
+		projectileMultiplier = (float) cfg.getDouble(Defaults.cfgMultProjectiles);
 		
 		if ( maxRadius > Defaults.radiusLock) maxRadius = Defaults.radiusLock; // safety check
 		

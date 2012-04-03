@@ -13,6 +13,7 @@ import me.asofold.bukkit.fattnt.utils.Utils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
@@ -20,10 +21,13 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityCombustEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -156,6 +160,20 @@ public class FatTnt extends JavaPlugin implements Listener {
 		double z = loc.getZ();
 		if (!entity.isDead()) entity.remove();
 		createExplosion(loc.getWorld(), x, y, z, event.getRadius(), event.getFire(), entity, type);
+	}
+	
+	@EventHandler(priority=EventPriority.HIGHEST)
+	void onEntityCombust(EntityCombustEvent event){
+		// TODO:
+		if (event.isCancelled()) return;
+		if (!settings.itemTnt) return;
+		Entity entity = event.getEntity();
+		if ( !(entity instanceof Item)) return;
+		Item item = (Item) entity;
+		ItemStack stack = item.getItemStack();
+		if ( stack.getType() != Material.TNT) return;
+		event.setCancelled(true);
+		ExplosionManager.replaceByTNTPrimed(item);		
 	}
 	
 	/**
