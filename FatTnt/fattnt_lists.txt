@@ -60,10 +60,12 @@ Maybe:
 !(add) Propagation API, set by name , with config/set on applyConfig, maybe search for classes. [only if it pays.] 
 !(add) Item-stacks: allow reducing or damaging them ratehr than dumb yield.
 !(add) splash potion items ?
+!(add) keep track of entities that got velocity added, for a strongest-wins heuristic ? [reason: massive tnt = quadratic entityeffects, postentially, though number is limited by range ...]
 
 
 SCHEDULE (Might include ideas, points to check.)
 -----------------------------------------------------------------
+? Maybe add: Probability distribution also config readable ProbDist<SubType> -> entries with (ignored keys and) part definition (part/sum(all parts)) and the sub object merged into the section.
 ! Add good explanation of what i will do / when, what the plugins does/not.
     - (i will not try to find the BEST configuration that is CLOSEST to Vanilla, 
       but i will add one if someone claims to have found it and others confirm it).
@@ -96,6 +98,9 @@ CHANGELOG (May show an unreleased version but only done changes.)
 
 
 *** [Beta/Dev stage]
+
+(0.1.8-DEV)
+- (bugfix) Randomized fuse ticks: min-prime and max-prime are now correctly used: either <= 0 will be default Minecraft fuse ticks, otherwise from ... to.
 
 (0.1.7) ["almost vanilla"]
 - (add) step-physics option, which currently removes blocks without applying physics on explosions [inoperable, just does not apply any physics]

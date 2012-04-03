@@ -147,8 +147,10 @@ public class ExplosionManager {
 		// do spawn tnt-primed
 		TNTPrimed tnt = spawnTNTPrimed(world, loc);
 		if ( tnt == null) return null;
-		if (settings.minPrime != settings.maxPrime){
-			int fuseTicks = settings.minPrime + random.nextInt((settings.maxPrime-settings.minPrime+1));
+		if (settings.minPrime > 0  && settings.maxPrime > 0){
+			int fuseTicks;
+			if ( settings.minPrime <settings.maxPrime) fuseTicks = settings.minPrime + random.nextInt((settings.maxPrime-settings.minPrime+1));
+			else fuseTicks = Math.max(settings.minPrime, settings.maxPrime);
 			try{
 				tnt.setFuseTicks(fuseTicks);
 			} catch (Throwable t){
