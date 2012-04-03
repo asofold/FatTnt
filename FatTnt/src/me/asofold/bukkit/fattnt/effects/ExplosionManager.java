@@ -207,9 +207,12 @@ public class ExplosionManager {
 			double z, float part, float max, Settings settings) {
 		// TODO: make some things configurable, possible entity dependent and !
 		if (!settings.velUse) return;
-		Vector v = entity.getVelocity();
+		Vector v = entity.getVelocity().clone();
 		Vector fromCenter = new Vector(loc.getX()-x,loc.getY()-y,loc.getZ()-z).normalize();
 		Vector rv = v.add((fromCenter.multiply(settings.velMin+random.nextFloat()*settings.velCen)).add(Vector.getRandom().multiply(settings.velRan)).multiply(part/max));
+		if( settings.velCap>0){
+			if (rv.lengthSquared()>settings.velCap*settings.velCap) rv = rv.normalize().multiply(settings.velCap);
+		}
 		if (entity instanceof LivingEntity) ((LivingEntity) entity).setVelocity(rv); 
 		else if (entity instanceof TNTPrimed) ((TNTPrimed) entity).setVelocity(rv);
 		else entity.setVelocity(rv);

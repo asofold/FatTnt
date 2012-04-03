@@ -34,6 +34,7 @@ public class Defaults {
 	public static final String cfgVelCen= "velocity.center";
 	public static final String cfgVelRan = "velocity.random";
 	public static final String cfgVelOnPrime = "velocity.tnt-primed";
+	public static final String cfgVelCap = "velocity.cap";
 	public static final String cfgFStraight = "multiplier.straight";
 	public static final String cfgThresholdTntDirect = "tnt.thresholds.direct-explode";
 	
@@ -128,6 +129,7 @@ public class Defaults {
 	public static final float velCen = 1.0f;
 	public static final float velRan = 0.5f;
 	public static final boolean velOnPrime = false;
+	public static float velCap = 3.0f;
 
 	public static final  float defaultYield = 0.2f;
 	
@@ -223,6 +225,10 @@ public class Defaults {
 		}
 		if ( !cfg.contains(cfgVelOnPrime)){
 			cfg.set(cfgVelOnPrime, velOnPrime);
+			changed = true;
+		}
+		if ( !cfg.contains(cfgVelCap)){
+			cfg.set(cfgVelCap, velCap);
 			changed = true;
 		}
 		if ( !cfg.contains(cfgThresholdTntDirect)){

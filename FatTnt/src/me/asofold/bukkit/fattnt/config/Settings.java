@@ -62,6 +62,7 @@ public class Settings {
 	public float velCen = Defaults.velCen;
 	public float velRan = Defaults.velRan;
 	public boolean velOnPrime = Defaults.velOnPrime;
+	public float velCap = Defaults.velCap;
 
 	public  float defaultYield = Defaults.defaultYield;
 	
@@ -100,6 +101,7 @@ public class Settings {
 		fStraight = (float) cfg.getDouble(Defaults.cfgFStraight);
 		velOnPrime = cfg.getBoolean(Defaults.cfgVelOnPrime);
 		thresholdTntDirect = cfg.getDouble(Defaults.cfgThresholdTntDirect);
+		velCap = (float) cfg.getDouble(Defaults.cfgVelCap);
 		
 		if ( maxRadius > Defaults.radiusLock) maxRadius = Defaults.radiusLock; // safety check
 		
