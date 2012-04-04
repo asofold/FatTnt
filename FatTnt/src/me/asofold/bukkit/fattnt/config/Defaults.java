@@ -39,8 +39,8 @@ public class Defaults {
 	public static final String cfgResistence = "resistence";
 	public static final String cfgDefaultResistence = "resistence.default";
 	public static final String cfgMaxRadius = "radius.max";
-	public static final String cfgRandRadius = "radius.random";
 	public static final String cfgEntities= "entities";
+	public static final String cfgRandRadius = "radius.random"; // UNUSED
 	
 	// block effects:
 	public static final String cfgYield = "yield";
@@ -49,6 +49,7 @@ public class Defaults {
 	// tnt specific
 	public static final String cfgMinPrime = "min-prime";
 	public static final String cfgMaxPrime = "max-prime";
+	public static final String cfgThresholdTntDirect = "tnt.thresholds.direct-explode"; // UNUSED
 	
 	// entity effects:
 	public static final String cfgEntityYield = "entity-yield";
@@ -65,9 +66,7 @@ public class Defaults {
 	public static final String cfgVelRan = cfgVel+".random";
 	public static final String cfgVelOnPrime = cfgVel+".tnt-primed";
 	public static final String cfgVelCap = cfgVel+".cap";
-	
-	// unused:
-	public static final String cfgThresholdTntDirect = "tnt.thresholds.direct-explode";
+
 	
 	
 	// -------------------------------------------------------------------------------
