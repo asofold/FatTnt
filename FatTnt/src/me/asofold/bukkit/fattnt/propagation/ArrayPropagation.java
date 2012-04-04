@@ -256,7 +256,7 @@ public class ArrayPropagation extends Propagation {
 		if ( expStr<minRes) return;
 		else if ( dur > expStr){
 			final float ptRes = passthrough[id];
-			if (ptRes>dur) return;// this block stopped this path of propagation.
+			if (ptRes>expStr) return;// this block stopped this path of propagation.
 			else{
 				// passthrough: continue to propagate
 				expStr -= ptRes;
