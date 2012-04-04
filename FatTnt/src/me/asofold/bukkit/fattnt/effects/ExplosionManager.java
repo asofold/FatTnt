@@ -11,7 +11,6 @@ import me.asofold.bukkit.fattnt.events.FatEntityDamageEvent;
 import me.asofold.bukkit.fattnt.events.FatEntityExplodeEvent;
 import me.asofold.bukkit.fattnt.propagation.Propagation;
 import me.asofold.bukkit.fattnt.stats.Stats;
-import me.asofold.bukkit.fattnt.utils.Utils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -63,7 +62,7 @@ public class ExplosionManager {
 	 * @param propagation
 	 */
 	public static void applyExplosionEffects(World world, double x, double y, double z, float realRadius, boolean fire, Entity explEntity, EntityType entityType,
-			List<Entity> nearbyEntities, float damageMultiplier, Settings settings, Propagation propagation) {
+			List<Entity> nearbyEntities, float damageMultiplier, Settings settings, Propagation propagation, DamageProcessor damageProcessor) {
 		if ( realRadius > settings.maxRadius){
 			// TODO: settings ?
 			realRadius = settings.maxRadius;
@@ -87,7 +86,7 @@ public class ExplosionManager {
 		// entities:
 		if ( nearbyEntities != null){
 			ms = System.nanoTime();
-			applyEntityEffects(world, x, y, z, realRadius, nearbyEntities, damageMultiplier, settings, propagation, specs);
+			applyEntityEffects(world, x, y, z, realRadius, nearbyEntities, damageMultiplier, settings, propagation, specs, damageProcessor);
 			stats.addStats(FatTnt.statsApplyEntities, System.nanoTime()-ms);
 		}
 		
@@ -229,8 +228,9 @@ public class ExplosionManager {
 	 * @param settings
 	 * @param propagation
 	 * @param specs 
+	 * @param damageProcessor 
 	 */
-	public static void applyEntityEffects(World world, double x, double y, double z, float realRadius, List<Entity> nearbyEntities, float damageMultiplier, Settings settings, Propagation propagation, FatExplosionSpecs specs) {
+	public static void applyEntityEffects(World world, double x, double y, double z, float realRadius, List<Entity> nearbyEntities, float damageMultiplier, Settings settings, Propagation propagation, FatExplosionSpecs specs, DamageProcessor damageProcessor) {
 		if ( realRadius > settings.maxRadius){
 			// TODO: settings ?
 			realRadius = settings.maxRadius;
@@ -305,7 +305,7 @@ public class ExplosionManager {
 				EntityDamageEvent event = new FatEntityDamageEvent(entity, DamageCause.ENTITY_EXPLOSION, damage, specs);
 				pm.callEvent(event);
 				if (!event.isCancelled()){
-					if (Utils.damageEntity(event) > 0){
+					if (damageProcessor.damageEntity(event) > 0){
 						// (declined: consider using "effective damage" for stats.)
 						// (but:) Only include >0 damage (that might lose some armored players later, but prevents including invalid entities. 
 						stats.addStats(FatTnt.statsDamage, damage); 

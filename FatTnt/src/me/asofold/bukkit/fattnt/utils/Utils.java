@@ -11,9 +11,7 @@ import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageEvent;
 
 public class Utils {
 
@@ -80,35 +78,6 @@ public class Utils {
 			dummyEntity.remove();
 		}
 		return nearbyEntities;
-	}
-
-	/**
-	 * Deal the damage to the entity.
-	 * (might be aiming at explosions currently)
-	 * @param event
-	 * @return damage dealt, 0 if none or if not applicable.
-	 */
-	public static  int damageEntity(EntityDamageEvent event) {
-		int damage = event.getDamage();
-		if ( damage == 0) return 0;
-		Entity entity = event.getEntity();
-		if (entity == null) return 0; // impossible ?
-		if (entity.isDead()) return 0;
-		EntityType type = entity.getType();
-		entity.setLastDamageCause(event); 
-		if ( type.isAlive()){
-			// TODO: armor !
-			// TODO: set damager if possible. [Needs EntityDamageByEntityEvent]
-			LivingEntity living = (LivingEntity) entity;
-			living.damage(damage);
-		} 
-		else{
-			// TODO: some stuff with different entity types (vehicles, items, paintings).
-			// TODO: maybe some destruction chance !
-			damage = 0;
-		}
-		
-		return damage;
 	}
 
 	/**

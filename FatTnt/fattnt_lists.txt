@@ -113,7 +113,9 @@ CHANGELOG (May show an unreleased version but only done changes.)
 
 *** [Beta/Dev stage]
 
-(0.1.8-DEV-2)
+(0.1.8-DEV-3)
+- (add) DamageProcessor in use (does nothing new yet, but API allows setting it).
+
 - (add) passthrough resistance feature.
 - (remove) ignore feature
 - (refactor) Move default values from Defaults to Settings as class members (does not need double updating). 

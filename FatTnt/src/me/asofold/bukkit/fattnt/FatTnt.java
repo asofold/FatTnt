@@ -5,6 +5,7 @@ import java.util.List;
 
 import me.asofold.bukkit.fattnt.config.Defaults;
 import me.asofold.bukkit.fattnt.config.Settings;
+import me.asofold.bukkit.fattnt.effects.DamageProcessor;
 import me.asofold.bukkit.fattnt.effects.ExplosionManager;
 import me.asofold.bukkit.fattnt.propagation.Propagation;
 import me.asofold.bukkit.fattnt.propagation.PropagationFactory;
@@ -18,6 +19,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -61,6 +63,7 @@ public class FatTnt extends JavaPlugin implements Listener {
 //	ExplosionPrimeEvent waitingEP = null;
 	
 	private final Settings settings = new Settings(stats);
+	private DamageProcessor damageProcessor = new DamageProcessor(settings);
 	
 	private Propagation propagation = null;
 	
@@ -118,6 +121,10 @@ public class FatTnt extends JavaPlugin implements Listener {
 		return false;
 	}
 
+	/**
+	 * Reload and apply settings from the default configuration file.
+	 * (uses applySettings)
+	 */
 	public void reloadSettings() {
 		File file = new File (getDataFolder(), "config.yml");
 		boolean exists = file.exists();
@@ -125,13 +132,27 @@ public class FatTnt extends JavaPlugin implements Listener {
 		FileConfiguration cfg = getConfig();
 		boolean changed = Defaults.addDefaultSettings(cfg);
 		if (!exists || changed) saveConfig();
+		applySettings(cfg);
+	}
+	
+	/**
+	 * Apply the settings.
+	 * @param cfg
+	 */
+	public void applySettings(Configuration cfg){
 		settings.applyConfig(cfg);
 		// TODO: propagation pbased on config (Factory)
 		propagation = PropagationFactory.getPropagation(settings);
+		setDamageProcessor(new DamageProcessor(settings));
 	}
 
-
-
+	/**
+	 * API
+	 * @param damageProcessor
+	 */
+	public void setDamageProcessor(DamageProcessor damageProcessor) {
+		this.damageProcessor = damageProcessor;
+	}
 
 	@EventHandler(priority=EventPriority.HIGHEST)
 	void onExplosionPrimeLowest(ExplosionPrimeEvent event){
@@ -280,7 +301,7 @@ public class FatTnt extends JavaPlugin implements Listener {
 	public void applyExplosionEffects(World world, double x, double y, double z, float realRadius, boolean fire, Entity explEntity, EntityType entityType,
 			List<Entity> nearbyEntities, float damageMultiplier) {
 		long ns = System.nanoTime();
-		ExplosionManager.applyExplosionEffects(world, x, y, z, realRadius, fire, explEntity, entityType, nearbyEntities, damageMultiplier, settings, propagation);
+		ExplosionManager.applyExplosionEffects(world, x, y, z, realRadius, fire, explEntity, entityType, nearbyEntities, damageMultiplier, settings, propagation, damageProcessor);
 		stats.addStats(statsAll, System.nanoTime()-ns);
 	}
 
