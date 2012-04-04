@@ -47,7 +47,9 @@ public class Settings {
 	 */
 	public float damageMultiplier = 3.0f;
 	
-	
+	/**
+	 * Restrict maximal path length for propagation multiplied by explosion strength.
+	 */
 	public float maxPathMultiplier = 1.7f;
 
 	/**
@@ -75,10 +77,17 @@ public class Settings {
 	 */
 	public boolean sparePrimed = true;
 	
+	/**
+	 * Currently unused [aimed at fast explosions]
+	 */
 	public  double thresholdTntDirect = 2.0;
 	
+	/**
+	 * Allow tnt items to change to primed tnt if combusted or hit by explosions.
+	 */
 	public boolean itemTnt = false;
 	
+	// velocity settings
 	public boolean velUse = true;
 	public float velMin = 0.2f;
 	public float velCen = 1.0f;
@@ -86,37 +95,74 @@ public class Settings {
 	public boolean velOnPrime = false;
 	public float velCap = 3.0f;
 	
+	/**
+	 * Maximal number of Item entities created from an ItemStack.
+	 */
 	public int maxItems = 15;
 	
+	/**
+	 * Transform arrow items to real arrows (explosions).
+	 */
 	public boolean itemArrows = false;
 	
+	/**
+	 * Affect projectiles velocity.
+	 */
 	public boolean projectiles = false;
 	
+	/**
+	 * Minimum fuse ticks, if primed tnt is created.
+	 * Set  to <=0 to have default fuse ticks.
+	 */
 	public int minPrime = 30;
+	/**
+	 * Maximum fuse ticks, if primed tnt is created.
+	 * Set  to <=0 to have default fuse ticks.
+	 * If set to a value greater than minPrime, the fuse ticks will be set randomly using that interval.
+	 */
 	public int maxPrime = 80;
 	
 	/**
-	 * Drop chance.
+	 * Drop chance from destroyed blocks.
 	 */
 	public float yield = 0.2f;
 	/**
-	 * Survival chance.
+	 * Survival chance for items/entities hit by an explosion.
 	 */
 	public float entityYield = 0.2f;
 	
+	/**
+	 * Experimental:Currently does explosions without applying physics (not good),
+	 * intended: apply physics after setting blocks to air.
+	 */
 	public boolean stepPhysics = false;
 	
+	/**
+	 * Multiply projectiles velocity by this, if affected.
+	 */
 	public float projectileMultiplier = 3.0f;
 	
+	/**
+	 * The minimal present resistance value.
+	 * Set automatically from configuration input.
+	 */
 	public float minResistance = 0.0f;
 	
 	/**
 	 * Ignore flags for blocks:
 	 * Explosion propagates beyond but does not destroy the block.
+	 * NOTE: Will be replaced by passthrough resistance values.
 	 */
 	public boolean[] ignore = new boolean[Defaults.blockArraySize];
+	/**
+	 * Explosion resistance values for blocks.
+	 */
 	public float[] resistance = new float[Defaults.blockArraySize];
 	
+	/**
+	 * 
+	 * @param stats Are passed with settings, currently, to use the same stats object.
+	 */
 	public Settings(Stats stats){
 		this.stats = stats;
 	}
