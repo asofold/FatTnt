@@ -20,68 +20,102 @@ import org.bukkit.entity.EntityType;
  */
 public class Settings {
 	public final Stats stats;
-	/**
-	 * Handle and alter explosions
-	 */
-	public boolean handleExplosions = Defaults.handleExplosions;
 	
 	/**
 	 * Defaults to empty !
 	 */
 	public final Set<EntityType> handledEntities = new HashSet<EntityType>();
 	
-	public float maxRadius = Defaults.maxRadius;
-	
-	public float radiusMultiplier = Defaults.radiusMultiplier;
-	
-	public float damageMultiplier = Defaults.damageMultiplier;
-	
-	public float maxPathMultiplier = Defaults.maxPathMultiplier;
-	
-	public float defaultResistance = Defaults.defaultResistance;
+	/**
+	 * Handle and alter explosions
+	 * TODO: also put to config.
+	 */
+	public boolean handleExplosions = true;
 	
 	/**
-	 * Set automatically according to settings;
+	 * Explosion strength is cut off there.
 	 */
-	public float minResistance = 0.0f;
+	public float maxRadius = 20.0f;
 	
-	public float fStraight = Defaults.fStraight;
+	/**
+	 * Multiplier for strength (radius)
+	 */
+	public float radiusMultiplier = 2.0f;
 	
-	public boolean invertIgnored = Defaults.invertIgnored;
+	/**
+	 * Multiplier for entity damage.
+	 */
+	public float damageMultiplier = 3.0f;
 	
-	public float randDec = Defaults.randDec;
 	
-	public boolean itemTnt = Defaults.itemTnt;
+	public float maxPathMultiplier = 1.7f;
+
+	/**
+	 * Default explosion  resistance value for all materials that are not in one of the resistance-lists.
+	 */
+	public float defaultResistance = 2.0f;
+	
+	/**
+	 * Strength changes with this factor, for explosion paths advancing in the same direction again.
+	 */
+	public float fStraight = 0.85f;
+	
+	/**
+	 * Use ignored settings inverted, i.e. blacklist (not-ignored).
+	 */
+	public boolean invertIgnored = false;
+
+	
+	/**
+	 * UNUSED (was: random resistance added to blocks)
+	 */
+	public float randDec = 0.2f;
 	/**
 	 * If to not apply damage to primed tnt.
 	 */
-	public boolean sparePrimed = Defaults.sparePrimed;
+	public boolean sparePrimed = true;
 	
-	public double thresholdTntDirect = Defaults.thresholdTntDirect;
+	public  double thresholdTntDirect = 2.0;
 	
-	public boolean velUse = Defaults.velUse;
-	public float velMin = Defaults.velMin;
-	public float velCen = Defaults.velCen;
-	public float velRan = Defaults.velRan;
-	public boolean velOnPrime = Defaults.velOnPrime;
-	public float velCap = Defaults.velCap;
+	public boolean itemTnt = false;
 	
-	public int maxItems = Defaults.maxItems;
-
-	public  float yield = Defaults.yield;
-	public  float entityYield = Defaults.entityYield;
+	public boolean velUse = true;
+	public float velMin = 0.2f;
+	public float velCen = 1.0f;
+	public float velRan = 0.5f;
+	public boolean velOnPrime = false;
+	public float velCap = 3.0f;
 	
-	public boolean itemArrows = Defaults.itemArrows;
-	public boolean projectiles = Defaults.projectiles;
+	public int maxItems = 15;
 	
+	public boolean itemArrows = false;
+	
+	public boolean projectiles = false;
+	
+	public int minPrime = 30;
+	public int maxPrime = 80;
+	
+	/**
+	 * Drop chance.
+	 */
+	public float yield = 0.2f;
+	/**
+	 * Survival chance.
+	 */
+	public float entityYield = 0.2f;
+	
+	public boolean stepPhysics = false;
+	
+	public float projectileMultiplier = 3.0f;
+	
+	public float minResistance = 0.0f;
+	
+	/**
+	 * Ignore flags for blocks:
+	 * Explosion propagates beyond but does not destroy the block.
+	 */
 	public boolean[] ignore = new boolean[Defaults.blockArraySize];
 	public float[] resistance = new float[Defaults.blockArraySize];
-	
-	public int minPrime = Defaults.minPrime;
-	public int maxPrime = Defaults.maxPrime;
-	public boolean stepPhysics = Defaults.stepPhysics;
-	
-	public float projectileMultiplier = Defaults.projectileMultiplier;
 	
 	public Settings(Stats stats){
 		this.stats = stats;

@@ -65,6 +65,7 @@ Maybe:
 
 SCHEDULE (Might include ideas, points to check.)
 -----------------------------------------------------------------
+! Change ignore flag to passthrough resistance, setting the standard resistance to a high value and the passthrough resistance to a lower one will have the same effect ! 
 ? Maybe add: Probability distribution also config readable ProbDist<SubType> -> entries with (ignored keys and) part definition (part/sum(all parts)) and the sub object merged into the section.
 ! Add good explanation of what i will do / when, what the plugins does/not.
     - (i will not try to find the BEST configuration that is CLOSEST to Vanilla, 
@@ -95,13 +96,25 @@ SCHEDULE (Might include ideas, points to check.)
 ! add option: placing tnt to replace lava or fire could result in primed tnt too ...
 ! (add) Two greedy config flags: handle-all-explosions (greedy-1) and prevent-other-explosions (greedy-2) [1 applies to explosion prime, 2 prevents Explosion events that bypassed explosion prime.]
 
+
+
+GRAVEYARD
+-----------------------------------------------------------------
+! EVALUATE: Use max-path (useless thing so far:) ) to limit the range, use path multiplier to limit shape, let air cost zero ! [That will allow to configure such that ignored blocks also can cost zero ! zero = minimum]
+   -> Either the blocks get destroyed , ignored, or block the propagation. Don't see the point of indestructible blocks that put through explosions.
+   -> Might  consider having a damage wave going further through some blocks like half steps, even if the explosion can not destroy them.
+   -> Other use is to have many indestructible blocks but to let the explosion through half steps and such, then for the damage it makes sense.
+   -> Thinking by typing: Actually having a put through resistance for ignored blocks or blocks in general would be interesting:
+         Blocks will have a resistance to get destroyed, or might be ignored concerning destruction. If ignored or not destroyed they have an alternative resistance value for letting the explosion pass [possibly to predefined directions!]
+
 CHANGELOG (May show an unreleased version but only done changes.)
 -----------------------------------------------------------------
 
 
 *** [Beta/Dev stage]
 
-(0.1.8-DEV-X)
+(0.1.8-DEV-2)
+- (refactor) Move  default values from Defaults to Settings as class members (does not need double updating). 
 - (bugfix) Randomized fuse ticks: min-prime and max-prime are now correctly used: either <= 0 will be default Minecraft fuse ticks, otherwise from ... to.
 
 (0.1.7) ["almost vanilla"]

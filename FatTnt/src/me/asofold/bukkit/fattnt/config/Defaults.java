@@ -16,8 +16,13 @@ import org.bukkit.util.Vector;
  *
  */
 public class Defaults {
+	
+	/**
+	 * To put in front of messages.
+	 */
+	public static final String msgPrefix = "[FatTnt] ";
 
-	// config
+	// config paths:
 	public static final String cfgMultRadius = "multiplier.radius";
 	public static final String cfgMultDamage = "multiplier.damage";
 	public static final String cfgMultMaxPath = "multiplier.max-path";
@@ -70,99 +75,18 @@ public class Defaults {
 			7, // bedrock
 	};
 	// other
-	/**
-	 * To put in front of messages.
-	 */
-	public static final String msgPrefix = "[FatTnt] ";
+	
+	public static final String[] handledEntities = new String[]{
+		"PRIMED_TNT",
+	};
+	
 	public static final float radiusLock = 100.0f;
 	
 	public static final Vector vCenter = new Vector(0.5,0.5,0.5);
 	
 	public static final int blockArraySize = 4096; 
 	
-	/**
-	 * Handle and alter explosions
-	 */
-	public static final boolean handleExplosions = true;
 	
-	/**
-	 * Explosion strength is cut off there.
-	 */
-	public static final float maxRadius = 20.0f;
-	
-	/**
-	 * Multiplier for strength (radius)
-	 */
-	public static final float radiusMultiplier = 2.0f;
-	
-	/**
-	 * Multiplier for entity damage.
-	 */
-	public static final float damageMultiplier = 3.0f;
-	
-	
-	public static final float maxPathMultiplier = 1.7f;
-	
-	/**
-	 * Default explosion  resistance value for all materials that are not in one of the resistance-lists.
-	 */
-	public static final float defaultResistance = 2.0f;
-	
-	/**
-	 * Strength changes with this factor, for explosion paths advancing in the same direction again.
-	 */
-	public static final float fStraight = 0.85f;
-	
-	/**
-	 * Use ignored settings inverted, i.e. blacklist (not-ignored).
-	 */
-	public static final boolean invertIgnored = false;
-	
-	public static final String[] handledEntities = new String[]{
-		"PRIMED_TNT",
-	};
-	
-	/**
-	 * UNUSED (was: random resistance added to blocks)
-	 */
-	public static final float randDec = 0.2f;
-	/**
-	 * If to not apply damage to primed tnt.
-	 */
-	public static final boolean sparePrimed = true;
-	
-	public static final double thresholdTntDirect = 2.0;
-	
-	public static final boolean itemTnt = false;
-	
-	public static final boolean velUse = true;
-	public static final float velMin = 0.2f;
-	public static final float velCen = 1.0f;
-	public static final float velRan = 0.5f;
-	public static final boolean velOnPrime = false;
-	public static final float velCap = 3.0f;
-	
-	public static final int maxItems = 15;
-	
-	public static final boolean itemArrows = false;
-	
-	public static final boolean projectiles = false;
-	
-	public static final int minPrime = 30;
-	public static final int maxPrime = 80;
-	
-	/**
-	 * Drop chance.
-	 */
-	public static final  float yield = 0.2f;
-	/**
-	 * Survival chance.
-	 */
-	public static final  float entityYield = 0.2f;
-	
-	public static final boolean stepPhysics = false;
-	
-	public static final float projectileMultiplier = 3.0f;
 	
 	/**
 	 * 
@@ -171,6 +95,8 @@ public class Defaults {
 	 */
 	public static boolean addDefaultSettings(FileConfiguration cfg) {
 		boolean changed = false;
+		Settings defaults = new Settings(null); // read defaults from here.
+		
 		if ( !cfg.contains(cfgEntities)){
 			List<String> l = new LinkedList<String>();
 			for (String et : handledEntities){
@@ -188,7 +114,7 @@ public class Defaults {
 			changed = true;
 		}
 		if ( !cfg.contains(cfgInvertIgnored)){
-			cfg.set(cfgInvertIgnored, invertIgnored);
+			cfg.set(cfgInvertIgnored, defaults.invertIgnored);
 			changed = true;
 		}
 		if ( !cfg.contains(cfgResistence)){
@@ -207,99 +133,99 @@ public class Defaults {
 			changed = true;
 		}
 		if ( !cfg.contains(cfgDefaultResistence)){
-			cfg.set(cfgDefaultResistence, defaultResistance);
+			cfg.set(cfgDefaultResistence, defaults.defaultResistance);
 			changed = true;
 		}
 		if ( !cfg.contains(cfgMaxRadius)){
-			cfg.set(cfgMaxRadius, maxRadius);
+			cfg.set(cfgMaxRadius, defaults.maxRadius);
 			changed = true;
 		}
 		if ( !cfg.contains(cfgMultDamage)){
-			cfg.set(cfgMultDamage, damageMultiplier);
+			cfg.set(cfgMultDamage, defaults.damageMultiplier);
 			changed = true;
 		}
 		if ( !cfg.contains(cfgMultRadius)){
-			cfg.set(cfgMultRadius, radiusMultiplier);
+			cfg.set(cfgMultRadius, defaults.radiusMultiplier);
 			changed = true;
 		}
 		if ( !cfg.contains(cfgMultMaxPath)){
-			cfg.set(cfgMultMaxPath, maxPathMultiplier);
+			cfg.set(cfgMultMaxPath, defaults.maxPathMultiplier);
 			changed = true;
 		}
 		if ( !cfg.contains(cfgRandRadius)){
-			cfg.set(cfgRandRadius, randDec); // TODO DEPRECATED ?
+			cfg.set(cfgRandRadius, defaults.randDec); // TODO DEPRECATED ?
 			changed = true;
 		}
 		if ( !cfg.contains(cfgYield)){
-			cfg.set(cfgYield, yield);
+			cfg.set(cfgYield, defaults.yield);
 			changed = true;
 		}
 		if ( !cfg.contains(cfgEntityYield)){
-			cfg.set(cfgEntityYield, entityYield);
+			cfg.set(cfgEntityYield, defaults.entityYield);
 			changed = true;
 		}
 		if ( !cfg.contains(cfgVelUse)){
-			cfg.set(cfgVelUse, velUse);
+			cfg.set(cfgVelUse, defaults.velUse);
 			changed = true;
 		}
 		if ( !cfg.contains(cfgVelMin)){
-			cfg.set(cfgVelMin, velMin);
+			cfg.set(cfgVelMin, defaults.velMin);
 			changed = true;
 		}
 		if ( !cfg.contains(cfgVelCen)){
-			cfg.set(cfgVelCen, velCen);
+			cfg.set(cfgVelCen, defaults.velCen);
 			changed = true;
 		}
 		if ( !cfg.contains(cfgVelRan)){
-			cfg.set(cfgVelRan, velRan);
+			cfg.set(cfgVelRan, defaults.velRan);
 			changed = true;
 		}
 		if ( !cfg.contains(cfgFStraight)){
-			cfg.set(cfgFStraight, fStraight);
+			cfg.set(cfgFStraight, defaults.fStraight);
 			changed = true;
 		}
 		if ( !cfg.contains(cfgVelOnPrime)){
-			cfg.set(cfgVelOnPrime, velOnPrime);
+			cfg.set(cfgVelOnPrime, defaults.velOnPrime);
 			changed = true;
 		}
 		if ( !cfg.contains(cfgVelCap)){
-			cfg.set(cfgVelCap, velCap);
+			cfg.set(cfgVelCap, defaults.velCap);
 			changed = true;
 		}
 		if ( !cfg.contains(cfgThresholdTntDirect)){
-			cfg.set(cfgThresholdTntDirect, thresholdTntDirect);
+			cfg.set(cfgThresholdTntDirect, defaults.thresholdTntDirect);
 			changed = true;
 		}
 		if ( !cfg.contains(cfgItemTnt)){
-			cfg.set(cfgItemTnt, itemTnt);
+			cfg.set(cfgItemTnt, defaults.itemTnt);
 			changed = true;
 		}
 		if ( !cfg.contains(cfgMaxItems)){
-			cfg.set(cfgMaxItems, maxItems);
+			cfg.set(cfgMaxItems, defaults.maxItems);
 			changed = true;
 		}
 		if ( !cfg.contains(cfgItemArrows)){
-			cfg.set(cfgItemArrows, itemArrows);
+			cfg.set(cfgItemArrows, defaults.itemArrows);
 			changed = true;
 		}
 		if ( !cfg.contains(cfgProjectiles)){
-			cfg.set(cfgProjectiles, projectiles);
+			cfg.set(cfgProjectiles, defaults.projectiles);
 			changed = true;
 		}
 		if ( !cfg.contains(cfgMinPrime)){
-			cfg.set(cfgMinPrime, minPrime);
+			cfg.set(cfgMinPrime, defaults.minPrime);
 			changed = true;
 		}
 		if ( !cfg.contains(cfgMaxPrime)){
-			cfg.set(cfgMaxPrime, maxPrime);
+			cfg.set(cfgMaxPrime, defaults.maxPrime);
 			changed = true;
 		}
 		if ( !cfg.contains(cfgStepPhysics)){
-			cfg.set(cfgStepPhysics, stepPhysics);
+			cfg.set(cfgStepPhysics, defaults.stepPhysics);
 			changed = true;
 		}
 		if ( !cfg.contains(cfgMultProjectiles)){
-			cfg.set(cfgMultProjectiles, projectileMultiplier);
+			cfg.set(cfgMultProjectiles, defaults.projectileMultiplier);
 			changed = true;
 		}
 		return changed;
