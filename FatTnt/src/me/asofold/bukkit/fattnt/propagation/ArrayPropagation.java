@@ -253,7 +253,7 @@ public class ArrayPropagation extends Propagation {
 		sequence[i] = seqMax;
 		strength[i] = expStr;
 //		if ( randDec > 0.0) dur += random.nextFloat()*randDec;
-		if ( dur<minRes) return;
+		if ( expStr<minRes) return;
 		else if ( dur > expStr){
 			final float ptRes = passthrough[id];
 			if (ptRes>dur) return;// this block stopped this path of propagation.

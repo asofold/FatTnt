@@ -114,6 +114,7 @@ CHANGELOG (May show an unreleased version but only done changes.)
 *** [Beta/Dev stage]
 
 (0.1.8-DEV-3)
+- (bugfix) Quick propagation abort: has to compare to expStr not resistance of material.
 - (add) DamageProcessor in use (does nothing new yet, but API allows setting it).
 
 - (add) passthrough resistance feature.
