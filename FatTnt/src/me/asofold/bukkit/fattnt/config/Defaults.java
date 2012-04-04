@@ -22,11 +22,18 @@ public class Defaults {
 	 */
 	public static final String msgPrefix = "[FatTnt] ";
 
-	// config paths:
-	public static final String cfgMultRadius = "multiplier.radius";
-	public static final String cfgMultDamage = "multiplier.damage";
-	public static final String cfgMultMaxPath = "multiplier.max-path";
-	public static final String cfgMultProjectiles = "multiplier.projectiles";
+	// -----------------------------------------------
+	// config paths ----------------------------------
+	
+	// multipliers:
+	public static final String cfgMult = "multiplier";
+	public static final String cfgMultRadius = cfgMult+".radius";
+	public static final String cfgMultDamage = cfgMult+".damage";
+	public static final String cfgMultMaxPath = cfgMult+".max-path";
+	public static final String cfgMultProjectiles = cfgMult+".projectiles";
+	public static final String cfgFStraight = cfgMult+".straight";
+	
+	// explosion/propagation settings:
 	public static final String cfgIgnore = "ignore-blocks";
 	public static final String cfgInvertIgnored= "invert-ignored";
 	public static final String cfgResistence = "resistence";
@@ -34,23 +41,38 @@ public class Defaults {
 	public static final String cfgMaxRadius = "radius.max";
 	public static final String cfgRandRadius = "radius.random";
 	public static final String cfgEntities= "entities";
+	
+	// block effects:
 	public static final String cfgYield = "yield";
-	public static final String cfgEntityYield = "entity-yield";
-	public static final String cfgMaxItems = "max-items";
-	public static final String cfgVelUse = "velocity.use";
-	public static final String cfgVelMin = "velocity.min";
-	public static final String cfgVelCen= "velocity.center";
-	public static final String cfgVelRan = "velocity.random";
-	public static final String cfgVelOnPrime = "velocity.tnt-primed";
-	public static final String cfgVelCap = "velocity.cap";
-	public static final String cfgFStraight = "multiplier.straight";
-	public static final String cfgThresholdTntDirect = "tnt.thresholds.direct-explode";
-	public static final String cfgItemTnt = "item-tnt";
-	public static final String cfgItemArrows = "item-arrows";
-	public static final String cfgProjectiles = "projectiles";
+	public static final String cfgStepPhysics= "step-physics";
+	
+	// tnt specific
 	public static final String cfgMinPrime = "min-prime";
 	public static final String cfgMaxPrime = "max-prime";
-	public static final String cfgStepPhysics= "step-physics";
+	
+	// entity effects:
+	public static final String cfgEntityYield = "entity-yield";
+	public static final String cfgItemTnt = "item-tnt";
+	public static final String cfgItemArrows = "item-arrows";
+	public static final String cfgMaxItems = "max-items";
+	public static final String cfgProjectiles = "projectiles";
+
+	// velocity:
+	public static final String cfgVel = "velocity";
+	public static final String cfgVelUse = cfgVel+".use";
+	public static final String cfgVelMin = cfgVel+".min";
+	public static final String cfgVelCen= cfgVel+".center";
+	public static final String cfgVelRan = cfgVel+".random";
+	public static final String cfgVelOnPrime = cfgVel+".tnt-primed";
+	public static final String cfgVelCap = cfgVel+".cap";
+	
+	// unused:
+	public static final String cfgThresholdTntDirect = "tnt.thresholds.direct-explode";
+	
+	
+	// -------------------------------------------------------------------------------
+	
+	// Block id presets (resistance) -------------------------------------------------
 	
 	public static final int[] defaultIgnoreBlocks = new int[]{
 	//			7, // bedrock
@@ -74,11 +96,13 @@ public class Defaults {
 	public static final int[] defaultMaxResistance = new int[]{
 			7, // bedrock
 	};
-	// other
 	
+	// entitiy presets -------------------------------------------------
 	public static final String[] handledEntities = new String[]{
 		"PRIMED_TNT",
 	};
+	
+	// some default settings ------------------------------------
 	
 	public static final float radiusLock = 100.0f;
 	
