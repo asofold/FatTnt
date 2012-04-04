@@ -35,12 +35,13 @@ public class Defaults {
 	
 	// explosion/propagation settings:
 	public static final String cfgPassthrough= "passthrough";
-	public static final String cfgDefaultPassthrough= "passthrough.default";
+	public static final String cfgDefaultPassthrough= cfgPassthrough+".default";
 	public static final String cfgResistence = "resistence";
-	public static final String cfgDefaultResistence = "resistence.default";
-	public static final String cfgMaxRadius = "radius.max";
+	public static final String cfgDefaultResistence = cfgResistence+".default";
+	public static final String cfgRadius = "radius";
+	public static final String cfgMaxRadius = cfgRadius+".max";
+	public static final String cfgRandRadius = cfgRadius+".random"; // UNUSED
 	public static final String cfgEntities= "entities";
-	public static final String cfgRandRadius = "radius.random"; // UNUSED
 	
 	// block effects:
 	public static final String cfgYield = "yield";
@@ -137,8 +138,8 @@ public class Defaults {
 			cfg.set(cfgEntities, l);
 			changed = true;
 		}
-		if ( !cfg.contains(cfgPassthrough)){
-			cfg.set(cfgPassthrough, defaults.defaultPassthrough);
+		if ( !cfg.contains(cfgDefaultPassthrough)){
+			cfg.set(cfgDefaultPassthrough, defaults.defaultPassthrough);
 			changed = true;
 		}
 		// no default ids for passthrough
