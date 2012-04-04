@@ -223,6 +223,7 @@ public class Settings {
 	
 	private void readResistance(Configuration cfg, String path, float[] array, float defaultResistance){
 		ConfigurationSection sec = cfg.getConfigurationSection(path);
+		if (sec == null) return;
 		Collection<String> keys = sec.getKeys(false);
 		if ( keys != null){
 			for (String key : keys){
