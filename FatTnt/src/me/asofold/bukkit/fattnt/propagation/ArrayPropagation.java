@@ -13,40 +13,40 @@ import org.bukkit.block.Block;
 
 public class ArrayPropagation extends Propagation {
 	
-	int[] sequence = null;
-	float[] strength = null;
-	int seqMax = 0;
+	private int[] sequence;
+	private float[] strength;
+	private int seqMax = 0;
 	
-	int center = -1;
-	int fY = 0;
-	int fZ = 0;
-	int izMax = 0;
-	int iCenter = -1;
+	private int center = -1;
+	private int fY = 0;
+	private int fZ = 0;
+	private int izMax = 0;
+	private int iCenter = -1;
 	
 	/**
 	 * Stats: number of visited blocks (some count double)
 	 */
-	int n = 0;
+	private int n = 0;
 	
 	/**
 	 * Explosion center block coords.
 	 */
-	int cx = 0;
-	int cy = 0;
-	int cz = 0;
+	private int cx = 0;
+	private int cy = 0;
+	private int cz = 0;
 	
-	float fStraight;
+	private float fStraight;
 	
-	float minRes;
+	private float minRes;
 	
-	float maxPath;
+	private float maxPath;
 	
 	private static final int[] ortDir = new int[]{2,4,6,8,10,12};
 	
 	/**
 	 * Blocks destroyed by the xplosion.
 	 */
-	List<Block> blocks = null;
+	private List<Block> blocks = null;
 	
 	/**
 	 * opposite direction:<br>
@@ -253,7 +253,8 @@ public class ArrayPropagation extends Propagation {
 		sequence[i] = seqMax;
 		strength[i] = expStr;
 //		if ( randDec > 0.0) dur += random.nextFloat()*randDec;
-		if ( dur > expStr){
+		if ( dur<minRes) return;
+		else if ( dur > expStr){
 			final float ptRes = passthrough[id];
 			if (ptRes>dur) return;// this block stopped this path of propagation.
 			else{
