@@ -254,7 +254,7 @@ public class ArrayPropagation extends Propagation {
 		strength[i] = expStr;
 //		if ( randDec > 0.0) dur += random.nextFloat()*randDec;
 		if ( dur > expStr){
-			final float ptRes = passthrough[i];
+			final float ptRes = passthrough[id];
 			if (ptRes>dur) return;// this block stopped this path of propagation.
 			else{
 				// passthrough: continue to propagate
