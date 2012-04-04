@@ -18,7 +18,7 @@ public abstract class Propagation {
 	
 	final float defaultResistance;
 	final float[] resistance;
-	final boolean[] ignore;
+	final float[] passthrough;
 
 	float maxRadius = 0;
 	
@@ -29,7 +29,7 @@ public abstract class Propagation {
 	public Propagation(Settings settings){
 		this.defaultResistance = settings.defaultResistance;
 		this.resistance = settings.resistance;
-		this.ignore = settings.ignore;
+		this.passthrough = settings.passthrough;
 		this.maxRadius = settings.maxRadius;
 		this.stats = settings.stats;
 	}

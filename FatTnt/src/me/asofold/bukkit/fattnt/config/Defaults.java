@@ -34,8 +34,8 @@ public class Defaults {
 	public static final String cfgFStraight = cfgMult+".straight";
 	
 	// explosion/propagation settings:
-	public static final String cfgIgnore = "ignore-blocks";
-	public static final String cfgInvertIgnored= "invert-ignored";
+	public static final String cfgPassthrough= "passthrough";
+	public static final String cfgDefaultPassthrough= "passthrough.default";
 	public static final String cfgResistence = "resistence";
 	public static final String cfgDefaultResistence = "resistence.default";
 	public static final String cfgMaxRadius = "radius.max";
@@ -137,18 +137,11 @@ public class Defaults {
 			cfg.set(cfgEntities, l);
 			changed = true;
 		}
-		if ( !cfg.contains(cfgIgnore)){
-			List<Integer> l = new LinkedList<Integer>();
-			for (int i : defaultIgnoreBlocks){
-				l.add(i);
-			}
-			cfg.set(cfgIgnore, l);
+		if ( !cfg.contains(cfgPassthrough)){
+			cfg.set(cfgPassthrough, defaults.defaultPassthrough);
 			changed = true;
 		}
-		if ( !cfg.contains(cfgInvertIgnored)){
-			cfg.set(cfgInvertIgnored, defaults.invertIgnored);
-			changed = true;
-		}
+		// no default ids for passthrough
 		if ( !cfg.contains(cfgResistence)){
 			float[] v = new float[]{1.0f, 4.0f, 20.0f, Float.MAX_VALUE};
 			int[][] ids = new int[][]{defaultLowResistance, defaultHigherResistance, defaultStrongResistance, defaultMaxResistance};

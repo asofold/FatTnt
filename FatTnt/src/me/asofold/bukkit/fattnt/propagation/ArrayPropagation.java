@@ -235,7 +235,7 @@ public class ArrayPropagation extends Propagation {
 			else if (id>0 && id<4096){
 				dur = resistance[id];
 				if ( sequence[i] == seqMax && strength[i] >= dur) ign = true; // TODO: might be unnecessary
-				else ign = ignore[id];
+				else ign = false;
 			}
 			else{
 				dur = defaultResistance;
@@ -253,10 +253,18 @@ public class ArrayPropagation extends Propagation {
 		sequence[i] = seqMax;
 		strength[i] = expStr;
 //		if ( randDec > 0.0) dur += random.nextFloat()*randDec;
-		if ( dur > expStr) return; // this block stopped this path of propagation.
-		expStr -= dur; // decrease after setting the array
-		// Add block or not:
-		if (!ign) blocks.add(w.getBlockAt(x,y,z));
+		if ( dur > expStr){
+			final float ptRes = passthrough[i];
+			if (ptRes>dur) return;// this block stopped this path of propagation.
+			else{
+				// passthrough: continue to propagate
+				expStr -= ptRes;
+			}
+		} 
+		else{
+			if (!ign) blocks.add(w.getBlockAt(x,y,z));
+			expStr -= dur; // decrease after setting the array
+		}
 		// Checks for propagation:
 		if (mpl==0) return;	
 		if (i<fZ || i>izMax) return; // no propagation from edge on.

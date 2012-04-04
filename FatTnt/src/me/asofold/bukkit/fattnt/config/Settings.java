@@ -58,6 +58,11 @@ public class Settings {
 	public float defaultResistance = 2.0f;
 	
 	/**
+	 * Default pass-through resistance.
+	 */
+	public float defaultPassthrough = Float.MAX_VALUE; 
+	
+	/**
 	 * Strength changes with this factor, for explosion paths advancing in the same direction again.
 	 */
 	public float fStraight = 0.85f;
@@ -149,15 +154,16 @@ public class Settings {
 	public float minResistance = 0.0f;
 	
 	/**
-	 * Ignore flags for blocks:
-	 * Explosion propagates beyond but does not destroy the block.
-	 * NOTE: Will be replaced by passthrough resistance values.
+	 * If a block can not be destroyed this will be checked for further propagation.
+	 * created in applyConfig
 	 */
-	public boolean[] ignore = new boolean[Defaults.blockArraySize];
+	public float[] passthrough = null;
+	
 	/**
 	 * Explosion resistance values for blocks.
+	 * created in applyConfig
 	 */
-	public float[] resistance = new float[Defaults.blockArraySize];
+	public float[] resistance = null;
 	
 	/**
 	 * 
@@ -168,6 +174,8 @@ public class Settings {
 	}
 	
 	public void applyConfig(Configuration cfg){
+		passthrough = new float[Defaults.blockArraySize];
+		resistance = new float[Defaults.blockArraySize];
 		minResistance = Float.MAX_VALUE;
 		handledEntities.clear();
 		for ( String n : cfg.getStringList(Defaults.cfgEntities)){
@@ -182,9 +190,9 @@ public class Settings {
 		radiusMultiplier = (float) cfg.getDouble(Defaults.cfgMultRadius);
 		damageMultiplier = (float) cfg.getDouble(Defaults.cfgMultDamage);
 		maxPathMultiplier = (float) cfg.getDouble(Defaults.cfgMultMaxPath);
-		invertIgnored = cfg.getBoolean(Defaults.cfgInvertIgnored);
+		defaultPassthrough = (float) cfg.getDouble(Defaults.cfgDefaultPassthrough);
 		defaultResistance = (float) cfg.getDouble(Defaults.cfgDefaultResistence);
-		minResistance = Math.min(minResistance, defaultResistance);
+		minResistance = Math.min(Math.min(minResistance, defaultResistance), defaultPassthrough);
 		maxRadius = (float) cfg.getDouble(Defaults.cfgMaxRadius);
 		randDec = (float) cfg.getDouble(Defaults.cfgRandRadius);
 		yield = (float) cfg.getDouble(Defaults.cfgYield);
@@ -209,26 +217,28 @@ public class Settings {
 		if ( maxRadius > Defaults.radiusLock) maxRadius = Defaults.radiusLock; // safety check
 		
 		initBlockIds();
-		for (Integer i : Defaults.getIdList(cfg, Defaults.cfgIgnore)){
-			ignore[i] = !invertIgnored;
-		}
-		ConfigurationSection sec = cfg.getConfigurationSection(Defaults.cfgResistence);
+		readResistance(cfg, Defaults.cfgResistence, resistance, defaultResistance);
+		readResistance(cfg, Defaults.cfgPassthrough, passthrough, defaultPassthrough);
+	}
+	
+	private void readResistance(Configuration cfg, String path, float[] array, float defaultResistance){
+		ConfigurationSection sec = cfg.getConfigurationSection(path);
 		Collection<String> keys = sec.getKeys(false);
 		if ( keys != null){
 			for (String key : keys){
 				if ( "default".equalsIgnoreCase(key)) continue;
-				float val = (float) cfg.getDouble(Defaults.cfgResistence+"."+key+".value", 1.0);
+				float val = (float) cfg.getDouble(path+"."+key+".value", defaultResistance);
 				minResistance = Math.min(minResistance, val);
-				for ( Integer i : Defaults.getIdList(cfg, Defaults.cfgResistence+"."+key+".ids")){
-					resistance[i] = val;
+				for ( Integer i : Defaults.getIdList(cfg, path+"."+key+".ids")){
+					array[i] = val;
 				}
 			}
 		}
 	}
 	
 	private void initBlockIds() {
-		for (int i = 0;i<ignore.length;i++){
-			ignore[i] = invertIgnored;
+		for (int i = 0;i<passthrough.length;i++){
+			passthrough[i] = defaultPassthrough;
 			resistance[i] = defaultResistance;
 		}
 	}
