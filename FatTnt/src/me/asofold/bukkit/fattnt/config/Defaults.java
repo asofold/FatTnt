@@ -104,10 +104,19 @@ public class Defaults {
 	
 	// some default settings ------------------------------------
 	
+	/**
+	 * Maximum explosion strength that will be accepted by config.
+	 */
 	public static final float radiusLock = 100.0f;
 	
+	/**
+	 * Center of a block (for addition to a block coordinate).
+	 */
 	public static final Vector vCenter = new Vector(0.5,0.5,0.5);
 	
+	/**
+	 * Maximum size of entity id arrays.
+	 */
 	public static final int blockArraySize = 4096; 
 	
 	
@@ -255,6 +264,12 @@ public class Defaults {
 		return changed;
 	}
 	
+	/**
+	 * Convenience method to allow for integers and block names. [Integers work, blocks?]
+	 * @param cfg
+	 * @param path
+	 * @return
+	 */
 	public static List<Integer> getIdList(Configuration cfg, String path){
 		List<Integer> out = new LinkedList<Integer>();
 		List<String> ref = cfg.getStringList(path);
