@@ -21,15 +21,16 @@ Features:
 - API might be used by other plugins to trigger explosions.
  
 Issues:
-! Sand/TNT spazzing: First set blocks without physics, then later apply physics [physics might be scheduled to the next tick ...]?
+! Sand glitches: Not sure this can be done with physics...
+! TNT glitches: Might be related as to when exactly the entity is removed (currently before starting the explosion, thus the dead entity is passed with the Explosion event). 
 ! Re-think event priorities and canceling to allow other plugins canceling the ExplosionPrimeEvent as well [Probably ok with highest].
 ! Re-think which events to intercept: [Currently for performance reason TNTPrimed is canceled always, to prevent calculations for the explosion being done by CraftBukkit or MC]
 ? propagation differs slightly concerning x / z ? [Will change anyway, seems to be about right now.] 
 ! ALWAYS: keep adjusting  default values to something realistic...
   
 Planned:
+?Evaluate: add-ray-damage - to come closer to vanilla effects, one damage base by blast strength at position, but also calculate ray backwards as extra damage to get damage with higher reach.
 ! Must add: fire, if fire is set.
- Random tick delay for primed tnt.
 ! add configuration flag for enabled (need not be changed by commands).
 ! MAKE SETTINGE DETACHED , default, world specific, ... further ...
 ? Damage or change  entities according to their type (TNT->Explode, ItemStacks - damage)
@@ -61,11 +62,15 @@ Maybe:
 !(add) Item-stacks: allow reducing or damaging them ratehr than dumb yield.
 !(add) splash potion items ?
 !(add) keep track of entities that got velocity added, for a strongest-wins heuristic ? [reason: massive tnt = quadratic entityeffects, postentially, though number is limited by range ...]
-
+! (add) Tackle/Option: Damage further than explosion reach ?  [demands heuristic calculation]
+        -> Problem: breaks the shelter principle a little bit.
+        -> Solution: Use (some*) rays towards center, if a block is not destroyed and has not let the explosion pass through, then checking stops there, if the center is exposed, damage
+           (*) Maybe also has to do orthogonal checks where changing more than one coordinate ?
 
 SCHEDULE (Might include ideas, points to check.)
 -----------------------------------------------------------------
-! Change ignore flag to passthrough resistance, setting the standard resistance to a high value and the passthrough resistance to a lower one will have the same effect ! 
+? Armor depletion: per heart of dealt damage ?
+! Check: use craftbukkit/minecraft internals to calculate damage ?
 ? Maybe add: Probability distribution also config readable ProbDist<SubType> -> entries with (ignored keys and) part definition (part/sum(all parts)) and the sub object merged into the section.
 ! Add good explanation of what i will do / when, what the plugins does/not.
     - (i will not try to find the BEST configuration that is CLOSEST to Vanilla, 
@@ -95,17 +100,12 @@ SCHEDULE (Might include ideas, points to check.)
 ! smarter reload: Propagation.applySettings (maybe factory method for replacing, invoking necessary checks)
 ! add option: placing tnt to replace lava or fire could result in primed tnt too ...
 ! (add) Two greedy config flags: handle-all-explosions (greedy-1) and prevent-other-explosions (greedy-2) [1 applies to explosion prime, 2 prevents Explosion events that bypassed explosion prime.]
-
+! Add: file defs for the main config, use multiple files for configuration?
 
 
 GRAVEYARD
 -----------------------------------------------------------------
-! EVALUATE: Use max-path (useless thing so far:) ) to limit the range, use path multiplier to limit shape, let air cost zero ! [That will allow to configure such that ignored blocks also can cost zero ! zero = minimum]
-   -> Either the blocks get destroyed , ignored, or block the propagation. Don't see the point of indestructible blocks that put through explosions.
-   -> Might  consider having a damage wave going further through some blocks like half steps, even if the explosion can not destroy them.
-   -> Other use is to have many indestructible blocks but to let the explosion through half steps and such, then for the damage it makes sense.
-   -> Thinking by typing: Actually having a put through resistance for ignored blocks or blocks in general would be interesting:
-         Blocks will have a resistance to get destroyed, or might be ignored concerning destruction. If ignored or not destroyed they have an alternative resistance value for letting the explosion pass [possibly to predefined directions!]
+
 
 CHANGELOG (May show an unreleased version but only done changes.)
 -----------------------------------------------------------------
@@ -114,6 +114,8 @@ CHANGELOG (May show an unreleased version but only done changes.)
 *** [Beta/Dev stage]
 
 (0.1.8-DEV-3)
+- (adjust) damage modifier is too low :) - problem is the method does only damage within block-reach currently.
+- (add) Basic armor depletion for blasts + damage reduction also by enchantments.
 - (bugfix) Passthrough resistance: same thing, compare to explosion strength, not material resistance.
 - (bugfix) Quick propagation abort: has to compare to expStr not resistance of material.
 - (add) DamageProcessor in use (does nothing new yet, but API allows setting it).

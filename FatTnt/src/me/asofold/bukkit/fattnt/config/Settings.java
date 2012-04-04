@@ -45,7 +45,7 @@ public class Settings {
 	/**
 	 * Multiplier for entity damage.
 	 */
-	public float damageMultiplier = 3.0f;
+	public float damageMultiplier =  8.0f; // TODO: add some ray damage !
 	
 	/**
 	 * Restrict maximal path length for propagation multiplied by explosion strength.
