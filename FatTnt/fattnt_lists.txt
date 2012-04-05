@@ -53,7 +53,7 @@ Maybe:
 ? Allow arbitrary strength (but limit radius) ?
 ? configure maximum radius to be handled and if to be aborted otherwisec or log/warn.
 ? propagate explosion slowly ?
-? Schedule TNT option (limit to n per tick)
+? Schedule TNT option (limit to n per tick or some total size)
 ? use lock + exception later on for API access
 ? prime tnt from itm drops or when in fire?
 ? other explosion shaping
@@ -69,7 +69,11 @@ Maybe:
 
 SCHEDULE (Might include ideas, points to check.)
 -----------------------------------------------------------------
-? Armor depletion: per heart of dealt damage ?
+!EVALUATE: use ray.distance array to allow splitting maximum radius from resistance (and eventually giving the path multiplier a PURPOSE).
+! EVALUATE: maximum block destruction  distance? [from entities : calculate the rays only, along the ray but usual method?]
+? increase range but increase resistance of normal materials
+? add config if to use damage amount for armor depletion as well + maybe a modifier.
+? do add greedy options, entities as blacklist, maybe: ignore worlds | maybe: world specific settings (PriorityValue etc.).
 ! Check: use craftbukkit/minecraft internals to calculate damage ?
 ? Maybe add: Probability distribution also config readable ProbDist<SubType> -> entries with (ignored keys and) part definition (part/sum(all parts)) and the sub object merged into the section.
 ! Add good explanation of what i will do / when, what the plugins does/not.
@@ -101,10 +105,15 @@ SCHEDULE (Might include ideas, points to check.)
 ! add option: placing tnt to replace lava or fire could result in primed tnt too ...
 ! (add) Two greedy config flags: handle-all-explosions (greedy-1) and prevent-other-explosions (greedy-2) [1 applies to explosion prime, 2 prevents Explosion events that bypassed explosion prime.]
 ! Add: file defs for the main config, use multiple files for configuration?
-
+! mind: For use with greedy: might have to add null-flags for handle-or-handle-not entities. Events might be thrown by any plugin ...
 
 GRAVEYARD
 -----------------------------------------------------------------
+
+
+ONGOING
+--------------------------------------
+
 
 
 CHANGELOG (May show an unreleased version but only done changes.)
@@ -112,6 +121,9 @@ CHANGELOG (May show an unreleased version but only done changes.)
 
 
 *** [Beta/Dev stage]
+
+(0.1.8-DEV-4)
+- (refactor) Remove recursion from propagation, to see what happens.
 
 (0.1.8-DEV-3)
 - (adjust) damage modifier is too low :) - problem is the method does only damage within block-reach currently.

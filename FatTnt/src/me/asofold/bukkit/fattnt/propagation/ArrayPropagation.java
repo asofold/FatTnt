@@ -141,6 +141,20 @@ public class ArrayPropagation extends Propagation {
 	 * Array increments by direction.
 	 */
 	private final int[] aInc =  new int[13];
+	
+	/**
+	 * Runtime ints.
+	 */
+	int[][] rInts = null;
+	/**
+	 * Runtime floats.
+	 */
+	float[] rFloats = null;
+	
+	/**
+	 * Maximum path lenght/recursion depth.
+	 */
+	int maxDepth = 0;
 
 	public ArrayPropagation(Settings settings) {
 		super(settings);
@@ -165,6 +179,14 @@ public class ArrayPropagation extends Propagation {
 		}
 		for (int i=0; i<aInc.length; i++){
 			aInc[i] = xInc[i] + yInc[i]*fY + zInc[i]*fZ;
+		}
+		
+		maxDepth = (1+ (int)maxRadius) * 2;
+		// six times (for 6 directions):
+		rFloats = new float[6*maxDepth];
+		rInts = new int[6*maxDepth][6];
+		for (int i = 0; i<6*maxDepth; i++){
+			rInts[i] = new int[6];
 		}
 	}
 
@@ -219,69 +241,116 @@ public class ArrayPropagation extends Propagation {
 	 * @param seq
 	 * @param blocks
 	 */
-	final void propagate(final World w, final int x, final int y, final int z, 
-			final int i, final int dir, int mpl, float expStr){
-		n ++;
-		// Block type check (id):
-		final int id;
-		float dur ; // AIR
-		final boolean ign;
-		if ( y>=0 && y <= w.getMaxHeight()){// TODO: maybe +-1 ?
-			id = w.getBlockTypeIdAt(x,y,z);
-			if ( id == 0 ){
-				ign = true;
+	final void propagate(final World w, int x, int y, int z, 
+			int i, int dir, int mpl, float expStr){
+		// preparation:
+		final int maxHeight = w.getMaxHeight();
+		final int seqMax = this.seqMax;
+		
+		final int[][] rInts = this.rInts;
+		final float[] rFloats = this.rFloats;
+		final float[] resistance = this.resistance;
+		final float[] passthrough = this.passthrough;
+		final float[] strength = this.strength;
+		final int[] sequence = this.sequence;
+		// kk exaggerated maybe...
+		
+		// set initial checking point:
+		int size = 1;
+		rInts[0] = new int[]{x,y,z,i,dir,Math.min(mpl, maxDepth)};
+		rFloats[0] = expStr;
+		// ? opt: boolean set = false; => get from stack ! if set continue with set values.
+		
+		// iterate while points to check are there:
+		int n = 0;
+		while (size > 0){
+			n ++;
+			expStr = rFloats[size-1];
+			int[] temp = rInts[size-1];
+			x = temp[0];
+			y = temp[1];
+			z = temp[2];
+			i = temp[3];
+			dir = temp[4];
+			mpl = temp[5];
+			size --;
+			// TODO: can still be optimized in order [...]
+			if (expStr<minRes) continue;
+			else if (sequence[i] == seqMax){
+				if ( strength[i] >= expStr) continue;
+			}
+			// Block type check (id):
+			final int id;
+			float dur ; // AIR
+			final boolean ign;
+			if ( y>=0 && y <= maxHeight){// TODO: maybe +-1 ?
+				id = w.getBlockTypeIdAt(x,y,z);
+				if ( id == 0 ){
+					ign = true;
+					dur = resistance[0];
+				}
+				else if (id>0 && id<4096){
+					dur = resistance[id];
+					if ( sequence[i] == seqMax && strength[i] >= dur) ign = true; // TODO: might be unnecessary
+					else ign = false;
+				}
+				else{
+					dur = defaultResistance;
+					ign = true;
+				}
+			} 
+			else{
 				dur = resistance[0];
-			}
-			else if (id>0 && id<4096){
-				dur = resistance[id];
-				if ( sequence[i] == seqMax && strength[i] >= dur) ign = true; // TODO: might be unnecessary
-				else ign = false;
-			}
-			else{
-				dur = defaultResistance;
+				id = 0;
 				ign = true;
 			}
-		} 
-		else{
-			dur = resistance[0];
-			id = 0;
-			ign = true;
-		}
-		// Resistance check:
-		if (FatTnt.DEBUG_LOTS) System.out.println(x+","+y+","+z+" - "+expStr+" | "+id+"@"+dur); // TODO: remove this
-		// Matrix position:
-		sequence[i] = seqMax;
-		strength[i] = expStr;
-//		if ( randDec > 0.0) dur += random.nextFloat()*randDec;
-		if ( expStr<minRes) return;
-		else if ( dur > expStr){
-			final float ptRes = passthrough[id];
-			if (ptRes>expStr) return;// this block stopped this path of propagation.
+			// Resistance check:
+			if (FatTnt.DEBUG_LOTS) System.out.println(x+","+y+","+z+" - "+expStr+" | "+id+"@"+dur); // TODO: remove this
+			// Matrix position:
+			sequence[i] = seqMax;
+			strength[i] = expStr;
+//			if ( randDec > 0.0) dur += random.nextFloat()*randDec;
+			
+			if ( dur > expStr){
+				final float ptRes = passthrough[id];
+				if (ptRes>expStr) continue;// this block stopped this path of propagation.
+				else{
+					// passthrough: continue to propagate
+					expStr -= ptRes;
+				}
+			} 
 			else{
-				// passthrough: continue to propagate
-				expStr -= ptRes;
+				if (!ign) blocks.add(w.getBlockAt(x,y,z));
+				expStr -= dur; // decrease after setting the array
 			}
-		} 
-		else{
-			if (!ign) blocks.add(w.getBlockAt(x,y,z));
-			expStr -= dur; // decrease after setting the array
+			// Checks for propagation:
+			if (mpl==0) continue;	
+			if (i<fZ || i>izMax) continue; // no propagation from edge on.
+			// TODO: use predefined directions + check here if maximum number of dirction changes is reached !
+			// propagate:
+			for (final int nd : ortDir){
+				// (iterate over orthogonal directions)
+				if (nd == oDir[dir]) continue; // prevent walking back.
+				final float effStr; // strength to be used.
+				// Check penalty for propagation in the same direction again:
+				if (nd == dir) effStr = expStr * fStraight;
+				else effStr = expStr;
+				if (effStr<minRes) continue; // not strong enough to propagate through any further block.
+				// Propagate if appropriate (not visited or with smaller strength).
+				final int j = i + aInc[nd];
+				if (sequence[j]!=seqMax || effStr>strength[j]){
+					rFloats[size] = effStr;
+					final int[] nInts = rInts[size];
+					nInts[0] = x+xInc[nd];
+					nInts[1] = y+yInc[nd];
+					nInts[2] = z+zInc[nd];
+					nInts[3] = j;
+					nInts[4] = nd;
+					nInts[5] = mpl-1;
+					size++;
+				}
+			}
 		}
-		// Checks for propagation:
-		if (mpl==0) return;	
-		if (i<fZ || i>izMax) return; // no propagation from edge on.
-		// TODO: use predefined directions + check here if maximum number of dirction changes is reached !
-		// propagate:
-		for (final int nd : ortDir){
-			// (iterate over orthogonal directions)
-			if (nd == oDir[dir]) continue; // prevent walking back.
-			final float effStr; // strength to be used.
-			// Check penalty for propagation in the same direction again:
-			if (nd == dir) effStr = expStr * fStraight;
-			else effStr = expStr;
-			if (effStr<minRes) continue; // not strong enough to propagate through any further block.
-			// Propagate if appropriate (not visited or with smaller strength).
-			final int j = i + aInc[nd];
-			if (sequence[j]!=seqMax || effStr>strength[j]) propagate(w, x+xInc[nd], y+yInc[nd], z+zInc[nd], j, nd, mpl-1, effStr);
-		}
+		this.n = n;
 	}
 }
