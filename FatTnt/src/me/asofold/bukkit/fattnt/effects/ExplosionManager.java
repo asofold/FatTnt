@@ -75,9 +75,11 @@ public class ExplosionManager {
 		stats.addStats(FatTnt.statsGetBlocks, System.nanoTime()-ms);
 		stats.addStats(FatTnt.statsBlocksCollected, affected.size());
 		stats.addStats(FatTnt.statsStrength, (long) realRadius);
+		ms = System.nanoTime();
 		FatExplosionSpecs specs = new FatExplosionSpecs();
 		EntityExplodeEvent exE = new FatEntityExplodeEvent(explEntity, new Location(world,x,y,z), affected, settings.yield , specs);
 		pm.callEvent(exE);
+		stats.addStats(FatTnt.statsExplodeEvent, System.nanoTime()-ms);
 		if (exE.isCancelled()) return;
 		// block effects:
 		ms = System.nanoTime();

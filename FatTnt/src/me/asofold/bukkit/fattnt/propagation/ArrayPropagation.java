@@ -275,8 +275,7 @@ public class ArrayPropagation extends Propagation {
 			mpl = temp[5];
 			size --;
 			// TODO: can still be optimized in order [...]
-			if (expStr<minRes) continue;
-			else if (sequence[i] == seqMax){
+			if (sequence[i] == seqMax){
 				if ( strength[i] >= expStr) continue;
 			}
 			// Block type check (id):

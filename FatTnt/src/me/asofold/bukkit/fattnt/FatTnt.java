@@ -48,6 +48,7 @@ public class FatTnt extends JavaPlugin implements Listener {
 	private static final Stats stats = new Stats(Defaults.msgPrefix.trim()+"[STATS]");
 	public static final Integer statsGetBlocks = stats.getNewId("get_blocks");
 	public static final Integer statsApplyBlocks = stats.getNewId("apply_blocks");
+	public static final Integer statsExplodeEvent = stats.getNewId("event_explode");
 	public static final Integer statsApplyEntities = stats.getNewId("apply_entities");
 	public static final Integer statsNearbyEntities = stats.getNewId("nearby_entities");
 	public static final Integer statsBlocksVisited = stats.getNewId("blocks_visited");

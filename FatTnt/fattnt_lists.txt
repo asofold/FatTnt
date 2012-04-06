@@ -122,6 +122,9 @@ CHANGELOG (May show an unreleased version but only done changes.)
 
 *** [Beta/Dev stage]
 
+(0.1.8-DEV-5)
+- (add) Stats for explode event (protection plugins use up time!). 
+
 (0.1.8-DEV-4)
 - (refactor) Remove recursion from propagation, to see what happens.
 
