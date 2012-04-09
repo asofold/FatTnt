@@ -177,6 +177,13 @@ public class Settings {
 	public float[] resistance = null;
 	
 	/**
+	 * If to damage the armor on base of damage amount.
+	 */
+	public boolean armorUseDamage = false;
+	public float armorMultDamage = 0.5f;
+	public int armorBaseDepletion = 3;
+	
+	/**
 	 * 
 	 * @param stats Are passed with settings, currently, to use the same stats object.
 	 */
@@ -226,6 +233,9 @@ public class Settings {
 		maxPrime = cfg.getInt(Defaults.cfgMaxPrime);
 		stepPhysics = cfg.getBoolean(Defaults.cfgStepPhysics);
 		projectileMultiplier = (float) cfg.getDouble(Defaults.cfgMultProjectiles);
+		armorUseDamage = cfg.getBoolean(Defaults.cfgArmorUseDamage);
+		armorMultDamage = (float) cfg.getDouble(Defaults.cfgArmorMultDamage);
+		armorBaseDepletion = cfg.getInt(Defaults.cfgArmorBaseDepletion);
 		
 		if ( maxRadius > Defaults.radiusLock) maxRadius = Defaults.radiusLock; // safety check
 		

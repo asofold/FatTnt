@@ -26,6 +26,7 @@ public class Defaults {
 	// config paths ----------------------------------
 	
 	// multipliers:
+	// TODO: maybe split this section.
 	public static final String cfgMult = "multiplier";
 	public static final String cfgMultRadius = cfgMult+".radius";
 	public static final String cfgMultDamage = cfgMult+".damage";
@@ -60,6 +61,12 @@ public class Defaults {
 	public static final String cfgItemArrows = "item-arrows";
 	public static final String cfgMaxItems = "max-items";
 	public static final String cfgProjectiles = "projectiles";
+	
+	// armor:
+	public static final String cfgArmor = "armor";
+	public static final String cfgArmorUseDamage = cfgArmor+".use-damage";
+	public static final String cfgArmorMultDamage = ".mult-damage";
+	public static final String cfgArmorBaseDepletion = ".base-depletion";
 
 	// velocity:
 	public static final String cfgVel = "velocity";
