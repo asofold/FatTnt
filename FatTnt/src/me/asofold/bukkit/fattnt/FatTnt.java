@@ -235,8 +235,8 @@ public class FatTnt extends JavaPlugin implements Listener {
 		float realRadius = radius*settings.radiusMultiplier;
 		List<Entity> nearbyEntities;
 		long ms = System.nanoTime();
-		if (explEntity==null) nearbyEntities = Utils.getNearbyEntities(world, x,y,z, realRadius);
-		else nearbyEntities = explEntity.getNearbyEntities(realRadius, realRadius, realRadius);
+		if (explEntity==null) nearbyEntities = Utils.getNearbyEntities(world, x,y,z, realRadius*settings.entityRadiusMultiplier);
+		else nearbyEntities = explEntity.getNearbyEntities(realRadius, realRadius, realRadius*settings.entityRadiusMultiplier);
 		stats.addStats(statsNearbyEntities, System.nanoTime()-ms);
 		applyExplosionEffects(world, x, y, z, realRadius, fire, explEntity, entityType, nearbyEntities);
 	}
