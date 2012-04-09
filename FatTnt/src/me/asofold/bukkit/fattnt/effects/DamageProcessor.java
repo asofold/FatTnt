@@ -129,11 +129,12 @@ public class DamageProcessor {
 	public int[] getArmorDamage(LivingEntity living, EntityType damager, DamageCause cause, int damage) {
 		if ( cause != DamageCause.ENTITY_EXPLOSION) return null; // current limit.
 		if ( living instanceof HumanEntity){
-			int base;
-			// TODO: config for almost all ...
-			if ( damager == EntityType.CREEPER) base = 2;
-			else base = 3; // GHAST ?
-			int[] out = new int[]{damage, base,base,base,base};
+			int base = settings.armorBaseDepletion; // TODO: entity specific ?
+			if (settings.armorUseDamage){
+				base += (int) (settings.armorMultDamage * (float) damage);
+			}
+			int[] out = new int[]{damage, base, base, base, base};
+			// TODO: reduce the damage for enchanted parts.
 			HumanEntity human = (HumanEntity) living;
 			ItemStack[] stacks = human.getInventory().getArmorContents();
 			int shield = 0;
