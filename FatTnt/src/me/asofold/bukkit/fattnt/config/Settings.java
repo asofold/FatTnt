@@ -48,6 +48,17 @@ public class Settings {
 	public float damageMultiplier =  8.0f; // TODO: add some ray damage !
 	
 	/**
+	 * Radius multiplier to modify range for collecting affected entities.
+	 * 
+	 */
+	public float entityRadiusMultiplier = 2.0f;
+	
+	/**
+	 * Multiplier for the distance based damage to entities.
+	 */
+	public float entityDistanceMultiplier = 1.0f; // TODO: adjust
+	
+	/**
 	 * Restrict maximal path length for propagation multiplied by explosion strength.
 	 */
 	public float maxPathMultiplier = 1.7f;
@@ -189,6 +200,8 @@ public class Settings {
 		}
 		radiusMultiplier = (float) cfg.getDouble(Defaults.cfgMultRadius);
 		damageMultiplier = (float) cfg.getDouble(Defaults.cfgMultDamage);
+		entityRadiusMultiplier = (float) cfg.getDouble(Defaults.cfgMultEntityRadius);
+		entityDistanceMultiplier = (float) cfg.getDouble(Defaults.cfgMultEntityDistance);
 		maxPathMultiplier = (float) cfg.getDouble(Defaults.cfgMultMaxPath);
 		defaultPassthrough = (float) cfg.getDouble(Defaults.cfgDefaultPassthrough);
 		defaultResistance = (float) cfg.getDouble(Defaults.cfgDefaultResistence);

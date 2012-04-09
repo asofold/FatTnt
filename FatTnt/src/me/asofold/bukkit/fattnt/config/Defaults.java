@@ -29,6 +29,8 @@ public class Defaults {
 	public static final String cfgMult = "multiplier";
 	public static final String cfgMultRadius = cfgMult+".radius";
 	public static final String cfgMultDamage = cfgMult+".damage";
+	public static final String cfgMultEntityRadius = cfgMult + ".entity-radius";
+	public static final String cfgMultEntityDistance = cfgMult + ".entity-distance";
 	public static final String cfgMultMaxPath = cfgMult+".max-path";
 	public static final String cfgMultProjectiles = cfgMult+".projectiles";
 	public static final String cfgFStraight = cfgMult+".straight";
@@ -117,9 +119,7 @@ public class Defaults {
 	/**
 	 * Maximum size of entity id arrays.
 	 */
-	public static final int blockArraySize = 4096; 
-	
-	
+	public static final int blockArraySize = 4096;
 	
 	/**
 	 * 
