@@ -45,6 +45,7 @@ public class Defaults {
 	public static final String cfgMaxRadius = cfgRadius+".max";
 	public static final String cfgRandRadius = cfgRadius+".random"; // UNUSED
 	public static final String cfgEntities= "entities";
+	public static final String cfgDamagePropagate = "propagate-damage";
 	
 	// block effects:
 	public static final String cfgYield = "yield";
@@ -108,6 +109,54 @@ public class Defaults {
 	};
 	public static final int[] defaultMaxResistance = new int[]{
 			7, // bedrock
+	};
+	
+	public static final int[] defaultPropagateDamage = new int[]{
+		0, 
+		6,
+		8,9,
+		10,11,
+		18,
+		27, 28,
+		30,
+		31,
+		32,
+		34,
+		36,
+		37,
+		38,
+		39,
+		40,
+		50,
+		51,
+		55,
+		59,
+		63,
+		64,
+		65, 66,
+		67,
+		68,
+		69,
+		70,72,
+		75,76,
+		78,
+		83,
+		85,
+		90,
+		93,94,
+		96,
+		101,
+		104, 105,
+		106,
+		107,
+		108,109,
+		111,
+		113,
+		114,
+		115,
+		117,
+		119,
+		122,
 	};
 	
 	// entitiy presets -------------------------------------------------
