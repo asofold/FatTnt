@@ -29,7 +29,7 @@ Issues:
 ! ALWAYS: keep adjusting  default values to something realistic...
   
 Planned:
-?Evaluate: add-ray-damage - to come closer to vanilla effects, one damage base by blast strength at position, but also calculate ray backwards as extra damage to get damage with higher reach.
+! add: limit explosions to certain y-coordinates (upper / lower limit).
 ! Must add: fire, if fire is set.
 ! add configuration flag for enabled (need not be changed by commands).
 ! MAKE SETTINGE DETACHED , default, world specific, ... further ...
@@ -69,6 +69,8 @@ Maybe:
 
 SCHEDULE (Might include ideas, points to check.)
 -----------------------------------------------------------------
+! add: control over block/entity effects based on conditions (y-coordinate, explosion in material).
+? EVALUATE: altered block list for event: entity effects are different that way.
 ! Evaluate: use array of continuations
 ! Evaluate: emulate vanilla style explosions ?
 ! Evaluate: add something random, or the position bias (entity at some offset)
@@ -117,11 +119,29 @@ GRAVEYARD
 STACK
 --------------------------------------
 
-*** (0.1.8-DEV-5)
 
+*** 0.2.0
 
+*** OPT
+- WorldGuard: add a quick switch to prevent explosions if touching WorldGuard regions
 
-!
+*** API
+- (add) "Add some API methods for new stuff, if necessary."
+- (add) FatExplosionSpec: content ! make some things adjustable !
+
+*** FEATURES:
+- !(add) flags to control some more stuff (forgot)...
+
+*** SPECIFIC/CONFINEMENT SETTINGS
+!(add) confinement: minY, maxY
+
+*** FILTER SETTINGS
+- (add) What to handle, greedy-flags, 
+
+*** CLEANUP OF SETTINGS
+- defaults, world-specific, entity-specific, 
+- ?(add) PriorityValue with filter technique for effective settings (defaults, worlds, entities: exploding+affected, ...)?
+
 
 
 CHANGELOG (May show an unreleased version but only done changes.)
