@@ -257,7 +257,7 @@ public class ExplosionManager {
 			
 			// ADD DISTANCE DAMAGE ASPECT (currently to effStr)
 			if ( settings.simpleDistanceDamage && effStr > 0.0); // ignore distance damage
-			if (isAlive){
+			else if (isAlive){
 				// TODO: maybe also allow for all 
 				// TODO: add distance aspect
 				if (settings.useDistanceDamage){
