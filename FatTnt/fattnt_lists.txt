@@ -66,6 +66,7 @@ Maybe:
         -> Problem: breaks the shelter principle a little bit.
         -> Solution: Use (some*) rays towards center, if a block is not destroyed and has not let the explosion pass through, then checking stops there, if the center is exposed, damage
            (*) Maybe also has to do orthogonal checks where changing more than one coordinate ?
+? (add) Exploding conditions for other mobs ? (mooshroom?) 
 
 SCHEDULE (Might include ideas, points to check.)
 -----------------------------------------------------------------
@@ -127,15 +128,21 @@ STACK
 
 *** API
 - (add) "Add some API methods for new stuff, if necessary."
+- (add) Use most specific Bukkit events where possible (with entities added etc.)
 - (add) FatExplosionSpec: content ! make some things adjustable !
 
 *** FEATURES:
 - !(add) flags to control some more stuff (forgot)...
 
 *** SPECIFIC/CONFINEMENT SETTINGS
-!(add) confinement: minY, maxY
+? name for confinement
+?CHECK confinement = inside + outside settings + settings just as normal ? 
+- ?(add) Confinement/outside: allow-explosion, allow-block-damage, allow-entity-damage, 
+!(add) confinement: minY, maxY [maybe tweak the resistance for those to not add the blocks in the first place?]
 
 *** FILTER SETTINGS
+- ! block settings: allow null as well, so only set them once if not specified otherwise.
+- ! block settings: maybe allow named sets of block ids (defined ONCE) + allow remove ids + add ids !
 - (add) What to handle, greedy-flags, 
 
 *** CLEANUP OF SETTINGS
@@ -148,6 +155,10 @@ CHANGELOG (May show an unreleased version but only done changes.)
 -----------------------------------------------------------------
 
 *** [Beta/Dev stage]
+
+(0.2.0-DEV-1)
+- (add) prioritiyvalues from plshared/swgt
+
 
 (0.1.8-DEV-5)
 - (note) The configuration is a mess :) - it WILL get changed some time later.
