@@ -70,8 +70,8 @@ public class Defaults {
 	// armor:
 	public static final String cfgArmor = "armor";
 	public static final String cfgArmorUseDamage = cfgArmor+".use-damage";
-	public static final String cfgArmorMultDamage = ".mult-damage";
-	public static final String cfgArmorBaseDepletion = ".base-depletion";
+	public static final String cfgArmorMultDamage = cfgArmor+".mult-damage";
+	public static final String cfgArmorBaseDepletion = cfgArmor+".base-depletion";
 
 	// velocity:
 	public static final String cfgVel = "velocity";
