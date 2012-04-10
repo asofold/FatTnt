@@ -46,7 +46,7 @@ public class Settings {
 	/**
 	 * Multiplier for entity damage.
 	 */
-	public float damageMultiplier =  8.0f; // TODO: add some ray damage !
+	public float damageMultiplier =  5.0f; // TODO: add some ray damage !
 	
 	/**
 	 * Radius multiplier to modify range for collecting affected entities.
@@ -54,10 +54,7 @@ public class Settings {
 	 */
 	public float entityRadiusMultiplier = 2.0f;
 	
-	/**
-	 * Multiplier for the distance based damage to entities.
-	 */
-	public float entityDistanceMultiplier = 1.0f; // TODO: adjust
+	
 	
 	/**
 	 * Restrict maximal path length for propagation multiplied by explosion strength.
@@ -156,7 +153,7 @@ public class Settings {
 	/**
 	 * Use a simple distance damage model.
 	 */
-	public boolean simpleDistanceDamage = true;
+	public boolean simpleDistanceDamage = false;
 	
 	/**
 	 * Experimental:Currently does explosions without applying physics (not good),
@@ -188,6 +185,11 @@ public class Settings {
 	public float[] resistance = null;
 	
 	public boolean[] propagateDamage = null;
+	
+	/**
+	 * Multiplier for the distance based damage to entities.
+	 */
+	public float entityDistanceMultiplier = 0.4f; // TODO: adjust
 	
 	/**
 	 * If to damage the armor on base of damage amount.
