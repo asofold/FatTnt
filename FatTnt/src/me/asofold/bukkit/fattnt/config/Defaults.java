@@ -31,7 +31,6 @@ public class Defaults {
 	public static final String cfgMultRadius = cfgMult+".radius";
 	public static final String cfgMultDamage = cfgMult+".damage";
 	public static final String cfgMultEntityRadius = cfgMult + ".entity-radius";
-	public static final String cfgMultEntityDistance = cfgMult + ".entity-distance";
 	public static final String cfgMultMaxPath = cfgMult+".max-path";
 	public static final String cfgMultProjectiles = cfgMult+".projectiles";
 	public static final String cfgFStraight = cfgMult+".straight";
@@ -62,10 +61,12 @@ public class Defaults {
 	public static final String cfgItemArrows = "item-arrows";
 	public static final String cfgMaxItems = "max-items";
 	public static final String cfgProjectiles = "projectiles";
+	
 	// distance effect (damage)
 	public static final String cfgDistanceDamage = "distance-damage";
 	public static final String cfgUseDistanceDamage = cfgDistanceDamage + ".use";
 	public static final String cfgSimpleDistanceDamage = cfgDistanceDamage + ".simple";
+	public static final String cfgMultEntityDistance = cfgDistanceDamage + ".mult";
 	
 	// armor:
 	public static final String cfgArmor = "armor";
