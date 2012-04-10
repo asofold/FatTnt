@@ -61,6 +61,10 @@ public class Defaults {
 	public static final String cfgItemArrows = "item-arrows";
 	public static final String cfgMaxItems = "max-items";
 	public static final String cfgProjectiles = "projectiles";
+	// distance effect (damage)
+	public static final String cfgDistanceDamage = "distance-damage";
+	public static final String cfgUseDistanceDamage = cfgDistanceDamage + ".use";
+	public static final String cfgSimpleDistanceDamage = cfgDistanceDamage + ".simple";
 	
 	// armor:
 	public static final String cfgArmor = "armor";

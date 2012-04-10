@@ -148,6 +148,16 @@ public class Settings {
 	public float entityYield = 0.2f;
 	
 	/**
+	 * Use extra distance based damage.
+	 */
+	public boolean useDistanceDamage = true;
+	
+	/**
+	 * Use a simple distance damage model.
+	 */
+	public boolean simpleDistanceDamage = true;
+	
+	/**
 	 * Experimental:Currently does explosions without applying physics (not good),
 	 * intended: apply physics after setting blocks to air.
 	 */
@@ -226,6 +236,8 @@ public class Settings {
 		velCap = (float) cfg.getDouble(Defaults.cfgVelCap);
 		itemTnt = cfg.getBoolean(Defaults.cfgItemTnt);
 		entityYield = (float) cfg.getDouble(Defaults.cfgEntityYield);
+		useDistanceDamage = cfg.getBoolean(Defaults.cfgUseDistanceDamage);
+		simpleDistanceDamage = cfg.getBoolean(Defaults.cfgSimpleDistanceDamage);
 		maxItems = cfg.getInt(Defaults.cfgMaxItems);
 		itemArrows = cfg.getBoolean(Defaults.cfgItemArrows);
 		projectiles = cfg.getBoolean(Defaults.cfgProjectiles);
