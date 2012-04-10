@@ -69,6 +69,9 @@ Maybe:
 
 SCHEDULE (Might include ideas, points to check.)
 -----------------------------------------------------------------
+! Evaluate: use array of continuations
+! Evaluate: emulate vanilla style explosions ?
+! Evaluate: add something random, or the position bias (entity at some offset)
 !EVALUATE: use ray.distance array to allow splitting maximum radius from resistance (and eventually giving the path multiplier a PURPOSE).
 ! EVALUATE: maximum block destruction  distance? [from entities : calculate the rays only, along the ray but usual method?]
 ? increase range but increase resistance of normal materials
@@ -111,18 +114,25 @@ GRAVEYARD
 -----------------------------------------------------------------
 
 
-ONGOING
+STACK
 --------------------------------------
 
+*** (0.1.8-DEV-5)
+
+
+
+!
 
 
 CHANGELOG (May show an unreleased version but only done changes.)
 -----------------------------------------------------------------
 
-
 *** [Beta/Dev stage]
 
 (0.1.8-DEV-5)
+- (note) The configuration is a mess :) - it WILL get changed some time later.
+- (add) Additional distance based damage.
+- (add) Modifiers for armor damage.
 - (add) Stats for explode event (protection plugins use up time!). 
 
 (0.1.8-DEV-4)

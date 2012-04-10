@@ -238,19 +238,72 @@ public class ExplosionManager {
 			realRadius = settings.maxRadius;
 		} else if (realRadius == 0.0f) return;
 		PluginManager pm = Bukkit.getPluginManager();
+		Location expCenter = new Location(world, x, y, z);
+		
+		float maxD = realRadius * settings.entityRadiusMultiplier;
+		
 		// entities:
 		for ( Entity entity : nearbyEntities){
 			// test damage:
 			final Location loc = entity.getLocation();
-			final float effRad = propagation.getStrength(loc); // effective strength/radius
-			if ( effRad == 0.0f) continue; // not affected
+			float effStr = propagation.getStrength(loc); // effective strength/radius
+			
+			boolean isAlive = entity.getType().isAlive();
 			boolean addVelocity = false;
 			boolean useDamage = true;
 			boolean applyEntityYield = false;
+			
+			
+			
+			// ADD DISTANCE DAMAGE ASPECT (currently to effStr)
+			if ( settings.simpleDistanceDamage && effStr > 0.0); // ignore distance damage
+			if (isAlive){
+				// TODO: maybe also allow for all 
+				// TODO: add distance aspect
+				if (settings.useDistanceDamage){
+					// currently only the simple method:
+					if (FatTnt.DEBUG_LOTS) System.out.println("[FatTnt] Checking distance damage...");
+					final float d = (float) loc.distance(expCenter);
+					// TODO: more precise / efficient (using block coordinates right away, diagonal transition checks, ... )
+					if (d < maxD){
+						final Vector dir = expCenter.toVector().subtract(loc.toVector()).normalize().multiply(0.3);
+						final int max = (int) (maxD*3.0);
+						double h = 0.5;
+						if ( entity instanceof LivingEntity){
+							h = ((LivingEntity) entity).getEyeHeight();
+						}
+						Location current = loc.clone().add(new Vector(0.0, h ,0.0)); 
+						for ( int i = 0 ; i< max; i++){
+							int id = world.getBlockTypeIdAt(current);
+							if (FatTnt.DEBUG_LOTS) System.out.println("[FatTnt] dist-damage at id: "+id);
+							if (!settings.propagateDamage[id]) break;
+							float str = propagation.getStrength(current);
+							if (str > 0.0f){
+								// modify effStr according to settings.
+								final float ed = (float) loc.distance(current);
+								if ( ed <= 0.0f) break;
+								effStr += str * settings.entityDistanceMultiplier*(maxD - ed) / maxD;
+								if ( FatTnt.DEBUG_LOTS) System.out.println("[FatTnt] Modified effStr at "+ed+ ": "+settings.entityDistanceMultiplier*(maxD - ed) / maxD);
+								break;
+							}
+							current.add(dir);
+						}
+					}
+				}
+			}
+			
+			// normal processing:
+			if ( effStr == 0.0f){
+				continue; // not affected
+			}
+			
+			
+			
 			if (settings.sparePrimed && (entity instanceof TNTPrimed)){
 				addVelocity = true;
 				useDamage = false;
 			} 
+			else if (isAlive); // just go with settings.
 			else if (entity instanceof Item){
 				Item item = (Item) entity;
 				ItemStack stack = item.getItemStack();
@@ -296,14 +349,14 @@ public class ExplosionManager {
 					addVelocity = false;
 				}
 			}
-			if ( applyEntityYield){
+			if (applyEntityYield){
 				if ( random.nextFloat()>settings.entityYield) entity.remove();
 				continue;
 			}
 			if (useDamage){
 				// TODO: damage entities according to type [currently almost only living entities]
-				int damage = 1 + (int) (effRad*settings.damageMultiplier*damageMultiplier) ;
-				// TODO: take into account armor, enchantments and such?
+				int damage = 1 + (int) (effStr*settings.damageMultiplier*damageMultiplier); // core damage
+				// TODO: add distance damage [maybe above]
 				EntityDamageEvent event = new FatEntityDamageEvent(entity, DamageCause.ENTITY_EXPLOSION, damage, specs);
 				pm.callEvent(event);
 				if (!event.isCancelled()){
@@ -315,7 +368,7 @@ public class ExplosionManager {
 					addVelocity = true;
 				}
 			}
-			if (addVelocity) addRandomVelocity(entity, loc, x,y,z, effRad, realRadius, settings);
+			if (addVelocity) addRandomVelocity(entity, loc, x,y,z, effStr, realRadius, settings);
 		}
 	}
 
