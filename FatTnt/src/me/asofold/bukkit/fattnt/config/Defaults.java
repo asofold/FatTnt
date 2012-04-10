@@ -314,6 +314,42 @@ public class Defaults {
 			cfg.set(cfgMultProjectiles, defaults.projectileMultiplier);
 			changed = true;
 		}
+		if (!cfg.contains(cfgArmorBaseDepletion)){
+			cfg.set(cfgArmorBaseDepletion, defaults.armorBaseDepletion);
+			changed = true;
+		}
+		if (!cfg.contains(cfgArmorMultDamage)){
+			cfg.set(cfgArmorMultDamage, defaults.armorMultDamage);
+			changed = true;
+		}
+		if (!cfg.contains(cfgArmorUseDamage)){
+			cfg.set(cfgArmorUseDamage, defaults.armorUseDamage);
+			changed = true;
+		}
+		if (!cfg.contains(cfgMultEntityDistance)){
+			cfg.set(cfgMultEntityDistance, defaults.entityDistanceMultiplier);
+			changed = true;
+		}
+		if (!cfg.contains(cfgMultEntityRadius)){
+			cfg.set(cfgMultEntityRadius, defaults.entityRadiusMultiplier);
+			changed = true;
+		}
+		if (!cfg.contains(cfgSimpleDistanceDamage)){
+			cfg.set(cfgSimpleDistanceDamage, defaults.simpleDistanceDamage);
+			changed = true;
+		}
+		if (!cfg.contains(cfgUseDistanceDamage)){
+			cfg.set(cfgUseDistanceDamage, defaults.useDistanceDamage);
+			changed = true;
+		}
+		if (!cfg.contains(cfgDamagePropagate)){
+			List<Integer> entries = new LinkedList<Integer>();
+			for (int i : Defaults.defaultPropagateDamage){
+				entries.add(i);
+			}
+			cfg.set(cfgDamagePropagate, entries);
+			changed = true;
+		}
 		return changed;
 	}
 	
