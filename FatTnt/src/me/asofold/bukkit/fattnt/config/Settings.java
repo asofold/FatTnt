@@ -2,6 +2,7 @@ package me.asofold.bukkit.fattnt.config;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import me.asofold.bukkit.fattnt.stats.Stats;
@@ -186,6 +187,8 @@ public class Settings {
 	 */
 	public float[] resistance = null;
 	
+	public boolean[] propagateDamage = null;
+	
 	/**
 	 * If to damage the armor on base of damage amount.
 	 */
@@ -204,6 +207,7 @@ public class Settings {
 	public void applyConfig(Configuration cfg){
 		passthrough = new float[Defaults.blockArraySize];
 		resistance = new float[Defaults.blockArraySize];
+		propagateDamage = new boolean[Defaults.blockArraySize];
 		minResistance = Float.MAX_VALUE;
 		handledEntities.clear();
 		for ( String n : cfg.getStringList(Defaults.cfgEntities)){
@@ -254,6 +258,10 @@ public class Settings {
 		initBlockIds();
 		readResistance(cfg, Defaults.cfgResistence, resistance, defaultResistance);
 		readResistance(cfg, Defaults.cfgPassthrough, passthrough, defaultPassthrough);
+		List<Integer> ids = Defaults.getIdList(cfg, Defaults.cfgDamagePropagate);
+		for ( Integer id : ids){
+			propagateDamage[id] = true;
+		}
 	}
 	
 	private void readResistance(Configuration cfg, String path, float[] array, float defaultResistance){
@@ -276,6 +284,7 @@ public class Settings {
 		for (int i = 0;i<passthrough.length;i++){
 			passthrough[i] = defaultPassthrough;
 			resistance[i] = defaultResistance;
+			propagateDamage[i] = false;
 		}
 	}
 	
