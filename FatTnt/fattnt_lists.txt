@@ -130,6 +130,7 @@ STACK
 - (add) "Add some API methods for new stuff, if necessary."
 - (add) Use most specific Bukkit events where possible (with entities added etc.)
 - (add) FatExplosionSpec: content ! make some things adjustable !
+- ?make fatexplosionspecs an interface ?
 
 *** FEATURES:
 - !(add) flags to control some more stuff (forgot)...
@@ -157,6 +158,7 @@ CHANGELOG (May show an unreleased version but only done changes.)
 *** [Beta/Dev stage]
 
 (0.2.0-DEV-1)
+- (refactor) Separate Path class for configuration paths.
 - (add) prioritiyvalues from plshared/swgt
 
 

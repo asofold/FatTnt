@@ -212,7 +212,7 @@ public class Settings {
 		propagateDamage = new boolean[Defaults.blockArraySize];
 		minResistance = Float.MAX_VALUE;
 		handledEntities.clear();
-		for ( String n : cfg.getStringList(Defaults.cfgEntities)){
+		for ( String n : cfg.getStringList(Path.cfgEntities)){
 			try{
 				EntityType etp = EntityType.valueOf(n.toUpperCase());
 				if ( etp == null) throw new IllegalArgumentException();
@@ -221,46 +221,46 @@ public class Settings {
 				Bukkit.getServer().getLogger().warning(Defaults.msgPrefix+"Bad entity: "+n);
 			}
 		}
-		radiusMultiplier = (float) cfg.getDouble(Defaults.cfgMultRadius);
-		damageMultiplier = (float) cfg.getDouble(Defaults.cfgMultDamage);
-		entityRadiusMultiplier = (float) cfg.getDouble(Defaults.cfgMultEntityRadius);
-		entityDistanceMultiplier = (float) cfg.getDouble(Defaults.cfgMultEntityDistance);
-		maxPathMultiplier = (float) cfg.getDouble(Defaults.cfgMultMaxPath);
-		defaultPassthrough = (float) cfg.getDouble(Defaults.cfgDefaultPassthrough);
-		defaultResistance = (float) cfg.getDouble(Defaults.cfgDefaultResistence);
+		radiusMultiplier = (float) cfg.getDouble(Path.cfgMultRadius);
+		damageMultiplier = (float) cfg.getDouble(Path.cfgMultDamage);
+		entityRadiusMultiplier = (float) cfg.getDouble(Path.cfgMultEntityRadius);
+		entityDistanceMultiplier = (float) cfg.getDouble(Path.multEntityDistance);
+		maxPathMultiplier = (float) cfg.getDouble(Path.cfgMultMaxPath);
+		defaultPassthrough = (float) cfg.getDouble(Path.cfgDefaultPassthrough);
+		defaultResistance = (float) cfg.getDouble(Path.cfgDefaultResistence);
 		minResistance = Math.min(Math.min(minResistance, defaultResistance), defaultPassthrough);
-		maxRadius = (float) cfg.getDouble(Defaults.cfgMaxRadius);
-		randDec = (float) cfg.getDouble(Defaults.cfgRandRadius);
-		yield = (float) cfg.getDouble(Defaults.cfgYield);
-		velUse = cfg.getBoolean(Defaults.cfgVelUse);
-		velMin = (float) cfg.getDouble(Defaults.cfgVelMin);
-		velCen = (float) cfg.getDouble(Defaults.cfgVelCen);
-		velRan = (float) cfg.getDouble(Defaults.cfgVelRan);
-		fStraight = (float) cfg.getDouble(Defaults.cfgFStraight);
-		velOnPrime = cfg.getBoolean(Defaults.cfgVelOnPrime);
-		thresholdTntDirect = cfg.getDouble(Defaults.cfgThresholdTntDirect);
-		velCap = (float) cfg.getDouble(Defaults.cfgVelCap);
-		itemTnt = cfg.getBoolean(Defaults.cfgItemTnt);
-		entityYield = (float) cfg.getDouble(Defaults.cfgEntityYield);
-		useDistanceDamage = cfg.getBoolean(Defaults.cfgUseDistanceDamage);
-		simpleDistanceDamage = cfg.getBoolean(Defaults.cfgSimpleDistanceDamage);
-		maxItems = cfg.getInt(Defaults.cfgMaxItems);
-		itemArrows = cfg.getBoolean(Defaults.cfgItemArrows);
-		projectiles = cfg.getBoolean(Defaults.cfgProjectiles);
-		minPrime = cfg.getInt(Defaults.cfgMinPrime);
-		maxPrime = cfg.getInt(Defaults.cfgMaxPrime);
-		stepPhysics = cfg.getBoolean(Defaults.cfgStepPhysics);
-		projectileMultiplier = (float) cfg.getDouble(Defaults.cfgMultProjectiles);
-		armorUseDamage = cfg.getBoolean(Defaults.cfgArmorUseDamage);
-		armorMultDamage = (float) cfg.getDouble(Defaults.cfgArmorMultDamage);
-		armorBaseDepletion = cfg.getInt(Defaults.cfgArmorBaseDepletion);
+		maxRadius = (float) cfg.getDouble(Path.cfgMaxRadius);
+		randDec = (float) cfg.getDouble(Path.cfgRandRadius);
+		yield = (float) cfg.getDouble(Path.cfgYield);
+		velUse = cfg.getBoolean(Path.velUse);
+		velMin = (float) cfg.getDouble(Path.velMin);
+		velCen = (float) cfg.getDouble(Path.velCen);
+		velRan = (float) cfg.getDouble(Path.velRan);
+		fStraight = (float) cfg.getDouble(Path.cfgFStraight);
+		velOnPrime = cfg.getBoolean(Path.velOnPrime);
+		thresholdTntDirect = cfg.getDouble(Path.cfgThresholdTntDirect);
+		velCap = (float) cfg.getDouble(Path.velCap);
+		itemTnt = cfg.getBoolean(Path.cfgItemTnt);
+		entityYield = (float) cfg.getDouble(Path.cfgEntityYield);
+		useDistanceDamage = cfg.getBoolean(Path.useDistanceDamage);
+		simpleDistanceDamage = cfg.getBoolean(Path.simpleDistanceDamage);
+		maxItems = cfg.getInt(Path.cfgMaxItems);
+		itemArrows = cfg.getBoolean(Path.cfgItemArrows);
+		projectiles = cfg.getBoolean(Path.cfgProjectiles);
+		minPrime = cfg.getInt(Path.cfgMinPrime);
+		maxPrime = cfg.getInt(Path.cfgMaxPrime);
+		stepPhysics = cfg.getBoolean(Path.cfgStepPhysics);
+		projectileMultiplier = (float) cfg.getDouble(Path.cfgMultProjectiles);
+		armorUseDamage = cfg.getBoolean(Path.armorUseDamage);
+		armorMultDamage = (float) cfg.getDouble(Path.armorMultDamage);
+		armorBaseDepletion = cfg.getInt(Path.armorBaseDepletion);
 		
 		if ( maxRadius > Defaults.radiusLock) maxRadius = Defaults.radiusLock; // safety check
 		
 		initBlockIds();
-		readResistance(cfg, Defaults.cfgResistence, resistance, defaultResistance);
-		readResistance(cfg, Defaults.cfgPassthrough, passthrough, defaultPassthrough);
-		List<Integer> ids = Defaults.getIdList(cfg, Defaults.cfgDamagePropagate);
+		readResistance(cfg, Path.cfgResistence, resistance, defaultResistance);
+		readResistance(cfg, Path.cfgPassthrough, passthrough, defaultPassthrough);
+		List<Integer> ids = Defaults.getIdList(cfg, Path.cfgDamagePropagate);
 		for ( Integer id : ids){
 			propagateDamage[id] = true;
 		}

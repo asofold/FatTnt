@@ -22,69 +22,6 @@ public class Defaults {
 	 */
 	public static final String msgPrefix = "[FatTnt] ";
 
-	// -----------------------------------------------
-	// config paths ----------------------------------
-	
-	// multipliers:
-	// TODO: maybe split this section.
-	public static final String cfgMult = "multiplier";
-	public static final String cfgMultRadius = cfgMult+".radius";
-	public static final String cfgMultDamage = cfgMult+".damage";
-	public static final String cfgMultEntityRadius = cfgMult + ".entity-radius";
-	public static final String cfgMultMaxPath = cfgMult+".max-path";
-	public static final String cfgMultProjectiles = cfgMult+".projectiles";
-	public static final String cfgFStraight = cfgMult+".straight";
-	
-	// explosion/propagation settings:
-	public static final String cfgPassthrough= "passthrough";
-	public static final String cfgDefaultPassthrough= cfgPassthrough+".default";
-	public static final String cfgResistence = "resistence";
-	public static final String cfgDefaultResistence = cfgResistence+".default";
-	public static final String cfgRadius = "radius";
-	public static final String cfgMaxRadius = cfgRadius+".max";
-	public static final String cfgRandRadius = cfgRadius+".random"; // UNUSED
-	public static final String cfgEntities= "entities";
-	public static final String cfgDamagePropagate = "propagate-damage";
-	
-	// block effects:
-	public static final String cfgYield = "yield";
-	public static final String cfgStepPhysics= "step-physics";
-	
-	// tnt specific
-	public static final String cfgMinPrime = "min-prime";
-	public static final String cfgMaxPrime = "max-prime";
-	public static final String cfgThresholdTntDirect = "tnt.thresholds.direct-explode"; // UNUSED
-	
-	// entity effects:
-	public static final String cfgEntityYield = "entity-yield";
-	public static final String cfgItemTnt = "item-tnt";
-	public static final String cfgItemArrows = "item-arrows";
-	public static final String cfgMaxItems = "max-items";
-	public static final String cfgProjectiles = "projectiles";
-	
-	// distance effect (damage)
-	public static final String cfgDistanceDamage = "distance-damage";
-	public static final String cfgUseDistanceDamage = cfgDistanceDamage + ".use";
-	public static final String cfgSimpleDistanceDamage = cfgDistanceDamage + ".simple";
-	public static final String cfgMultEntityDistance = cfgDistanceDamage + ".mult";
-	
-	// armor:
-	public static final String cfgArmor = "armor";
-	public static final String cfgArmorUseDamage = cfgArmor+".use-damage";
-	public static final String cfgArmorMultDamage = cfgArmor+".mult-damage";
-	public static final String cfgArmorBaseDepletion = cfgArmor+".base-depletion";
-
-	// velocity:
-	public static final String cfgVel = "velocity";
-	public static final String cfgVelUse = cfgVel+".use";
-	public static final String cfgVelMin = cfgVel+".min";
-	public static final String cfgVelCen= cfgVel+".center";
-	public static final String cfgVelRan = cfgVel+".random";
-	public static final String cfgVelOnPrime = cfgVel+".tnt-primed";
-	public static final String cfgVelCap = cfgVel+".cap";
-
-	
-	
 	// -------------------------------------------------------------------------------
 	
 	// Block id presets (resistance) -------------------------------------------------
@@ -191,25 +128,25 @@ public class Defaults {
 		boolean changed = false;
 		Settings defaults = new Settings(null); // read defaults from here.
 		
-		if ( !cfg.contains(cfgEntities)){
+		if ( !cfg.contains(Path.cfgEntities)){
 			List<String> l = new LinkedList<String>();
 			for (String et : handledEntities){
 				l.add(et);
 			}
-			cfg.set(cfgEntities, l);
+			cfg.set(Path.cfgEntities, l);
 			changed = true;
 		}
-		if ( !cfg.contains(cfgDefaultPassthrough)){
-			cfg.set(cfgDefaultPassthrough, defaults.defaultPassthrough);
+		if ( !cfg.contains(Path.cfgDefaultPassthrough)){
+			cfg.set(Path.cfgDefaultPassthrough, defaults.defaultPassthrough);
 			changed = true;
 		}
 		// no default ids for passthrough
-		if ( !cfg.contains(cfgResistence)){
+		if ( !cfg.contains(Path.cfgResistence)){
 			float[] v = new float[]{1.0f, 4.0f, 20.0f, Float.MAX_VALUE};
 			int[][] ids = new int[][]{defaultLowResistance, defaultHigherResistance, defaultStrongResistance, defaultMaxResistance};
 			String[] keys = new String[]{"low", "higher", "strongest", "indestructible"};
 			for ( int i = 0; i<v.length; i++){
-				String base = cfgResistence+"."+keys[i];
+				String base = Path.cfgResistence+"."+keys[i];
 				List<Integer> l = new LinkedList<Integer>();
 				for ( int id: ids[i]) {
 					l.add(id);
@@ -219,136 +156,136 @@ public class Defaults {
 			}
 			changed = true;
 		}
-		if ( !cfg.contains(cfgDefaultResistence)){
-			cfg.set(cfgDefaultResistence, defaults.defaultResistance);
+		if ( !cfg.contains(Path.cfgDefaultResistence)){
+			cfg.set(Path.cfgDefaultResistence, defaults.defaultResistance);
 			changed = true;
 		}
-		if ( !cfg.contains(cfgMaxRadius)){
-			cfg.set(cfgMaxRadius, defaults.maxRadius);
+		if ( !cfg.contains(Path.cfgMaxRadius)){
+			cfg.set(Path.cfgMaxRadius, defaults.maxRadius);
 			changed = true;
 		}
-		if ( !cfg.contains(cfgMultDamage)){
-			cfg.set(cfgMultDamage, defaults.damageMultiplier);
+		if ( !cfg.contains(Path.cfgMultDamage)){
+			cfg.set(Path.cfgMultDamage, defaults.damageMultiplier);
 			changed = true;
 		}
-		if ( !cfg.contains(cfgMultRadius)){
-			cfg.set(cfgMultRadius, defaults.radiusMultiplier);
+		if ( !cfg.contains(Path.cfgMultRadius)){
+			cfg.set(Path.cfgMultRadius, defaults.radiusMultiplier);
 			changed = true;
 		}
-		if ( !cfg.contains(cfgMultMaxPath)){
-			cfg.set(cfgMultMaxPath, defaults.maxPathMultiplier);
+		if ( !cfg.contains(Path.cfgMultMaxPath)){
+			cfg.set(Path.cfgMultMaxPath, defaults.maxPathMultiplier);
 			changed = true;
 		}
-		if ( !cfg.contains(cfgRandRadius)){
-			cfg.set(cfgRandRadius, defaults.randDec); // TODO DEPRECATED ?
+		if ( !cfg.contains(Path.cfgRandRadius)){
+			cfg.set(Path.cfgRandRadius, defaults.randDec); // TODO DEPRECATED ?
 			changed = true;
 		}
-		if ( !cfg.contains(cfgYield)){
-			cfg.set(cfgYield, defaults.yield);
+		if ( !cfg.contains(Path.cfgYield)){
+			cfg.set(Path.cfgYield, defaults.yield);
 			changed = true;
 		}
-		if ( !cfg.contains(cfgEntityYield)){
-			cfg.set(cfgEntityYield, defaults.entityYield);
+		if ( !cfg.contains(Path.cfgEntityYield)){
+			cfg.set(Path.cfgEntityYield, defaults.entityYield);
 			changed = true;
 		}
-		if ( !cfg.contains(cfgVelUse)){
-			cfg.set(cfgVelUse, defaults.velUse);
+		if ( !cfg.contains(Path.velUse)){
+			cfg.set(Path.velUse, defaults.velUse);
 			changed = true;
 		}
-		if ( !cfg.contains(cfgVelMin)){
-			cfg.set(cfgVelMin, defaults.velMin);
+		if ( !cfg.contains(Path.velMin)){
+			cfg.set(Path.velMin, defaults.velMin);
 			changed = true;
 		}
-		if ( !cfg.contains(cfgVelCen)){
-			cfg.set(cfgVelCen, defaults.velCen);
+		if ( !cfg.contains(Path.velCen)){
+			cfg.set(Path.velCen, defaults.velCen);
 			changed = true;
 		}
-		if ( !cfg.contains(cfgVelRan)){
-			cfg.set(cfgVelRan, defaults.velRan);
+		if ( !cfg.contains(Path.velRan)){
+			cfg.set(Path.velRan, defaults.velRan);
 			changed = true;
 		}
-		if ( !cfg.contains(cfgFStraight)){
-			cfg.set(cfgFStraight, defaults.fStraight);
+		if ( !cfg.contains(Path.cfgFStraight)){
+			cfg.set(Path.cfgFStraight, defaults.fStraight);
 			changed = true;
 		}
-		if ( !cfg.contains(cfgVelOnPrime)){
-			cfg.set(cfgVelOnPrime, defaults.velOnPrime);
+		if ( !cfg.contains(Path.velOnPrime)){
+			cfg.set(Path.velOnPrime, defaults.velOnPrime);
 			changed = true;
 		}
-		if ( !cfg.contains(cfgVelCap)){
-			cfg.set(cfgVelCap, defaults.velCap);
+		if ( !cfg.contains(Path.velCap)){
+			cfg.set(Path.velCap, defaults.velCap);
 			changed = true;
 		}
-		if ( !cfg.contains(cfgThresholdTntDirect)){
-			cfg.set(cfgThresholdTntDirect, defaults.thresholdTntDirect);
+		if ( !cfg.contains(Path.cfgThresholdTntDirect)){
+			cfg.set(Path.cfgThresholdTntDirect, defaults.thresholdTntDirect);
 			changed = true;
 		}
-		if ( !cfg.contains(cfgItemTnt)){
-			cfg.set(cfgItemTnt, defaults.itemTnt);
+		if ( !cfg.contains(Path.cfgItemTnt)){
+			cfg.set(Path.cfgItemTnt, defaults.itemTnt);
 			changed = true;
 		}
-		if ( !cfg.contains(cfgMaxItems)){
-			cfg.set(cfgMaxItems, defaults.maxItems);
+		if ( !cfg.contains(Path.cfgMaxItems)){
+			cfg.set(Path.cfgMaxItems, defaults.maxItems);
 			changed = true;
 		}
-		if ( !cfg.contains(cfgItemArrows)){
-			cfg.set(cfgItemArrows, defaults.itemArrows);
+		if ( !cfg.contains(Path.cfgItemArrows)){
+			cfg.set(Path.cfgItemArrows, defaults.itemArrows);
 			changed = true;
 		}
-		if ( !cfg.contains(cfgProjectiles)){
-			cfg.set(cfgProjectiles, defaults.projectiles);
+		if ( !cfg.contains(Path.cfgProjectiles)){
+			cfg.set(Path.cfgProjectiles, defaults.projectiles);
 			changed = true;
 		}
-		if ( !cfg.contains(cfgMinPrime)){
-			cfg.set(cfgMinPrime, defaults.minPrime);
+		if ( !cfg.contains(Path.cfgMinPrime)){
+			cfg.set(Path.cfgMinPrime, defaults.minPrime);
 			changed = true;
 		}
-		if ( !cfg.contains(cfgMaxPrime)){
-			cfg.set(cfgMaxPrime, defaults.maxPrime);
+		if ( !cfg.contains(Path.cfgMaxPrime)){
+			cfg.set(Path.cfgMaxPrime, defaults.maxPrime);
 			changed = true;
 		}
-		if ( !cfg.contains(cfgStepPhysics)){
-			cfg.set(cfgStepPhysics, defaults.stepPhysics);
+		if ( !cfg.contains(Path.cfgStepPhysics)){
+			cfg.set(Path.cfgStepPhysics, defaults.stepPhysics);
 			changed = true;
 		}
-		if ( !cfg.contains(cfgMultProjectiles)){
-			cfg.set(cfgMultProjectiles, defaults.projectileMultiplier);
+		if ( !cfg.contains(Path.cfgMultProjectiles)){
+			cfg.set(Path.cfgMultProjectiles, defaults.projectileMultiplier);
 			changed = true;
 		}
-		if (!cfg.contains(cfgArmorBaseDepletion)){
-			cfg.set(cfgArmorBaseDepletion, defaults.armorBaseDepletion);
+		if (!cfg.contains(Path.armorBaseDepletion)){
+			cfg.set(Path.armorBaseDepletion, defaults.armorBaseDepletion);
 			changed = true;
 		}
-		if (!cfg.contains(cfgArmorMultDamage)){
-			cfg.set(cfgArmorMultDamage, defaults.armorMultDamage);
+		if (!cfg.contains(Path.armorMultDamage)){
+			cfg.set(Path.armorMultDamage, defaults.armorMultDamage);
 			changed = true;
 		}
-		if (!cfg.contains(cfgArmorUseDamage)){
-			cfg.set(cfgArmorUseDamage, defaults.armorUseDamage);
+		if (!cfg.contains(Path.armorUseDamage)){
+			cfg.set(Path.armorUseDamage, defaults.armorUseDamage);
 			changed = true;
 		}
-		if (!cfg.contains(cfgMultEntityDistance)){
-			cfg.set(cfgMultEntityDistance, defaults.entityDistanceMultiplier);
+		if (!cfg.contains(Path.multEntityDistance)){
+			cfg.set(Path.multEntityDistance, defaults.entityDistanceMultiplier);
 			changed = true;
 		}
-		if (!cfg.contains(cfgMultEntityRadius)){
-			cfg.set(cfgMultEntityRadius, defaults.entityRadiusMultiplier);
+		if (!cfg.contains(Path.cfgMultEntityRadius)){
+			cfg.set(Path.cfgMultEntityRadius, defaults.entityRadiusMultiplier);
 			changed = true;
 		}
-		if (!cfg.contains(cfgSimpleDistanceDamage)){
-			cfg.set(cfgSimpleDistanceDamage, defaults.simpleDistanceDamage);
+		if (!cfg.contains(Path.simpleDistanceDamage)){
+			cfg.set(Path.simpleDistanceDamage, defaults.simpleDistanceDamage);
 			changed = true;
 		}
-		if (!cfg.contains(cfgUseDistanceDamage)){
-			cfg.set(cfgUseDistanceDamage, defaults.useDistanceDamage);
+		if (!cfg.contains(Path.useDistanceDamage)){
+			cfg.set(Path.useDistanceDamage, defaults.useDistanceDamage);
 			changed = true;
 		}
-		if (!cfg.contains(cfgDamagePropagate)){
+		if (!cfg.contains(Path.cfgDamagePropagate)){
 			List<Integer> entries = new LinkedList<Integer>();
 			for (int i : Defaults.defaultPropagateDamage){
 				entries.add(i);
 			}
-			cfg.set(cfgDamagePropagate, entries);
+			cfg.set(Path.cfgDamagePropagate, entries);
 			changed = true;
 		}
 		return changed;
