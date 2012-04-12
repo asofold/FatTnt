@@ -142,17 +142,17 @@ public class Defaults {
 		for (String et : handledEntities){
 			entities.add(et);
 		}
-		cfg.set(Path.cfgEntities, entities);
+		cfg.set(Path.entities, entities);
 		
 		// passthrough
-		cfg.set(Path.cfgDefaultPassthrough, defaults.defaultPassthrough);
+		cfg.set(Path.defaultPassthrough, defaults.defaultPassthrough);
 		
 		// resistance
 		float[] v = new float[]{1.0f, 4.0f, 20.0f, Float.MAX_VALUE};
 		int[][] ids = new int[][]{defaultLowResistance, defaultHigherResistance, defaultStrongResistance, defaultMaxResistance};
 		String[] keys = new String[]{"low", "higher", "strongest", "indestructible"};
 		for ( int i = 0; i<v.length; i++){
-			String base = Path.cfgResistence+"."+keys[i];
+			String base = Path.resistence+"."+keys[i];
 			List<Integer> resSet = new LinkedList<Integer>();
 			for ( int id: ids[i]) {
 				resSet.add(id);
@@ -160,23 +160,23 @@ public class Defaults {
 			cfg.set(base+".value", v[i]);
 			cfg.set(base+".ids", resSet);
 		}
-		cfg.set(Path.cfgDefaultResistence, defaults.defaultResistance);
+		cfg.set(Path.defaultResistence, defaults.defaultResistance);
 		
 		// damage propagation
 		List<Integer> entries = new LinkedList<Integer>();
 		for (int i : Defaults.defaultPropagateDamage){
 			entries.add(i);
 		}
-		cfg.set(Path.cfgDamagePropagate, entries);
+		cfg.set(Path.damagePropagate, entries);
 			
 		// explosion basics:
-		cfg.set(Path.cfgMaxRadius, defaults.maxRadius);
-		cfg.set(Path.cfgMultDamage, defaults.damageMultiplier);
-		cfg.set(Path.cfgMultRadius, defaults.radiusMultiplier);
-		cfg.set(Path.cfgMultMaxPath, defaults.maxPathMultiplier);
-		cfg.set(Path.cfgRandRadius, defaults.randDec); // TODO DEPRECATED ?
-		cfg.set(Path.cfgYield, defaults.yield);
-		cfg.set(Path.cfgEntityYield, defaults.entityYield);
+		cfg.set(Path.maxRadius, defaults.maxRadius);
+		cfg.set(Path.multDamage, defaults.damageMultiplier);
+		cfg.set(Path.multRadius, defaults.radiusMultiplier);
+		cfg.set(Path.multMaxPath, defaults.maxPathMultiplier);
+		cfg.set(Path.randRadius, defaults.randDec); // TODO DEPRECATED ?
+		cfg.set(Path.yield, defaults.yield);
+		cfg.set(Path.entityYield, defaults.entityYield);
 		
 		// velocity:
 		cfg.set(Path.velUse, defaults.velUse);
@@ -187,24 +187,24 @@ public class Defaults {
 		cfg.set(Path.velCap, defaults.velCap);
 		
 		// array propagation specific
-		cfg.set(Path.cfgFStraight, defaults.fStraight);			
+		cfg.set(Path.fStraight, defaults.fStraight);			
 			
 		// item transformationz
-		cfg.set(Path.cfgItemTnt, defaults.itemTnt);
-		cfg.set(Path.cfgMaxItems, defaults.maxItems);
-		cfg.set(Path.cfgItemArrows, defaults.itemArrows);
+		cfg.set(Path.itemTnt, defaults.itemTnt);
+		cfg.set(Path.maxItems, defaults.maxItems);
+		cfg.set(Path.itemArrows, defaults.itemArrows);
 		
 		// Projectiles:
-		cfg.set(Path.cfgMultProjectiles, defaults.projectileMultiplier);
-		cfg.set(Path.cfgProjectiles, defaults.projectiles);
+		cfg.set(Path.multProjectiles, defaults.projectileMultiplier);
+		cfg.set(Path.projectiles, defaults.projectiles);
 			
 		// tnt specific
-		cfg.set(Path.cfgMinPrime, defaults.minPrime);
-		cfg.set(Path.cfgMaxPrime, defaults.maxPrime);
-		cfg.set(Path.cfgThresholdTntDirect, defaults.thresholdTntDirect); // unused ?	
+		cfg.set(Path.minPrime, defaults.minPrime);
+		cfg.set(Path.maxPrime, defaults.maxPrime);
+		cfg.set(Path.cthresholdTntDirect, defaults.thresholdTntDirect); // unused ?	
 			
 		// physics
-		cfg.set(Path.cfgStepPhysics, defaults.stepPhysics);
+		cfg.set(Path.stepPhysics, defaults.stepPhysics);
 			
 		// armor
 		cfg.set(Path.armorBaseDepletion, defaults.armorBaseDepletion);
@@ -213,7 +213,7 @@ public class Defaults {
 			
 		// entity damage - beyond block damage)
 		cfg.set(Path.multEntityDistance, defaults.entityDistanceMultiplier);
-		cfg.set(Path.cfgMultEntityRadius, defaults.entityRadiusMultiplier);
+		cfg.set(Path.multEntityRadius, defaults.entityRadiusMultiplier);
 		cfg.set(Path.simpleDistanceDamage, defaults.simpleDistanceDamage);
 		cfg.set(Path.useDistanceDamage, defaults.useDistanceDamage);
 		

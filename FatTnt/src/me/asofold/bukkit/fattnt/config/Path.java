@@ -10,40 +10,40 @@ public class Path {
 
 	// multipliers:
 	// TODO: maybe split this section.
-	public static final String cfgMult = "multiplier";
-	public static final String cfgMultRadius = cfgMult+".radius";
-	public static final String cfgMultDamage = cfgMult+".damage";
-	public static final String cfgMultEntityRadius = cfgMult + ".entity-radius";
-	public static final String cfgMultMaxPath = cfgMult+".max-path";
-	public static final String cfgMultProjectiles = cfgMult+".projectiles";
-	public static final String cfgFStraight = cfgMult+".straight";
+	public static final String mult = "multiplier";
+	public static final String multRadius = mult+".radius";
+	public static final String multDamage = mult+".damage";
+	public static final String multEntityRadius = mult + ".entity-radius";
+	public static final String multMaxPath = mult+".max-path";
+	public static final String multProjectiles = mult+".projectiles";
+	public static final String fStraight = mult+".straight";
 	
 	// explosion/propagation settings:
-	public static final String cfgPassthrough= "passthrough";
-	public static final String cfgDefaultPassthrough= cfgPassthrough+".default";
-	public static final String cfgResistence = "resistence";
-	public static final String cfgDefaultResistence = cfgResistence+".default";
-	public static final String cfgRadius = "radius";
-	public static final String cfgMaxRadius = cfgRadius+".max";
-	public static final String cfgRandRadius = cfgRadius+".random"; // UNUSED
-	public static final String cfgEntities= "entities";
-	public static final String cfgDamagePropagate = "propagate-damage";
+	public static final String passthrough= "passthrough";
+	public static final String defaultPassthrough= passthrough+".default";
+	public static final String resistence = "resistence";
+	public static final String defaultResistence = resistence+".default";
+	public static final String radius = "radius";
+	public static final String maxRadius = radius+".max";
+	public static final String randRadius = radius+".random"; // UNUSED
+	public static final String entities= "entities";
+	public static final String damagePropagate = "propagate-damage";
 	
 	// block effects:
-	public static final String cfgYield = "yield";
-	public static final String cfgStepPhysics= "step-physics";
+	public static final String yield = "yield";
+	public static final String stepPhysics= "step-physics";
 	
 	// tnt specific
-	public static final String cfgMinPrime = "min-prime";
-	public static final String cfgMaxPrime = "max-prime";
-	public static final String cfgThresholdTntDirect = "tnt.thresholds.direct-explode"; // UNUSED
+	public static final String minPrime = "min-prime";
+	public static final String maxPrime = "max-prime";
+	public static final String cthresholdTntDirect = "tnt.thresholds.direct-explode"; // UNUSED
 	
 	// entity effects:
-	public static final String cfgEntityYield = "entity-yield";
-	public static final String cfgItemTnt = "item-tnt";
-	public static final String cfgItemArrows = "item-arrows";
-	public static final String cfgMaxItems = "max-items";
-	public static final String cfgProjectiles = "projectiles";
+	public static final String entityYield = "entity-yield";
+	public static final String itemTnt = "item-tnt";
+	public static final String itemArrows = "item-arrows";
+	public static final String maxItems = "max-items";
+	public static final String projectiles = "projectiles";
 	
 	// distance effect (damage)
 	public static final String distanceDamage = "distance-damage";

@@ -214,7 +214,7 @@ public class Settings {
 		propagateDamage = new boolean[Defaults.blockArraySize];
 		minResistance = Float.MAX_VALUE;
 		handledEntities.clear();
-		for ( String n : cfg.getStringList(Path.cfgEntities)){
+		for ( String n : cfg.getStringList(Path.entities)){
 			try{
 				EntityType etp = EntityType.valueOf(n.toUpperCase());
 				if ( etp == null) throw new IllegalArgumentException();
@@ -223,36 +223,36 @@ public class Settings {
 				Bukkit.getServer().getLogger().warning(Defaults.msgPrefix+"Bad entity: "+n);
 			}
 		}
-		radiusMultiplier = (float) cfg.getDouble(Path.cfgMultRadius);
-		damageMultiplier = (float) cfg.getDouble(Path.cfgMultDamage);
-		entityRadiusMultiplier = (float) cfg.getDouble(Path.cfgMultEntityRadius);
+		radiusMultiplier = (float) cfg.getDouble(Path.multRadius);
+		damageMultiplier = (float) cfg.getDouble(Path.multDamage);
+		entityRadiusMultiplier = (float) cfg.getDouble(Path.multEntityRadius);
 		entityDistanceMultiplier = (float) cfg.getDouble(Path.multEntityDistance);
-		maxPathMultiplier = (float) cfg.getDouble(Path.cfgMultMaxPath);
-		defaultPassthrough = (float) cfg.getDouble(Path.cfgDefaultPassthrough);
-		defaultResistance = (float) cfg.getDouble(Path.cfgDefaultResistence);
+		maxPathMultiplier = (float) cfg.getDouble(Path.multMaxPath);
+		defaultPassthrough = (float) cfg.getDouble(Path.defaultPassthrough);
+		defaultResistance = (float) cfg.getDouble(Path.defaultResistence);
 		minResistance = Math.min(Math.min(minResistance, defaultResistance), defaultPassthrough);
-		maxRadius = (float) cfg.getDouble(Path.cfgMaxRadius);
-		randDec = (float) cfg.getDouble(Path.cfgRandRadius);
-		yield = (float) cfg.getDouble(Path.cfgYield);
+		maxRadius = (float) cfg.getDouble(Path.maxRadius);
+		randDec = (float) cfg.getDouble(Path.randRadius);
+		yield = (float) cfg.getDouble(Path.yield);
 		velUse = cfg.getBoolean(Path.velUse);
 		velMin = (float) cfg.getDouble(Path.velMin);
 		velCen = (float) cfg.getDouble(Path.velCen);
 		velRan = (float) cfg.getDouble(Path.velRan);
-		fStraight = (float) cfg.getDouble(Path.cfgFStraight);
+		fStraight = (float) cfg.getDouble(Path.fStraight);
 		velOnPrime = cfg.getBoolean(Path.velOnPrime);
-		thresholdTntDirect = cfg.getDouble(Path.cfgThresholdTntDirect);
+		thresholdTntDirect = cfg.getDouble(Path.cthresholdTntDirect);
 		velCap = (float) cfg.getDouble(Path.velCap);
-		itemTnt = cfg.getBoolean(Path.cfgItemTnt);
-		entityYield = (float) cfg.getDouble(Path.cfgEntityYield);
+		itemTnt = cfg.getBoolean(Path.itemTnt);
+		entityYield = (float) cfg.getDouble(Path.entityYield);
 		useDistanceDamage = cfg.getBoolean(Path.useDistanceDamage);
 		simpleDistanceDamage = cfg.getBoolean(Path.simpleDistanceDamage);
-		maxItems = cfg.getInt(Path.cfgMaxItems);
-		itemArrows = cfg.getBoolean(Path.cfgItemArrows);
-		projectiles = cfg.getBoolean(Path.cfgProjectiles);
-		minPrime = cfg.getInt(Path.cfgMinPrime);
-		maxPrime = cfg.getInt(Path.cfgMaxPrime);
-		stepPhysics = cfg.getBoolean(Path.cfgStepPhysics);
-		projectileMultiplier = (float) cfg.getDouble(Path.cfgMultProjectiles);
+		maxItems = cfg.getInt(Path.maxItems);
+		itemArrows = cfg.getBoolean(Path.itemArrows);
+		projectiles = cfg.getBoolean(Path.projectiles);
+		minPrime = cfg.getInt(Path.minPrime);
+		maxPrime = cfg.getInt(Path.maxPrime);
+		stepPhysics = cfg.getBoolean(Path.stepPhysics);
+		projectileMultiplier = (float) cfg.getDouble(Path.multProjectiles);
 		armorUseDamage = cfg.getBoolean(Path.armorUseDamage);
 		armorMultDamage = (float) cfg.getDouble(Path.armorMultDamage);
 		armorBaseDepletion = cfg.getInt(Path.armorBaseDepletion);
@@ -260,9 +260,9 @@ public class Settings {
 		if ( maxRadius > Defaults.radiusLock) maxRadius = Defaults.radiusLock; // safety check
 		
 		initBlockIds();
-		readResistance(cfg, Path.cfgResistence, resistance, defaultResistance);
-		readResistance(cfg, Path.cfgPassthrough, passthrough, defaultPassthrough);
-		List<Integer> ids = Defaults.getIdList(cfg, Path.cfgDamagePropagate);
+		readResistance(cfg, Path.resistence, resistance, defaultResistance);
+		readResistance(cfg, Path.passthrough, passthrough, defaultPassthrough);
+		List<Integer> ids = Defaults.getIdList(cfg, Path.damagePropagate);
 		for ( Integer id : ids){
 			propagateDamage[id] = true;
 		}
