@@ -199,7 +199,9 @@ public class Settings {
 	public int armorBaseDepletion = 3;
 	
 	/**
-	 * 
+	 * NOTES:<br>
+	 * - Constructor does not initialize arrays !<br>
+	 * - Before using applyConfig you need to add defaults to ensure all paths are there. 
 	 * @param stats Are passed with settings, currently, to use the same stats object.
 	 */
 	public Settings(Stats stats){

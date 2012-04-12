@@ -2,11 +2,12 @@ package me.asofold.bukkit.fattnt.config;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.Configuration;
-import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.util.Vector;
 
 /**
@@ -120,175 +121,112 @@ public class Defaults {
 	public static final int blockArraySize = 4096;
 	
 	/**
-	 * 
+	 * Simple default values.
+	 */
+	static Configuration simpleDefaults;
+	
+	static{
+		simpleDefaults = getSimpleDefaultConfiguration();
+	}
+	
+	/**
+	 * Used for all entries that can be checked with if (!Configuration.contains(path)) ... (add it as a whole).
+	 * @return
+	 */
+	public static Configuration getSimpleDefaultConfiguration(){
+		Settings defaults = new Settings(null); // read defaults from here.
+		MemoryConfiguration cfg = new MemoryConfiguration();
+		
+		// entities: 
+		List<String> entities = new LinkedList<String>();
+		for (String et : handledEntities){
+			entities.add(et);
+		}
+		cfg.set(Path.cfgEntities, entities);
+		
+		// passthrough
+		cfg.set(Path.cfgDefaultPassthrough, defaults.defaultPassthrough);
+		
+		// resistance
+		float[] v = new float[]{1.0f, 4.0f, 20.0f, Float.MAX_VALUE};
+		int[][] ids = new int[][]{defaultLowResistance, defaultHigherResistance, defaultStrongResistance, defaultMaxResistance};
+		String[] keys = new String[]{"low", "higher", "strongest", "indestructible"};
+		for ( int i = 0; i<v.length; i++){
+			String base = Path.cfgResistence+"."+keys[i];
+			List<Integer> resSet = new LinkedList<Integer>();
+			for ( int id: ids[i]) {
+				resSet.add(id);
+			}
+			cfg.set(base+".value", v[i]);
+			cfg.set(base+".ids", resSet);
+		}
+		cfg.set(Path.cfgDefaultResistence, defaults.defaultResistance);
+		
+		// damage propagation
+		List<Integer> entries = new LinkedList<Integer>();
+		for (int i : Defaults.defaultPropagateDamage){
+			entries.add(i);
+		}
+		cfg.set(Path.cfgDamagePropagate, entries);
+			
+		// explosion basics:
+		cfg.set(Path.cfgMaxRadius, defaults.maxRadius);
+		cfg.set(Path.cfgMultDamage, defaults.damageMultiplier);
+		cfg.set(Path.cfgMultRadius, defaults.radiusMultiplier);
+		cfg.set(Path.cfgMultMaxPath, defaults.maxPathMultiplier);
+		cfg.set(Path.cfgRandRadius, defaults.randDec); // TODO DEPRECATED ?
+		cfg.set(Path.cfgYield, defaults.yield);
+		cfg.set(Path.cfgEntityYield, defaults.entityYield);
+		
+		// velocity:
+		cfg.set(Path.velUse, defaults.velUse);
+		cfg.set(Path.velMin, defaults.velMin);
+		cfg.set(Path.velCen, defaults.velCen);			
+		cfg.set(Path.velRan, defaults.velRan);
+		cfg.set(Path.velOnPrime, defaults.velOnPrime);	
+		cfg.set(Path.velCap, defaults.velCap);
+		
+		// array propagation specific
+		cfg.set(Path.cfgFStraight, defaults.fStraight);			
+			
+		// item transformationz
+		cfg.set(Path.cfgItemTnt, defaults.itemTnt);
+		cfg.set(Path.cfgMaxItems, defaults.maxItems);
+		cfg.set(Path.cfgItemArrows, defaults.itemArrows);
+		
+		// Projectiles:
+		cfg.set(Path.cfgMultProjectiles, defaults.projectileMultiplier);
+		cfg.set(Path.cfgProjectiles, defaults.projectiles);
+			
+		// tnt specific
+		cfg.set(Path.cfgMinPrime, defaults.minPrime);
+		cfg.set(Path.cfgMaxPrime, defaults.maxPrime);
+		cfg.set(Path.cfgThresholdTntDirect, defaults.thresholdTntDirect); // unused ?	
+			
+		// physics
+		cfg.set(Path.cfgStepPhysics, defaults.stepPhysics);
+			
+		// armor
+		cfg.set(Path.armorBaseDepletion, defaults.armorBaseDepletion);
+		cfg.set(Path.armorMultDamage, defaults.armorMultDamage);
+		cfg.set(Path.armorUseDamage, defaults.armorUseDamage);
+			
+		// entity damage - beyond block damage)
+		cfg.set(Path.multEntityDistance, defaults.entityDistanceMultiplier);
+		cfg.set(Path.cfgMultEntityRadius, defaults.entityRadiusMultiplier);
+		cfg.set(Path.simpleDistanceDamage, defaults.simpleDistanceDamage);
+		cfg.set(Path.useDistanceDamage, defaults.useDistanceDamage);
+		
+		return cfg;
+	}
+	
+	/**
+	 * Add non present default settings.
 	 * @param cfg
 	 * @return If changes were done.
 	 */
-	public static boolean addDefaultSettings(FileConfiguration cfg) {
-		boolean changed = false;
-		Settings defaults = new Settings(null); // read defaults from here.
-		
-		if ( !cfg.contains(Path.cfgEntities)){
-			List<String> l = new LinkedList<String>();
-			for (String et : handledEntities){
-				l.add(et);
-			}
-			cfg.set(Path.cfgEntities, l);
-			changed = true;
-		}
-		if ( !cfg.contains(Path.cfgDefaultPassthrough)){
-			cfg.set(Path.cfgDefaultPassthrough, defaults.defaultPassthrough);
-			changed = true;
-		}
-		// no default ids for passthrough
-		if ( !cfg.contains(Path.cfgResistence)){
-			float[] v = new float[]{1.0f, 4.0f, 20.0f, Float.MAX_VALUE};
-			int[][] ids = new int[][]{defaultLowResistance, defaultHigherResistance, defaultStrongResistance, defaultMaxResistance};
-			String[] keys = new String[]{"low", "higher", "strongest", "indestructible"};
-			for ( int i = 0; i<v.length; i++){
-				String base = Path.cfgResistence+"."+keys[i];
-				List<Integer> l = new LinkedList<Integer>();
-				for ( int id: ids[i]) {
-					l.add(id);
-				}
-				cfg.set(base+".value", v[i]);
-				cfg.set(base+".ids", l);
-			}
-			changed = true;
-		}
-		if ( !cfg.contains(Path.cfgDefaultResistence)){
-			cfg.set(Path.cfgDefaultResistence, defaults.defaultResistance);
-			changed = true;
-		}
-		if ( !cfg.contains(Path.cfgMaxRadius)){
-			cfg.set(Path.cfgMaxRadius, defaults.maxRadius);
-			changed = true;
-		}
-		if ( !cfg.contains(Path.cfgMultDamage)){
-			cfg.set(Path.cfgMultDamage, defaults.damageMultiplier);
-			changed = true;
-		}
-		if ( !cfg.contains(Path.cfgMultRadius)){
-			cfg.set(Path.cfgMultRadius, defaults.radiusMultiplier);
-			changed = true;
-		}
-		if ( !cfg.contains(Path.cfgMultMaxPath)){
-			cfg.set(Path.cfgMultMaxPath, defaults.maxPathMultiplier);
-			changed = true;
-		}
-		if ( !cfg.contains(Path.cfgRandRadius)){
-			cfg.set(Path.cfgRandRadius, defaults.randDec); // TODO DEPRECATED ?
-			changed = true;
-		}
-		if ( !cfg.contains(Path.cfgYield)){
-			cfg.set(Path.cfgYield, defaults.yield);
-			changed = true;
-		}
-		if ( !cfg.contains(Path.cfgEntityYield)){
-			cfg.set(Path.cfgEntityYield, defaults.entityYield);
-			changed = true;
-		}
-		if ( !cfg.contains(Path.velUse)){
-			cfg.set(Path.velUse, defaults.velUse);
-			changed = true;
-		}
-		if ( !cfg.contains(Path.velMin)){
-			cfg.set(Path.velMin, defaults.velMin);
-			changed = true;
-		}
-		if ( !cfg.contains(Path.velCen)){
-			cfg.set(Path.velCen, defaults.velCen);
-			changed = true;
-		}
-		if ( !cfg.contains(Path.velRan)){
-			cfg.set(Path.velRan, defaults.velRan);
-			changed = true;
-		}
-		if ( !cfg.contains(Path.cfgFStraight)){
-			cfg.set(Path.cfgFStraight, defaults.fStraight);
-			changed = true;
-		}
-		if ( !cfg.contains(Path.velOnPrime)){
-			cfg.set(Path.velOnPrime, defaults.velOnPrime);
-			changed = true;
-		}
-		if ( !cfg.contains(Path.velCap)){
-			cfg.set(Path.velCap, defaults.velCap);
-			changed = true;
-		}
-		if ( !cfg.contains(Path.cfgThresholdTntDirect)){
-			cfg.set(Path.cfgThresholdTntDirect, defaults.thresholdTntDirect);
-			changed = true;
-		}
-		if ( !cfg.contains(Path.cfgItemTnt)){
-			cfg.set(Path.cfgItemTnt, defaults.itemTnt);
-			changed = true;
-		}
-		if ( !cfg.contains(Path.cfgMaxItems)){
-			cfg.set(Path.cfgMaxItems, defaults.maxItems);
-			changed = true;
-		}
-		if ( !cfg.contains(Path.cfgItemArrows)){
-			cfg.set(Path.cfgItemArrows, defaults.itemArrows);
-			changed = true;
-		}
-		if ( !cfg.contains(Path.cfgProjectiles)){
-			cfg.set(Path.cfgProjectiles, defaults.projectiles);
-			changed = true;
-		}
-		if ( !cfg.contains(Path.cfgMinPrime)){
-			cfg.set(Path.cfgMinPrime, defaults.minPrime);
-			changed = true;
-		}
-		if ( !cfg.contains(Path.cfgMaxPrime)){
-			cfg.set(Path.cfgMaxPrime, defaults.maxPrime);
-			changed = true;
-		}
-		if ( !cfg.contains(Path.cfgStepPhysics)){
-			cfg.set(Path.cfgStepPhysics, defaults.stepPhysics);
-			changed = true;
-		}
-		if ( !cfg.contains(Path.cfgMultProjectiles)){
-			cfg.set(Path.cfgMultProjectiles, defaults.projectileMultiplier);
-			changed = true;
-		}
-		if (!cfg.contains(Path.armorBaseDepletion)){
-			cfg.set(Path.armorBaseDepletion, defaults.armorBaseDepletion);
-			changed = true;
-		}
-		if (!cfg.contains(Path.armorMultDamage)){
-			cfg.set(Path.armorMultDamage, defaults.armorMultDamage);
-			changed = true;
-		}
-		if (!cfg.contains(Path.armorUseDamage)){
-			cfg.set(Path.armorUseDamage, defaults.armorUseDamage);
-			changed = true;
-		}
-		if (!cfg.contains(Path.multEntityDistance)){
-			cfg.set(Path.multEntityDistance, defaults.entityDistanceMultiplier);
-			changed = true;
-		}
-		if (!cfg.contains(Path.cfgMultEntityRadius)){
-			cfg.set(Path.cfgMultEntityRadius, defaults.entityRadiusMultiplier);
-			changed = true;
-		}
-		if (!cfg.contains(Path.simpleDistanceDamage)){
-			cfg.set(Path.simpleDistanceDamage, defaults.simpleDistanceDamage);
-			changed = true;
-		}
-		if (!cfg.contains(Path.useDistanceDamage)){
-			cfg.set(Path.useDistanceDamage, defaults.useDistanceDamage);
-			changed = true;
-		}
-		if (!cfg.contains(Path.cfgDamagePropagate)){
-			List<Integer> entries = new LinkedList<Integer>();
-			for (int i : Defaults.defaultPropagateDamage){
-				entries.add(i);
-			}
-			cfg.set(Path.cfgDamagePropagate, entries);
-			changed = true;
-		}
-		return changed;
+	public static boolean addDefaultSettings(Configuration cfg) {
+		return forceDefaults(simpleDefaults, cfg);
 	}
 	
 	/**
@@ -322,6 +260,18 @@ public class Defaults {
 			Bukkit.getServer().getLogger().warning(Defaults.msgPrefix+"Bad item ("+path+"): "+x);
 		}
 		return out;
+	}
+	
+	public static boolean forceDefaults(Configuration defaults, Configuration config){
+		Map<String ,Object> all = defaults.getValues(true);
+		boolean changed = false;
+		for ( String path : all.keySet()){
+			if ( !config.contains(path)){
+				config.set(path, defaults.get(path));
+				changed = true;
+			}
+		}
+		return changed;
 	}
 
 }
