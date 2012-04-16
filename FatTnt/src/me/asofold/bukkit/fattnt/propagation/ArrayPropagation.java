@@ -2,10 +2,12 @@ package me.asofold.bukkit.fattnt.propagation;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 import me.asofold.bukkit.fattnt.FatTnt;
 import me.asofold.bukkit.fattnt.config.Defaults;
 import me.asofold.bukkit.fattnt.config.Settings;
+import me.asofold.bukkit.fattnt.effects.ExplosionManager;
 import me.asofold.bukkit.fattnt.utils.Utils;
 
 import org.bukkit.World;
@@ -41,8 +43,12 @@ public class ArrayPropagation extends Propagation {
 	
 	private float maxPath;
 	
+	private float randRadius;
+	
 	private static final int[] ortDir = new int[]{2,4,6,8,10,12};
 	
+	
+	private final float[] rand = new float[2500];
 	/**
 	 * Blocks destroyed by the xplosion.
 	 */
@@ -155,12 +161,15 @@ public class ArrayPropagation extends Propagation {
 	 * Maximum path lenght/recursion depth.
 	 */
 	int maxDepth = 0;
+	private final boolean useRand;
 
 	public ArrayPropagation(Settings settings) {
 		super(settings);
 		fStraight = settings.fStraight;
 		minRes = settings.minResistance;
 		maxPath = settings.maxPathMultiplier;
+		randRadius = settings.randRadius;
+		useRand = randRadius > 0.0f;
 		createArrays();
 	}
 	
@@ -187,6 +196,12 @@ public class ArrayPropagation extends Propagation {
 		rInts = new int[6*maxDepth][6];
 		for (int i = 0; i<6*maxDepth; i++){
 			rInts[i] = new int[6];
+		}
+		
+		// random arrays:
+		Random temp = new Random(ExplosionManager.random.nextLong()^(System.currentTimeMillis()+115));
+		for (int i = 0; i <rand.length; i++){
+			rand[i] = randRadius*(temp.nextFloat()-0.5f);
 		}
 	}
 
@@ -261,6 +276,10 @@ public class ArrayPropagation extends Propagation {
 		rFloats[0] = expStr;
 		// ? opt: boolean set = false; => get from stack ! if set continue with set values.
 		
+		int ir = ExplosionManager.random.nextInt(rand.length);
+		final int is = rand.length-1;
+		final int iinc = ExplosionManager.random.nextInt(16) + 1;
+
 		// iterate while points to check are there:
 		int n = 0;
 		while (size > 0){
@@ -304,7 +323,6 @@ public class ArrayPropagation extends Propagation {
 				ign = true;
 			}
 			// Resistance check:
-			if (FatTnt.DEBUG_LOTS) System.out.println(x+","+y+","+z+" - "+expStr+" | "+id+"@"+dur); // TODO: remove this
 			// Matrix position:
 			sequence[i] = seqMax;
 			strength[i] = expStr;
@@ -325,6 +343,13 @@ public class ArrayPropagation extends Propagation {
 			// Checks for propagation:
 			if (mpl==0) continue;	
 			if (i<fZ || i>izMax) continue; // no propagation from edge on.
+			if (useRand){
+				// TODO: find out something fast, probably just have a task running filling in random numbers now and then.
+				// TODO: maybe the memory size matters...
+				expStr += rand[ir];
+				ir += iinc;
+				if (ir>is) ir =  mpl;
+			}
 			// TODO: use predefined directions + check here if maximum number of dirction changes is reached !
 			// propagate:
 			for (final int nd : ortDir){

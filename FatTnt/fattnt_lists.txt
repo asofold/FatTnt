@@ -151,13 +151,14 @@ STACK
 - ?(add) PriorityValue with filter technique for effective settings (defaults, worlds, entities: exploding+affected, ...)?
 
 
-
 CHANGELOG (May show an unreleased version but only done changes.)
 -----------------------------------------------------------------
 
 *** [Beta/Dev stage]
 
 (0.2.0-DEV-1)
+- (add) Re-add randomization option to propagation.
+- (adjust) Increase default radius multiplier by 1/8.
 - (refactor) Code simplification for the configuration.
 - (refactor) Separate Path class for configuration paths.
 - (add) prioritiyvalues from plshared/swgt

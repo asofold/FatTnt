@@ -174,7 +174,7 @@ public class Defaults {
 		cfg.set(Path.multDamage, defaults.damageMultiplier);
 		cfg.set(Path.multRadius, defaults.radiusMultiplier);
 		cfg.set(Path.multMaxPath, defaults.maxPathMultiplier);
-		cfg.set(Path.randRadius, defaults.randDec); // TODO DEPRECATED ?
+		cfg.set(Path.randRadius, defaults.randRadius); // TODO DEPRECATED ?
 		cfg.set(Path.yield, defaults.yield);
 		cfg.set(Path.entityYield, defaults.entityYield);
 		

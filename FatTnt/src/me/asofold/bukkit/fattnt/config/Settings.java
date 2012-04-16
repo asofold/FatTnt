@@ -41,7 +41,7 @@ public class Settings {
 	/**
 	 * Multiplier for strength (radius)
 	 */
-	public float radiusMultiplier = 2.0f;
+	public float radiusMultiplier = 2.125f;
 	
 	/**
 	 * Multiplier for entity damage.
@@ -85,7 +85,7 @@ public class Settings {
 	/**
 	 * UNUSED (was: random resistance added to blocks)
 	 */
-	public float randDec = 0.2f;
+	public float randRadius = 0.2f;
 	/**
 	 * If to not apply damage to primed tnt.
 	 */
@@ -232,7 +232,7 @@ public class Settings {
 		defaultResistance = (float) cfg.getDouble(Path.defaultResistence);
 		minResistance = Math.min(Math.min(minResistance, defaultResistance), defaultPassthrough);
 		maxRadius = (float) cfg.getDouble(Path.maxRadius);
-		randDec = (float) cfg.getDouble(Path.randRadius);
+		randRadius = (float) cfg.getDouble(Path.randRadius);
 		yield = (float) cfg.getDouble(Path.yield);
 		velUse = cfg.getBoolean(Path.velUse);
 		velMin = (float) cfg.getDouble(Path.velMin);
