@@ -260,8 +260,8 @@ public class ArrayPropagation extends Propagation {
 			int i, int dir, int mpl, float expStr){
 		// preparation:
 		// TODO: also set these from the configuration.
-		final int wyMin = w.getMaxHeight();
-		final int wyMax = 0;
+		final int wyMin = 0;
+		final int wyMax = w.getMaxHeight();
 		final int yMin;
 		final int yMax;
 		if (settings.confineEnabled){
