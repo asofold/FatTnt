@@ -25,8 +25,9 @@ public abstract class Propagation {
 	// TODO: add axplosion center into this
 	
 	final Stats stats;
-	
+	final Settings settings;
 	public Propagation(Settings settings){
+		this.settings = settings;
 		this.defaultResistance = settings.defaultResistance;
 		this.resistance = settings.resistance;
 		this.passthrough = settings.passthrough;
