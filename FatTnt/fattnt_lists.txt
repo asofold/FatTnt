@@ -169,7 +169,7 @@ CHANGELOG (May show an unreleased version but only done changes.)
 
 (0.2.0-DEV-1)
 - (add) Confinement settings (y). [by now: only global setting, applies for all worlds!] 
-- (add) Re-add randomization option to propagation. [Lets 70% more blocks be visited, at the cost of some performance!]
+- (add) Re-add randomization option to propagation. [Lets 50-70% more blocks be visited, which costs some performance!]
 - (adjust) Increase default radius multiplier by 1/8.
 - (refactor) Code simplification for the configuration.
 - (refactor) Separate Path class for configuration paths.
