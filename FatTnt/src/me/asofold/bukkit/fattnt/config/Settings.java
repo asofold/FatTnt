@@ -198,6 +198,12 @@ public class Settings {
 	public float armorMultDamage = 0.5f;
 	public int armorBaseDepletion = 3;
 	
+	
+	// confinement
+	public boolean confineEnabled = false;
+	public int confineYMin = 0;
+	public int confineYMax = 255;
+	
 	/**
 	 * NOTES:<br>
 	 * - Constructor does not initialize arrays !<br>
@@ -256,9 +262,14 @@ public class Settings {
 		armorUseDamage = cfg.getBoolean(Path.armorUseDamage);
 		armorMultDamage = (float) cfg.getDouble(Path.armorMultDamage);
 		armorBaseDepletion = cfg.getInt(Path.armorBaseDepletion);
+		confineEnabled = cfg.getBoolean(Path.confineEnabled);
+		confineYMin = cfg.getInt(Path.confineYMin);
+		confineYMax = cfg.getInt(Path.confineYMax);
+		
 		
 		if ( maxRadius > Defaults.radiusLock) maxRadius = Defaults.radiusLock; // safety check
 		
+		// TODO: Lazy treatment of the follwing settings (keep null or set).
 		initBlockIds();
 		readResistance(cfg, Path.resistence, resistance, defaultResistance);
 		readResistance(cfg, Path.passthrough, passthrough, defaultPassthrough);

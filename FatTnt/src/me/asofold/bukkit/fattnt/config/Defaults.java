@@ -217,6 +217,10 @@ public class Defaults {
 		cfg.set(Path.simpleDistanceDamage, defaults.simpleDistanceDamage);
 		cfg.set(Path.useDistanceDamage, defaults.useDistanceDamage);
 		
+		cfg.set(Path.confineEnabled, defaults.confineEnabled);
+		cfg.set(Path.confineYMin, defaults.confineYMin);
+		cfg.set(Path.confineYMax, defaults.confineYMax);
+		
 		return cfg;
 	}
 	
