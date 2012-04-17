@@ -162,7 +162,7 @@ public class ArrayPropagation extends Propagation {
 	 */
 	int maxDepth = 0;
 	private final boolean useRand;
-
+	
 	public ArrayPropagation(Settings settings) {
 		super(settings);
 		fStraight = settings.fStraight;
@@ -259,7 +259,19 @@ public class ArrayPropagation extends Propagation {
 	final void propagate(final World w, int x, int y, int z, 
 			int i, int dir, int mpl, float expStr){
 		// preparation:
-		final int maxHeight = w.getMaxHeight();
+		// TODO: also set these from the configuration.
+		final int wyMin = w.getMaxHeight();
+		final int wyMax = 0;
+		final int yMin;
+		final int yMax;
+		if (settings.confineEnabled){
+			yMin = settings.confineYMin;
+			yMax = settings.confineYMax;
+		} else{
+			yMin = wyMin;
+			yMax = wyMax;
+		}
+		
 		final int seqMax = this.seqMax;
 		
 		final int[][] rInts = this.rInts;
@@ -301,7 +313,7 @@ public class ArrayPropagation extends Propagation {
 			final int id;
 			float dur ; // AIR
 			final boolean ign;
-			if ( y>=0 && y <= maxHeight){// TODO: maybe +-1 ?
+			if ( y>=yMax && y <= yMin){// TODO: maybe +-1 ?
 				id = w.getBlockTypeIdAt(x,y,z);
 				if ( id == 0 ){
 					ign = true;
@@ -317,9 +329,16 @@ public class ArrayPropagation extends Propagation {
 					ign = true;
 				}
 			} 
-			else{
+			else if (y<wyMin || y>wyMax){
+				// Outside of world, no destruction, treat as air.
 				dur = resistance[0];
 				id = 0;
+				ign = true;
+			}
+			else{
+				// Use pass-through resistance, and ignore destruction.
+				id = w.getBlockTypeIdAt(x,y,z);
+				dur = passthrough[id];
 				ign = true;
 			}
 			// Resistance check:

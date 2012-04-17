@@ -48,6 +48,9 @@ Planned:
 ? (add) EntityCombust for tnt : create primed tnt for item
   
 Maybe:
+? (add) Ways to damage blocks over time ?[Use damage values ? hat with block break?]
+! (add) Ways to damage blocks more by many explosions within one or several ticks [remember blocks + timestamp ?].
+- WorldGuard: add a quick switch to prevent explosions if touching WorldGuard regions
 ! Config option to allo tnt to be dropped as item with probability, also add probability for actually destroying tnt items as well.
 ? Allow to delay tnt explosion on ExplosionPrimeEvents (schedule new or st primed for later)
 ? Allow arbitrary strength (but limit radius) ?
@@ -124,7 +127,7 @@ STACK
 *** 0.2.0
 
 *** OPT
-- WorldGuard: add a quick switch to prevent explosions if touching WorldGuard regions
+
 
 *** API
 - (add) "Add some API methods for new stuff, if necessary."
@@ -134,6 +137,7 @@ STACK
 
 *** FEATURES:
 - !(add) flags to control some more stuff (forgot)...
+- !(add) Possibility to control ordinary explosions (not replace) ?
 
 *** SPECIFIC/CONFINEMENT SETTINGS
 ? name for confinement
@@ -150,6 +154,9 @@ STACK
 - defaults, world-specific, entity-specific, 
 - ?(add) PriorityValue with filter technique for effective settings (defaults, worlds, entities: exploding+affected, ...)?
 
+!REFACTOR: Introduce ExplosionSettings or SettingsMixins to be read from paths: world-setings, entity-settings, etc. - use PriorityValues !
+!CHECK final settings in FatTnt (maye get rid of final)
+!REFACTOR: Propagation/ArrayPropagation: Less fixed variables, use settings.
 
 CHANGELOG (May show an unreleased version but only done changes.)
 -----------------------------------------------------------------
@@ -157,8 +164,9 @@ CHANGELOG (May show an unreleased version but only done changes.)
 *** [Beta/Dev stage]
 
 (0.2.0-DEV-1)
+- (add) Confinement settings (y). [by now: only global setting, applies for all worlds!] 
 - (add) Re-add randomization option to propagation. [Lets 70% more blocks be visited, so use with care!]
-- (adjust) Increase default radius multiplier by 1/8.
+- (adjust) Increase default radius multiplier by 1/8, radius/random to 0.0 by default.
 - (refactor) Code simplification for the configuration.
 - (refactor) Separate Path class for configuration paths.
 - (add) prioritiyvalues from plshared/swgt
