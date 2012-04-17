@@ -313,7 +313,7 @@ public class ArrayPropagation extends Propagation {
 			final int id;
 			float dur ; // AIR
 			final boolean ign;
-			if ( y>=yMax && y <= yMin){// TODO: maybe +-1 ?
+			if ( y>=yMin && y <= yMax){// TODO: maybe +-1 ?
 				id = w.getBlockTypeIdAt(x,y,z);
 				if ( id == 0 ){
 					ign = true;
