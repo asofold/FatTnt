@@ -47,8 +47,9 @@ public class ArrayPropagation extends Propagation {
 	
 	private static final int[] ortDir = new int[]{2,4,6,8,10,12};
 	
+	long tsLastIdle = System.currentTimeMillis();
 	
-	private final float[] rand = new float[2500];
+	private final float[] rand = new float[1024];
 	/**
 	 * Blocks destroyed by the xplosion.
 	 */
@@ -198,8 +199,12 @@ public class ArrayPropagation extends Propagation {
 			rInts[i] = new int[6];
 		}
 		
+		initRandomArrays();
+	}
+
+	private void initRandomArrays() {
 		// random arrays:
-		Random temp = new Random(ExplosionManager.random.nextLong()^(System.currentTimeMillis()+115));
+		Random temp = ExplosionManager.random;
 		for (int i = 0; i <rand.length; i++){
 			rand[i] = randRadius*(temp.nextFloat()-0.5f);
 		}
@@ -290,7 +295,7 @@ public class ArrayPropagation extends Propagation {
 		
 		int ir = ExplosionManager.random.nextInt(rand.length);
 		final int is = rand.length-1;
-		final int iinc = ExplosionManager.random.nextInt(16) + 1;
+		final int iinc = ExplosionManager.random.nextInt(4) + 1;
 
 		// iterate while points to check are there:
 		int n = 0;
@@ -330,13 +335,13 @@ public class ArrayPropagation extends Propagation {
 				}
 			} 
 			else if (y<wyMin || y>wyMax){
-				// Outside of world, no destruction, treat as air.
+				// Outside of world: no destruction, treat as air (use resistance).
 				dur = resistance[0];
 				id = 0;
 				ign = true;
 			}
 			else{
-				// Use pass-through resistance, and ignore destruction.
+				// Confinement: no destruction, use pass-through resistance.
 				id = w.getBlockTypeIdAt(x,y,z);
 				dur = passthrough[id];
 				ign = true;
@@ -395,5 +400,10 @@ public class ArrayPropagation extends Propagation {
 			}
 		}
 		this.n = n;
+	}
+
+	@Override
+	public void onIdle() {
+		if (System.currentTimeMillis() - tsLastIdle >= 30000) initRandomArrays();
 	}
 }

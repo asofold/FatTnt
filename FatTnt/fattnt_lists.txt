@@ -154,6 +154,10 @@ STACK
 - defaults, world-specific, entity-specific, 
 - ?(add) PriorityValue with filter technique for effective settings (defaults, worlds, entities: exploding+affected, ...)?
 
+
+! maybe refill random array every so and so explosions.
+! DO TRY: Preset directions, maybe include some diagonals + malus for directions ? 
+!CHECK: randomized version: prevent collection of that many blocks !
 !REFACTOR: Introduce ExplosionSettings or SettingsMixins to be read from paths: world-setings, entity-settings, etc. - use PriorityValues !
 !CHECK final settings in FatTnt (maye get rid of final)
 !REFACTOR: Propagation/ArrayPropagation: Less fixed variables, use settings.
@@ -165,8 +169,8 @@ CHANGELOG (May show an unreleased version but only done changes.)
 
 (0.2.0-DEV-1)
 - (add) Confinement settings (y). [by now: only global setting, applies for all worlds!] 
-- (add) Re-add randomization option to propagation. [Lets 70% more blocks be visited, so use with care!]
-- (adjust) Increase default radius multiplier by 1/8, radius/random to 0.0 by default.
+- (add) Re-add randomization option to propagation. [Lets 70% more blocks be visited, at the cost of some performance!]
+- (adjust) Increase default radius multiplier by 1/8.
 - (refactor) Code simplification for the configuration.
 - (refactor) Separate Path class for configuration paths.
 - (add) prioritiyvalues from plshared/swgt

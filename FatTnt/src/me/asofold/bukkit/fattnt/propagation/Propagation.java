@@ -65,4 +65,8 @@ public abstract class Propagation {
 	public abstract List<Block> getExplodingBlocks(World world, double cx, double cy,
 			double cz, float realRadius);
 	
+	/**
+	 * To be called periodically, for cleanup action etc.
+	 */
+	public abstract void onIdle();
 }
