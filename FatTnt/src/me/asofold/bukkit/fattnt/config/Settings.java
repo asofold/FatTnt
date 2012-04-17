@@ -85,7 +85,7 @@ public class Settings {
 	/**
 	 * UNUSED (was: random resistance added to blocks)
 	 */
-	public float randRadius = 0.0f;
+	public float randRadius = 0.2f;
 	/**
 	 * If to not apply damage to primed tnt.
 	 */
