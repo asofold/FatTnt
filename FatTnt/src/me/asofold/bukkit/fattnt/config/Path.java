@@ -31,6 +31,7 @@ public class Path {
 	
 	// confine:
 	public static final String confine = "confine";
+	public static final String confinePriority = confine +  sep + "priority";
 	public static final String confineEnabled = confine +  sep + "enabled";
 	public static final String confineYMin = confine +  sep + "y-min";
 	public static final String confineYMax = confine +  sep + "y-max";
@@ -71,5 +72,9 @@ public class Path {
 	public static final String velRan = vel +  sep + "random";
 	public static final String velOnPrime = vel +  sep + "tnt-primed";
 	public static final String velCap = vel +  sep + "cap";
+	
+	
+	// other / general
+	public static final String priority = "priority";
 
 }
