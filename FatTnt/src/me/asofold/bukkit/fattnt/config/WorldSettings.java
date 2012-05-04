@@ -36,6 +36,8 @@ public class WorldSettings extends PrioritySettings {
 	
 	public void toConfig(Configuration cfg, String prefix){
 		if (priority != 0) cfg.set(prefix + Path.confine, priority);
+		
+		// confinement settings:
 		confine.toConfig(cfg, prefix);
 	}
 	
