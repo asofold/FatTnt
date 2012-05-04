@@ -32,10 +32,7 @@ public class ConfinementSettings extends PrioritySettings{
 		priority = 0;
 		if (cfg.contains(p)){
 			Integer temp = cfg.getInt(p, (Integer) null);
-			if (temp != null){
-				priority = temp;
-				setPriority(priority);
-			}
+			if (temp != null) priority = temp;
 		}
 		resetAllValues(priority);
 		p = prefix+Path.confineEnabled;
