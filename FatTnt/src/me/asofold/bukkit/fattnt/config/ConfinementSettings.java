@@ -23,10 +23,12 @@ public class ConfinementSettings extends PrioritySettings{
 	
 	public ConfinementSettings(int priority){
 		this.priority = priority;
+		setPriority(priority);
 	}
 	
 	public void fromConfig(Configuration cfg, String prefix){
 		String p = prefix+Path.confinePriority;
+		priority = 0;
 		if (cfg.contains(p)){
 			Integer temp = cfg.getInt(p, (Integer) null);
 			if (temp != null){
@@ -34,6 +36,7 @@ public class ConfinementSettings extends PrioritySettings{
 				setPriority(priority);
 			}
 		}
+		resetAllValues(priority);
 		p = prefix+Path.confineEnabled;
 		if (cfg.contains(p)){
 			Boolean temp = cfg.getBoolean(p);
