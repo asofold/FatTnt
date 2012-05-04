@@ -132,10 +132,10 @@ public class FatTnt extends JavaPlugin implements Listener {
 		sched.cancelTasks(this);
 		File file = new File (getDataFolder(), "config.yml");
 		boolean exists = file.exists();
-		reloadConfig();
 		CompatConfig cfg = new NewConfig(file);
+		cfg.load();
 		boolean changed = Defaults.addDefaultSettings(cfg);
-		if (!exists || changed) saveConfig();
+		if (!exists || changed) cfg.save();
 		applySettings(cfg);
 		sched.scheduleSyncRepeatingTask(this, new Runnable(){
 			@Override
