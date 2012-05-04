@@ -270,10 +270,10 @@ public class ArrayPropagation extends Propagation {
 		final int wyMax = w.getMaxHeight();
 		final int yMin;
 		final int yMax;
-		WorldSettings ws = settings.getApplicableWorldSettings(w.getName());
+		final WorldSettings ws = settings.getApplicableWorldSettings(w.getName());
 		if (ws.confine.enabled.getValue(false)){
-			yMin = ws.confine.yMin.getValue(0).intValue();
-			yMax = ws.confine.yMin.getValue(w.getMaxHeight()).intValue();
+			yMin = ws.confine.yMin.getValue(wyMin).intValue();
+			yMax = ws.confine.yMax.getValue(wyMax).intValue();
 		} else{
 			yMin = wyMin;
 			yMax = wyMax;
