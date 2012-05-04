@@ -12,8 +12,9 @@ import java.util.Map;
 public class PrioritySettings{
 	protected Map<String, PriorityValue<?>> nameValueMap = new HashMap<String, PriorityValue<?>>();
 	
-	public void addValue(String name, PriorityValue<?> value){
+	public <T> PriorityValue<T> addValue(String name, PriorityValue<T> value){
 		nameValueMap.put(name, value);
+		return value;
 	}
 	
 	public void applySettings(PrioritySettings other){
@@ -26,5 +27,19 @@ public class PrioritySettings{
 			}
 			v.applyValue(ov);
 		}
+	}
+	
+	public void setPriority(int priority){
+		for (PriorityValue<?> v : nameValueMap.values()){
+			v.priority = priority;
+		}
+	}
+	
+	public boolean hasValues(){
+		if (nameValueMap.isEmpty()) return false;
+		for (PriorityValue<?> v : nameValueMap.values()){
+			if (v.value != null) return true;
+		}
+		return false;
 	}
 }
