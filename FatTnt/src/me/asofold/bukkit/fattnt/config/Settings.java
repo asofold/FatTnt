@@ -279,10 +279,10 @@ public class Settings {
 		defaultWorldSettings = new WorldSettings();
 		defaultWorldSettings.fromConfig(cfg, "");
 		worldSettings.clear();
-		List<String> worlds = cfg.getStringKeys("world-settings");
+		List<String> worlds = cfg.getStringKeys(Path.worldSettings);
 		for (String world : worlds){
 			WorldSettings ws = new WorldSettings();
-			ws.fromConfig(cfg, world+".");
+			ws.fromConfig(cfg, Path.worldSettings + Path.sep + world + Path.sep);
 			if (ws.hasValues() || ws.confine.hasValues()) worldSettings.put(world.trim().toLowerCase(), ws);
 		}
 		// TODO: read ! 
@@ -304,9 +304,9 @@ public class Settings {
 		if ( keys != null){
 			for (String key : keys){
 				if ( "default".equalsIgnoreCase(key)) continue;
-				float val = cfg.getDouble(path+"."+key+".value", (double) defaultResistance).floatValue();
+				float val = cfg.getDouble(path+Path.sep+key+Path.sep+"value", (double) defaultResistance).floatValue();
 				minResistance = Math.min(minResistance, val);
-				for ( Integer i : Defaults.getIdList(cfg, path+"."+key+".ids")){
+				for ( Integer i : Defaults.getIdList(cfg, path+Path.sep+key+Path.sep+"ids")){
 					array[i] = val;
 				}
 			}
