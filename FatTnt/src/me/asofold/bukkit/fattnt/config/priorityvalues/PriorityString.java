@@ -10,6 +10,9 @@ public class PriorityString extends PriorityValue<String>{
 		case KEEP:
 			// do nothing
 			break;
+		case OVERRIDE:
+			this.value = other.value;
+			break;
 		default:
 			throw new IllegalArgumentException("Override policy not supported: "+eqPolicy);
 		}
