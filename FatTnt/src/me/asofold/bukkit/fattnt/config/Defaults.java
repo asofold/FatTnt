@@ -5,11 +5,11 @@ import java.util.List;
 
 import me.asofold.bukkit.fattnt.config.compatlayer.CompatConfig;
 import me.asofold.bukkit.fattnt.config.compatlayer.ConfigUtil;
+import me.asofold.bukkit.fattnt.config.compatlayer.NewConfig;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.Configuration;
-import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.util.Vector;
 
 /**
@@ -137,7 +137,7 @@ public class Defaults {
 	 */
 	public static CompatConfig getSimpleDefaultConfiguration(){
 		Settings defaults = new Settings(null); // read defaults from here.
-		MemoryConfiguration cfg = new MemoryConfiguration();
+		CompatConfig cfg = new NewConfig(null);
 		
 		// entities: 
 		List<String> entities = new LinkedList<String>();
@@ -219,9 +219,10 @@ public class Defaults {
 		cfg.set(Path.simpleDistanceDamage, defaults.simpleDistanceDamage);
 		cfg.set(Path.useDistanceDamage, defaults.useDistanceDamage);
 		
-		cfg.set(Path.confineEnabled, defaults.confineEnabled);
-		cfg.set(Path.confineYMin, defaults.confineYMin);
-		cfg.set(Path.confineYMax, defaults.confineYMax);
+		// TODO: these are a workaround:
+		cfg.set(Path.confineEnabled, false);
+		cfg.set(Path.confineYMin, 0);
+		cfg.set(Path.confineYMax, 255);
 		
 		return cfg;
 	}
