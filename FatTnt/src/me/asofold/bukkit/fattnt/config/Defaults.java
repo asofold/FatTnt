@@ -2,7 +2,9 @@ package me.asofold.bukkit.fattnt.config;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
+
+import me.asofold.bukkit.fattnt.config.compatlayer.CompatConfig;
+import me.asofold.bukkit.fattnt.config.compatlayer.ConfigUtil;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -123,7 +125,7 @@ public class Defaults {
 	/**
 	 * Simple default values.
 	 */
-	static Configuration simpleDefaults;
+	static CompatConfig simpleDefaults;
 	
 	static{
 		simpleDefaults = getSimpleDefaultConfiguration();
@@ -133,7 +135,7 @@ public class Defaults {
 	 * Used for all entries that can be checked with if (!Configuration.contains(path)) ... (add it as a whole).
 	 * @return
 	 */
-	public static Configuration getSimpleDefaultConfiguration(){
+	public static CompatConfig getSimpleDefaultConfiguration(){
 		Settings defaults = new Settings(null); // read defaults from here.
 		MemoryConfiguration cfg = new MemoryConfiguration();
 		
@@ -229,8 +231,8 @@ public class Defaults {
 	 * @param cfg
 	 * @return If changes were done.
 	 */
-	public static boolean addDefaultSettings(Configuration cfg) {
-		return forceDefaults(simpleDefaults, cfg);
+	public static boolean addDefaultSettings(CompatConfig cfg) {
+		return ConfigUtil.forceDefaults(simpleDefaults, cfg);
 	}
 	
 	/**
@@ -264,18 +266,6 @@ public class Defaults {
 			Bukkit.getServer().getLogger().warning(Defaults.msgPrefix+"Bad item ("+path+"): "+x);
 		}
 		return out;
-	}
-	
-	public static boolean forceDefaults(Configuration defaults, Configuration config){
-		Map<String ,Object> all = defaults.getValues(true);
-		boolean changed = false;
-		for ( String path : all.keySet()){
-			if ( !config.contains(path)){
-				config.set(path, defaults.get(path));
-				changed = true;
-			}
-		}
-		return changed;
 	}
 
 }
