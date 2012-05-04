@@ -42,4 +42,11 @@ public class PrioritySettings{
 		}
 		return false;
 	}
+	
+	public void resetAllValues(int priority){
+		for (PriorityValue<?> v : nameValueMap.values()){
+			v.setValue(null, priority);
+		}
+	}
+	
 }
