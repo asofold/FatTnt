@@ -5,6 +5,8 @@ import java.util.List;
 
 import me.asofold.bukkit.fattnt.config.Defaults;
 import me.asofold.bukkit.fattnt.config.Settings;
+import me.asofold.bukkit.fattnt.config.compatlayer.CompatConfig;
+import me.asofold.bukkit.fattnt.config.compatlayer.NewConfig;
 import me.asofold.bukkit.fattnt.effects.DamageProcessor;
 import me.asofold.bukkit.fattnt.effects.ExplosionManager;
 import me.asofold.bukkit.fattnt.propagation.Propagation;
@@ -19,8 +21,6 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.Configuration;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
@@ -133,7 +133,7 @@ public class FatTnt extends JavaPlugin implements Listener {
 		File file = new File (getDataFolder(), "config.yml");
 		boolean exists = file.exists();
 		reloadConfig();
-		FileConfiguration cfg = getConfig();
+		CompatConfig cfg = new NewConfig(file);
 		boolean changed = Defaults.addDefaultSettings(cfg);
 		if (!exists || changed) saveConfig();
 		applySettings(cfg);
@@ -153,7 +153,7 @@ public class FatTnt extends JavaPlugin implements Listener {
 	 * Apply the settings.
 	 * @param cfg
 	 */
-	public void applySettings(Configuration cfg){
+	public void applySettings(CompatConfig cfg){
 		settings.applyConfig(cfg);
 		// TODO: propagation pbased on config (Factory)
 		propagation = PropagationFactory.getPropagation(settings);
