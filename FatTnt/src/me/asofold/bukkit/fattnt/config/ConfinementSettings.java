@@ -1,5 +1,6 @@
 package me.asofold.bukkit.fattnt.config;
 
+import me.asofold.bukkit.fattnt.config.compatlayer.CompatConfig;
 import me.asofold.bukkit.fattnt.config.priorityvalues.OverridePolicy;
 import me.asofold.bukkit.fattnt.config.priorityvalues.PriorityBoolean;
 import me.asofold.bukkit.fattnt.config.priorityvalues.PriorityNumber;
@@ -13,10 +14,10 @@ import org.bukkit.configuration.Configuration;
  *
  */
 public class ConfinementSettings extends PrioritySettings{
-	int priority = 0;
-	PriorityBoolean enabled = (PriorityBoolean) addValue("enabled", new PriorityBoolean(null, priority, OverridePolicy.OVERRIDE));
-	PriorityNumber yMax = (PriorityNumber) addValue("yMax", new PriorityNumber(null, priority, OverridePolicy.OVERRIDE));
-	PriorityNumber yMin = (PriorityNumber) addValue("yMin", new PriorityNumber(null, priority, OverridePolicy.OVERRIDE));
+	public int priority = 0;
+	public PriorityBoolean enabled = (PriorityBoolean) addValue("enabled", new PriorityBoolean(null, priority, OverridePolicy.OVERRIDE));
+	public PriorityNumber yMax = (PriorityNumber) addValue("yMax", new PriorityNumber(null, priority, OverridePolicy.OVERRIDE));
+	public PriorityNumber yMin = (PriorityNumber) addValue("yMin", new PriorityNumber(null, priority, OverridePolicy.OVERRIDE));
 	
 	public ConfinementSettings(){	
 	}
@@ -26,7 +27,7 @@ public class ConfinementSettings extends PrioritySettings{
 		setPriority(priority);
 	}
 	
-	public void fromConfig(Configuration cfg, String prefix){
+	public void fromConfig(CompatConfig cfg, String prefix){
 		String p = prefix+Path.confinePriority;
 		priority = 0;
 		if (cfg.contains(p)){

@@ -7,6 +7,7 @@ import java.util.Random;
 import me.asofold.bukkit.fattnt.FatTnt;
 import me.asofold.bukkit.fattnt.config.Defaults;
 import me.asofold.bukkit.fattnt.config.Settings;
+import me.asofold.bukkit.fattnt.config.WorldSettings;
 import me.asofold.bukkit.fattnt.effects.ExplosionManager;
 import me.asofold.bukkit.fattnt.utils.Utils;
 
@@ -269,9 +270,10 @@ public class ArrayPropagation extends Propagation {
 		final int wyMax = w.getMaxHeight();
 		final int yMin;
 		final int yMax;
-		if (settings.confineEnabled){
-			yMin = settings.confineYMin;
-			yMax = settings.confineYMax;
+		WorldSettings ws = settings.getApplicableWorldSettings(w.getName());
+		if (ws.confine.enabled.getValue(false)){
+			yMin = ws.confine.yMin.getValue(0).intValue();
+			yMax = ws.confine.yMin.getValue(w.getMaxHeight()).intValue();
 		} else{
 			yMin = wyMin;
 			yMax = wyMax;

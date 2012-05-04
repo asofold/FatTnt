@@ -1,15 +1,16 @@
 package me.asofold.bukkit.fattnt.config;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+import me.asofold.bukkit.fattnt.config.compatlayer.CompatConfig;
 import me.asofold.bukkit.fattnt.stats.Stats;
 
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.Configuration;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.EntityType;
 
 /**
@@ -199,10 +200,17 @@ public class Settings {
 	public int armorBaseDepletion = 3;
 	
 	
-	// confinement
-	public boolean confineEnabled = false;
-	public int confineYMin = 0;
-	public int confineYMax = 255;
+	// World dependent settings:
+	
+	/**
+	 * Default settings for all worlds.
+	 */
+	WorldSettings defaultWorldSettings = new WorldSettings();
+	
+	/**
+	 * World name (lower-case) to WorldSettings.
+	 */
+	Map<String, WorldSettings> worldSettings = new HashMap<String, WorldSettings>();
 	
 	/**
 	 * NOTES:<br>
@@ -214,7 +222,8 @@ public class Settings {
 		this.stats = stats;
 	}
 	
-	public void applyConfig(Configuration cfg){
+	public void applyConfig(CompatConfig cfg){
+		Settings ref = new Settings(null); // dfefault settings.
 		passthrough = new float[Defaults.blockArraySize];
 		resistance = new float[Defaults.blockArraySize];
 		propagateDamage = new boolean[Defaults.blockArraySize];
@@ -229,43 +238,54 @@ public class Settings {
 				Bukkit.getServer().getLogger().warning(Defaults.msgPrefix+"Bad entity: "+n);
 			}
 		}
-		radiusMultiplier = (float) cfg.getDouble(Path.multRadius);
-		damageMultiplier = (float) cfg.getDouble(Path.multDamage);
-		entityRadiusMultiplier = (float) cfg.getDouble(Path.multEntityRadius);
-		entityDistanceMultiplier = (float) cfg.getDouble(Path.multEntityDistance);
-		maxPathMultiplier = (float) cfg.getDouble(Path.multMaxPath);
-		defaultPassthrough = (float) cfg.getDouble(Path.defaultPassthrough);
-		defaultResistance = (float) cfg.getDouble(Path.defaultResistence);
+		radiusMultiplier = cfg.getDouble(Path.multRadius, (double) ref.radiusMultiplier).floatValue();
+		damageMultiplier = cfg.getDouble(Path.multDamage, (double) ref.damageMultiplier).floatValue();
+		entityRadiusMultiplier = cfg.getDouble(Path.multEntityRadius, (double) ref.entityRadiusMultiplier).floatValue();
+		entityDistanceMultiplier = cfg.getDouble(Path.multEntityDistance, (double) ref.entityDistanceMultiplier).floatValue();
+		maxPathMultiplier = cfg.getDouble(Path.multMaxPath, (double) ref.maxPathMultiplier).floatValue();
+		defaultPassthrough = cfg.getDouble(Path.defaultPassthrough, (double) ref.defaultPassthrough).floatValue();
+		defaultResistance = cfg.getDouble(Path.defaultResistence, (double) ref.defaultResistance).floatValue();
 		minResistance = Math.min(Math.min(minResistance, defaultResistance), defaultPassthrough);
-		maxRadius = (float) cfg.getDouble(Path.maxRadius);
-		randRadius = (float) cfg.getDouble(Path.randRadius);
-		yield = (float) cfg.getDouble(Path.yield);
-		velUse = cfg.getBoolean(Path.velUse);
-		velMin = (float) cfg.getDouble(Path.velMin);
-		velCen = (float) cfg.getDouble(Path.velCen);
-		velRan = (float) cfg.getDouble(Path.velRan);
-		fStraight = (float) cfg.getDouble(Path.fStraight);
-		velOnPrime = cfg.getBoolean(Path.velOnPrime);
-		thresholdTntDirect = cfg.getDouble(Path.cthresholdTntDirect);
-		velCap = (float) cfg.getDouble(Path.velCap);
-		itemTnt = cfg.getBoolean(Path.itemTnt);
-		entityYield = (float) cfg.getDouble(Path.entityYield);
-		useDistanceDamage = cfg.getBoolean(Path.useDistanceDamage);
-		simpleDistanceDamage = cfg.getBoolean(Path.simpleDistanceDamage);
-		maxItems = cfg.getInt(Path.maxItems);
-		itemArrows = cfg.getBoolean(Path.itemArrows);
-		projectiles = cfg.getBoolean(Path.projectiles);
-		minPrime = cfg.getInt(Path.minPrime);
-		maxPrime = cfg.getInt(Path.maxPrime);
-		stepPhysics = cfg.getBoolean(Path.stepPhysics);
-		projectileMultiplier = (float) cfg.getDouble(Path.multProjectiles);
-		armorUseDamage = cfg.getBoolean(Path.armorUseDamage);
-		armorMultDamage = (float) cfg.getDouble(Path.armorMultDamage);
-		armorBaseDepletion = cfg.getInt(Path.armorBaseDepletion);
-		confineEnabled = cfg.getBoolean(Path.confineEnabled);
-		confineYMin = cfg.getInt(Path.confineYMin);
-		confineYMax = cfg.getInt(Path.confineYMax);
+		maxRadius = cfg.getDouble(Path.maxRadius, (double) ref.maxRadius).floatValue();
+		randRadius = cfg.getDouble(Path.randRadius, (double) ref.randRadius).floatValue();
+		yield = cfg.getDouble(Path.yield, (double) ref.yield).floatValue();
 		
+		velUse = cfg.getBoolean(Path.velUse, ref.velUse);
+		velMin = cfg.getDouble(Path.velMin, (double) ref.velMin).floatValue();
+		velCen = cfg.getDouble(Path.velCen, (double) ref.velCen).floatValue();
+		velRan = cfg.getDouble(Path.velRan, (double) ref.velRan).floatValue();
+		velOnPrime = cfg.getBoolean(Path.velOnPrime, ref.velOnPrime);
+		velCap = cfg.getDouble(Path.velCap, (double) ref.velCap).floatValue();
+		
+		fStraight = cfg.getDouble(Path.fStraight, (double) ref.fStraight).floatValue();
+		
+		thresholdTntDirect = cfg.getDouble(Path.cthresholdTntDirect, ref.thresholdTntDirect);
+		itemTnt = cfg.getBoolean(Path.itemTnt, ref.itemTnt);
+		entityYield = cfg.getDouble(Path.entityYield, (double) ref.entityYield).floatValue();
+		useDistanceDamage = cfg.getBoolean(Path.useDistanceDamage, ref.useDistanceDamage);
+		simpleDistanceDamage = cfg.getBoolean(Path.simpleDistanceDamage, ref.simpleDistanceDamage);
+		maxItems = cfg.getInt(Path.maxItems, ref.maxItems);
+		itemArrows = cfg.getBoolean(Path.itemArrows, ref.itemArrows);
+		projectiles = cfg.getBoolean(Path.projectiles, ref.projectiles);
+		minPrime = cfg.getInt(Path.minPrime, ref.minPrime);
+		maxPrime = cfg.getInt(Path.maxPrime, ref.maxPrime);
+		stepPhysics = cfg.getBoolean(Path.stepPhysics, ref.stepPhysics);
+		projectileMultiplier = cfg.getDouble(Path.multProjectiles, (double) ref.projectileMultiplier).floatValue();
+		armorUseDamage = cfg.getBoolean(Path.armorUseDamage, ref.armorUseDamage);
+		armorMultDamage = cfg.getDouble(Path.armorMultDamage, (double) ref.armorMultDamage).floatValue();
+		armorBaseDepletion = cfg.getInt(Path.armorBaseDepletion, ref.armorBaseDepletion);
+		
+		// world settings:
+		defaultWorldSettings = new WorldSettings();
+		defaultWorldSettings.fromConfig(cfg, "");
+		worldSettings.clear();
+		List<String> worlds = cfg.getStringKeys("world-settings");
+		for (String world : worlds){
+			WorldSettings ws = new WorldSettings();
+			ws.fromConfig(cfg, world+".");
+			if (ws.hasValues() || ws.confine.hasValues()) worldSettings.put(world.trim().toLowerCase(), ws);
+		}
+		// TODO: read ! 
 		
 		if ( maxRadius > Defaults.radiusLock) maxRadius = Defaults.radiusLock; // safety check
 		
@@ -279,14 +299,12 @@ public class Settings {
 		}
 	}
 	
-	private void readResistance(Configuration cfg, String path, float[] array, float defaultResistance){
-		ConfigurationSection sec = cfg.getConfigurationSection(path);
-		if (sec == null) return;
-		Collection<String> keys = sec.getKeys(false);
+	private void readResistance(CompatConfig cfg, String path, float[] array, float defaultResistance){
+		Collection<String> keys = cfg.getStringKeys(path);
 		if ( keys != null){
 			for (String key : keys){
 				if ( "default".equalsIgnoreCase(key)) continue;
-				float val = (float) cfg.getDouble(path+"."+key+".value", defaultResistance);
+				float val = cfg.getDouble(path+"."+key+".value", (double) defaultResistance).floatValue();
 				minResistance = Math.min(minResistance, val);
 				for ( Integer i : Defaults.getIdList(cfg, path+"."+key+".ids")){
 					array[i] = val;
@@ -308,4 +326,17 @@ public class Settings {
 		// TODO: maybe save to some configuration file ?
 	}
 	
+	public WorldSettings getApplicableWorldSettings(String worldName){
+		WorldSettings out = new WorldSettings();
+		out.applySettings(defaultWorldSettings);
+		out.confine.applySettings(defaultWorldSettings.confine);
+		WorldSettings ref = worldSettings.get(worldName.trim().toLowerCase());
+		if (ref != null){
+			out.applySettings(ref);
+			out.confine.applySettings(ref.confine);
+		}
+		// TODO: maybe ensure some defaults here ?
+		return out;
+	}
+
 }

@@ -48,7 +48,7 @@ public class ExplosionManager {
 	private static Stats stats = null;
 	
 	/**
-	 * This does not create the explosion effect !
+	 * This does not create the explosion effect (FX) but calculates and applies the world changes !
 	 * @param world
 	 * @param x
 	 * @param y
@@ -61,12 +61,12 @@ public class ExplosionManager {
 	 * @param settings
 	 * @param propagation
 	 */
-	public static void applyExplosionEffects(World world, double x, double y, double z, float realRadius, boolean fire, Entity explEntity, EntityType entityType,
+	public static boolean applyExplosionEffects(World world, double x, double y, double z, float realRadius, boolean fire, Entity explEntity, EntityType entityType,
 			List<Entity> nearbyEntities, float damageMultiplier, Settings settings, Propagation propagation, DamageProcessor damageProcessor) {
 		if ( realRadius > settings.maxRadius){
 			// TODO: settings ?
 			realRadius = settings.maxRadius;
-		} else if (realRadius == 0.0f) return;
+		} else if (realRadius == 0.0f) return false;
 		PluginManager pm = Bukkit.getPluginManager();
 		
 		// blocks:
@@ -80,7 +80,7 @@ public class ExplosionManager {
 		EntityExplodeEvent exE = new FatEntityExplodeEvent(explEntity, new Location(world,x,y,z), affected, settings.yield , specs);
 		pm.callEvent(exE);
 		stats.addStats(FatTnt.statsExplodeEvent, System.nanoTime()-ms);
-		if (exE.isCancelled()) return;
+		if (exE.isCancelled()) return false;
 		// block effects:
 		ms = System.nanoTime();
 		applyBlockEffects(world, x, y, z, realRadius, exE.blockList(), exE.getYield(), settings, propagation, specs);
@@ -91,8 +91,7 @@ public class ExplosionManager {
 			applyEntityEffects(world, x, y, z, realRadius, nearbyEntities, damageMultiplier, settings, propagation, specs, damageProcessor);
 			stats.addStats(FatTnt.statsApplyEntities, System.nanoTime()-ms);
 		}
-		
-		
+		return true;
 	}
 	
 	/**

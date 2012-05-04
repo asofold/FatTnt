@@ -1,5 +1,6 @@
 package me.asofold.bukkit.fattnt.config;
 
+import me.asofold.bukkit.fattnt.config.compatlayer.CompatConfig;
 import me.asofold.bukkit.fattnt.config.priorityvalues.PrioritySettings;
 
 import org.bukkit.configuration.Configuration;
@@ -12,8 +13,8 @@ import org.bukkit.configuration.Configuration;
  */
 public class WorldSettings extends PrioritySettings {
 
-	int priority = 0;
-	ConfinementSettings confine = new ConfinementSettings();
+	public int priority = 0;
+	public ConfinementSettings confine = new ConfinementSettings();
 	
 	public WorldSettings(){
 	}
@@ -23,7 +24,7 @@ public class WorldSettings extends PrioritySettings {
 		setPriority(priority);
 	}
 	
-	public void fromConfig(Configuration cfg, String prefix){
+	public void fromConfig(CompatConfig cfg, String prefix){
 		priority = 0;
 		if (cfg.contains(prefix + Path.priority)) priority  = cfg.getInt(prefix + Path.priority, (int) 0);
 		resetAllValues(priority);

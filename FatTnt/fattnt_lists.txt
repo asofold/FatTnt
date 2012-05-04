@@ -154,7 +154,7 @@ STACK
 - defaults, world-specific, entity-specific, 
 - ?(add) PriorityValue with filter technique for effective settings (defaults, worlds, entities: exploding+affected, ...)?
 
-
+? add WorldGuard hook (check some flags)
 ! maybe refill random array every so and so explosions.
 ! DO TRY: Preset directions, maybe include some diagonals + malus for directions ? 
 !CHECK: randomized version: prevent collection of that many blocks !
@@ -162,10 +162,18 @@ STACK
 !CHECK final settings in FatTnt (maye get rid of final)
 !REFACTOR: Propagation/ArrayPropagation: Less fixed variables, use settings.
 
+
+*** 
+
 CHANGELOG (May show an unreleased version but only done changes.)
 -----------------------------------------------------------------
 
 *** [Beta/Dev stage]
+
+(0.2.0-DEV-2)
+- (add) World dependent settings: confine
+- (add) configuration: compatlayer
+- (update) PrioritySettings
 
 (0.2.0-DEV-1)
 - (add) Confinement settings (y). [by now: only global setting, applies for all worlds!] 

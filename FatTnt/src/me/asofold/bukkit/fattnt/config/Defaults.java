@@ -9,7 +9,6 @@ import me.asofold.bukkit.fattnt.config.compatlayer.NewConfig;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.configuration.Configuration;
 import org.bukkit.util.Vector;
 
 /**
@@ -242,7 +241,7 @@ public class Defaults {
 	 * @param path
 	 * @return
 	 */
-	public static List<Integer> getIdList(Configuration cfg, String path){
+	public static List<Integer> getIdList(CompatConfig cfg, String path){
 		List<Integer> out = new LinkedList<Integer>();
 		List<String> ref = cfg.getStringList(path);
 		for ( Object x : ref){
