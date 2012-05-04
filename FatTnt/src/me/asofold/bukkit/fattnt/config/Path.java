@@ -76,5 +76,6 @@ public class Path {
 	
 	// other / general
 	public static final String priority = "priority";
+	public static final String worldSettings = "world-settings";
 
 }
