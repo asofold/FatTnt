@@ -28,14 +28,14 @@ public class ConfinementSettings extends PrioritySettings{
 	}
 	
 	public void fromConfig(CompatConfig cfg, String prefix){
-		String p = prefix+Path.confinePriority;
+		String p = prefix + Path.confinePriority;
 		priority = 0;
 		if (cfg.contains(p)){
 			Integer temp = cfg.getInt(p, (Integer) null);
 			if (temp != null) priority = temp;
 		}
 		resetAllValues(priority);
-		p = prefix+Path.confineEnabled;
+		p = prefix + Path.confineEnabled;
 		if (cfg.contains(p)){
 			Boolean temp = cfg.getBoolean(p);
 			if (temp != null) enabled.value = temp;
