@@ -248,7 +248,6 @@ public class Settings {
 		minResistance = Math.min(Math.min(minResistance, defaultResistance), defaultPassthrough);
 		maxRadius = cfg.getDouble(Path.maxRadius, (double) ref.maxRadius).floatValue();
 		randRadius = cfg.getDouble(Path.randRadius, (double) ref.randRadius).floatValue();
-		yield = cfg.getDouble(Path.yield, (double) ref.yield).floatValue();
 		
 		velUse = cfg.getBoolean(Path.velUse, ref.velUse);
 		velMin = cfg.getDouble(Path.velMin, (double) ref.velMin).floatValue();
@@ -260,20 +259,26 @@ public class Settings {
 		fStraight = cfg.getDouble(Path.fStraight, (double) ref.fStraight).floatValue();
 		
 		thresholdTntDirect = cfg.getDouble(Path.cthresholdTntDirect, ref.thresholdTntDirect);
-		itemTnt = cfg.getBoolean(Path.itemTnt, ref.itemTnt);
-		entityYield = cfg.getDouble(Path.entityYield, (double) ref.entityYield).floatValue();
+		
+		
 		useDistanceDamage = cfg.getBoolean(Path.useDistanceDamage, ref.useDistanceDamage);
 		simpleDistanceDamage = cfg.getBoolean(Path.simpleDistanceDamage, ref.simpleDistanceDamage);
 		maxItems = cfg.getInt(Path.maxItems, ref.maxItems);
-		itemArrows = cfg.getBoolean(Path.itemArrows, ref.itemArrows);
+		
 		projectiles = cfg.getBoolean(Path.projectiles, ref.projectiles);
 		minPrime = cfg.getInt(Path.minPrime, ref.minPrime);
 		maxPrime = cfg.getInt(Path.maxPrime, ref.maxPrime);
 		stepPhysics = cfg.getBoolean(Path.stepPhysics, ref.stepPhysics);
 		projectileMultiplier = cfg.getDouble(Path.multProjectiles, (double) ref.projectileMultiplier).floatValue();
+		
 		armorUseDamage = cfg.getBoolean(Path.armorUseDamage, ref.armorUseDamage);
 		armorMultDamage = cfg.getDouble(Path.armorMultDamage, (double) ref.armorMultDamage).floatValue();
 		armorBaseDepletion = cfg.getInt(Path.armorBaseDepletion, ref.armorBaseDepletion);
+		
+		yield = cfg.getDouble(Path.yield, (double) ref.yield).floatValue();
+		entityYield = cfg.getDouble(Path.entityYield, (double) ref.entityYield).floatValue();
+		itemTnt = cfg.getBoolean(Path.itemTnt, ref.itemTnt);
+		itemArrows = cfg.getBoolean(Path.itemArrows, ref.itemArrows);
 		
 		// world settings:
 		defaultWorldSettings = new WorldSettings();
