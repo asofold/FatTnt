@@ -378,7 +378,8 @@ public class ArrayPropagation extends Propagation {
 			}
 			// TODO: use predefined directions + check here if maximum number of dirction changes is reached !
 			// propagate:
-			for (final int nd : ortDir){
+			for (int k = 0; k < ortDir.length; k++){
+				final int nd = ortDir[k];
 				// (iterate over orthogonal directions)
 				if (nd == oDir[dir]) continue; // prevent walking back.
 				final float effStr; // strength to be used.
