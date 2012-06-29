@@ -163,12 +163,22 @@ STACK
 !REFACTOR: Propagation/ArrayPropagation: Less fixed variables, use settings.
 
 
-*** 
+*** Greedy / handle-explosions settings !
+WorldSettings: handle-explosions: entities+entities-as-blacklist, handle-all-explosions, prevent-other-explosions, replace-other-explosions
+? also cancel other explosions -> config flag !
+
+*** UNSORTED
+- Entities: get them from chunks, check what the code does (CraftBukkit side as well). Log number of checked entities !
+- Do: statistics file for the test setup for comparison
+
 
 CHANGELOG (May show an unreleased version but only done changes.)
 -----------------------------------------------------------------
 
 *** [Beta/Dev stage]
+
+(0.2.0-DEV-3)
+- (update) config/compatlayer
 
 (0.2.0-DEV-2)
 - (add) World dependent settings: confine
