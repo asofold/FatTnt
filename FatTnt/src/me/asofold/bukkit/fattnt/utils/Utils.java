@@ -68,7 +68,7 @@ public class Utils {
 		// TODO: get rid of this hack.
 		Entity dummyEntity = null;
 		try{
-			world.spawn(new Location(world,x,y,z), Arrow.class);
+			dummyEntity = world.spawn(new Location(world,x,y,z), Arrow.class);
 		} catch (Throwable t){};
 		if ( dummyEntity==null){
 			// TODO: maybe warn ?
