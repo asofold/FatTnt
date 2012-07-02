@@ -70,26 +70,26 @@ public class ExplosionManager {
 		PluginManager pm = Bukkit.getPluginManager();
 		
 		// blocks:
-		long ms = System.nanoTime();
+		long ns = System.nanoTime();
 		List<Block> affected = propagation.getExplodingBlocks(world , x, y, z, realRadius);
-		stats.addStats(FatTnt.statsGetBlocks, System.nanoTime()-ms);
-		stats.addStats(FatTnt.statsBlocksCollected, affected.size());
-		stats.addStats(FatTnt.statsStrength, (long) realRadius);
-		ms = System.nanoTime();
+		stats.addStats(FatTnt.statsGetBlocks, System.nanoTime()-ns); // Time measurement
+		stats.addStats(FatTnt.statsBlocksCollected, affected.size()); // counting average number of collected blocks.
+		stats.addStats(FatTnt.statsStrength, (long) realRadius); // just counting average explosion strength !
+		ns = System.nanoTime();
 		FatExplosionSpecs specs = new FatExplosionSpecs();
 		EntityExplodeEvent exE = new FatEntityExplodeEvent(explEntity, new Location(world,x,y,z), affected, settings.yield , specs);
 		pm.callEvent(exE);
-		stats.addStats(FatTnt.statsExplodeEvent, System.nanoTime()-ms);
+		stats.addStats(FatTnt.statsExplodeEvent, System.nanoTime()-ns);
 		if (exE.isCancelled()) return false;
 		// block effects:
-		ms = System.nanoTime();
+		ns = System.nanoTime();
 		applyBlockEffects(world, x, y, z, realRadius, exE.blockList(), exE.getYield(), settings, propagation, specs);
-		stats.addStats(FatTnt.statsApplyBlocks, System.nanoTime()-ms);
+		stats.addStats(FatTnt.statsApplyBlocks, System.nanoTime()-ns);
 		// entities:
 		if ( nearbyEntities != null){
-			ms = System.nanoTime();
+			ns = System.nanoTime();
 			applyEntityEffects(world, x, y, z, realRadius, nearbyEntities, damageMultiplier, settings, propagation, specs, damageProcessor);
-			stats.addStats(FatTnt.statsApplyEntities, System.nanoTime()-ms);
+			stats.addStats(FatTnt.statsApplyEntities, System.nanoTime()-ns);
 		}
 		return true;
 	}
