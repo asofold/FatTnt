@@ -177,6 +177,8 @@ WorldSettings: handle-explosions: entities+entities-as-blacklist, handle-all-exp
 
 *** smart randomization: Option to or change to only use randomization of propagated explosion strength for destroyed blocks ? (performance trick)
 
+*** Check event processing to rule out time used up by protection plugins etc.
+
 VERSION HISTORY (only done changes)
 -----------------------------------------------------------------
 
