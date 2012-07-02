@@ -172,12 +172,18 @@ WorldSettings: handle-explosions: entities+entities-as-blacklist, handle-all-exp
 - Do: statistics file for the test setup for comparison
 
 
-CHANGELOG (May show an unreleased version but only done changes.)
+
+*** consider hacks to get entities: use the chunk wise storage of entities for faster getting (only affects servers with MANY entities)?
+
+*** smart randomization: Option to or change to only use randomization of propagated explosion strength for destroyed blocks ? (performance trick)
+
+VERSION HISTORY (only done changes)
 -----------------------------------------------------------------
 
 *** [Beta/Dev stage]
 
 (0.2.0-DEV-3)
+- (adjust) Adjust getNearbyEntities to spawn an arrow as fake entity.
 - (update) config/compatlayer
 
 (0.2.0-DEV-2)

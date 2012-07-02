@@ -9,8 +9,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
 public class Utils {
@@ -65,7 +65,11 @@ public class Utils {
 	public static List<Entity> getNearbyEntities(World world, double x, double y,
 			double z, double realRadius) {
 		List<Entity> nearbyEntities;
-		Entity dummyEntity = world.spawnCreature(new Location(world,x,y,z), EntityType.CHICKEN);
+		// TODO: get rid of this hack.
+		Entity dummyEntity = null;
+		try{
+			world.spawn(new Location(world,x,y,z), Arrow.class);
+		} catch (Throwable t){};
 		if ( dummyEntity==null){
 			// TODO: maybe warn ?
 			nearbyEntities = new LinkedList<Entity>();
