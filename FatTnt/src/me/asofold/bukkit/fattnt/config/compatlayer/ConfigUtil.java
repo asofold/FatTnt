@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -207,6 +208,13 @@ public class ConfigUtil {
 			out.add(input[i]);
 		}
 		return out;
+	}
+	
+	public static final String[] toArray(final Collection<String> collection){
+		if (collection == null) return null;
+		final String[] a = new String[collection.size()];
+		collection.toArray(a);
+		return a;
 	}
 	
 	/**

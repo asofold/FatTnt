@@ -116,9 +116,6 @@ SCHEDULE (Might include ideas, points to check.)
 ! Add: file defs for the main config, use multiple files for configuration?
 ! mind: For use with greedy: might have to add null-flags for handle-or-handle-not entities. Events might be thrown by any plugin ...
 
-GRAVEYARD
------------------------------------------------------------------
-
 
 STACK
 --------------------------------------
@@ -171,13 +168,17 @@ WorldSettings: handle-explosions: entities+entities-as-blacklist, handle-all-exp
 - Entities: get them from chunks, check what the code does (CraftBukkit side as well). Log number of checked entities !
 - Do: statistics file for the test setup for comparison
 
-
+*** Fastest way to get a type id ? World.getTypeIdAt is thead safe ??
 
 *** consider hacks to get entities: use the chunk wise storage of entities for faster getting (only affects servers with MANY entities)?
 
 *** smart randomization: Option to or change to only use randomization of propagated explosion strength for destroyed blocks ? (performance trick)
 
 *** Check event processing to rule out time used up by protection plugins etc.
+
+*** Entity settings (extra multiplicators, to be multiplied).
+
+? evaluate: use chunks, store chunks ? use getChunkSnapShot for faster processing ? -> Async processing possible ?
 
 VERSION HISTORY (only done changes)
 -----------------------------------------------------------------
