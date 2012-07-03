@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Random;
 
 import me.asofold.bukkit.fattnt.FatTnt;
-import me.asofold.bukkit.fattnt.config.Defaults;
 import me.asofold.bukkit.fattnt.config.Settings;
 import me.asofold.bukkit.fattnt.events.FatEntityDamageEvent;
 import me.asofold.bukkit.fattnt.events.FatEntityExplodeEvent;
@@ -95,7 +94,7 @@ public class ExplosionManager {
 	}
 	
 	/**
-	 * Block manuipulations for explosions.
+	 * Block manipulations for explosions.
 	 * @param world
 	 * @param x
 	 * @param y
@@ -109,32 +108,38 @@ public class ExplosionManager {
 	 */
 	public static void applyBlockEffects(World world, double x, double y, double z, float realRadius, List<Block> blocks, float defaultYield, Settings settings, Propagation propagation, FatExplosionSpecs specs){
 //		final List<block> directExplode = new LinkedList<block>(); // if set in config. - maybe later (split method to avoid recursion !)
-		for ( Block block : blocks){
+		for (Block block : blocks){
 			if (block.getType() == Material.TNT){
-				if( settings.stepPhysics) block.setTypeId(0, false);
+				if (settings.stepPhysics) block.setTypeId(0, false);
 				else block.setTypeId(0, true);
-				Location loc = block.getLocation().add(Defaults.vCenter);
+				Location loc = blockCenter(world, block);
 				addTNTPrimed(world, x, y, z, loc, realRadius, settings, propagation);
 				continue;
 			}
 			// All other blocks:
 			Collection<ItemStack> drops = block.getDrops();
 			for (ItemStack drop : drops){
-				if ( random.nextFloat()<=defaultYield){
-					Location loc = block.getLocation().add(Defaults.vCenter);
-					Item item = world.dropItemNaturally(loc, drop.clone());
+				if (random.nextFloat()<=defaultYield){
+//					Location loc = block.getLocation().add(Defaults.vCenter);
+					Location loc = blockCenter(world, block);
+					Item item = world.dropItemNaturally(loc, drop); // .clone());
 					if (item==null) continue;
+					// TODO: settings !
 					//addRandomVelocity(item, loc, x,y,z, realRadius);
 				}
 			}
-			if( settings.stepPhysics) block.setTypeId(0, false);
-			else block.setTypeId(0, true); 
+			if (settings.stepPhysics) block.setTypeId(0, false);
+			else block.setTypeId(0, true);
 		}
 		if (settings.stepPhysics){
 			for ( Block block : blocks){
 				block.getState().update();
 			}
 		}
+	}
+	
+	public static final Location blockCenter(final World world, final Block block){
+		return new Location(world, 0.5 + (double) block.getX(), 0.5 + (double) block.getY(), 0.5 + (double) block.getZ());
 	}
 	
 	public static TNTPrimed addTNTPrimed(World world, double x, double y, double z,

@@ -178,6 +178,7 @@ WorldSettings: handle-explosions: entities+entities-as-blacklist, handle-all-exp
 
 *** Entity settings (extra multiplicators, to be multiplied).
 
+? experiment: no physics updates at first, but delayed in tasks.
 ? evaluate: use chunks, store chunks ? use getChunkSnapShot for faster processing ? -> Async processing possible ?
 
 VERSION HISTORY (only done changes)
