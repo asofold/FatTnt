@@ -54,6 +54,17 @@ public abstract class Propagation {
 	}
 	
 	/**
+	 * If ids were cached return therm from here, -1 if unavailable.
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return
+	 */
+	public int getTypeId(int x, int y, int z){
+		return -1;
+	}
+	
+	/**
 	 * 
 	 * @param world
 	 * @param cx

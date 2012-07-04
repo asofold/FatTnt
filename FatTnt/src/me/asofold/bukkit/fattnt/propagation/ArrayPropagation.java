@@ -214,14 +214,45 @@ public class ArrayPropagation extends Propagation {
 	}
 
 	@Override
-	public float getStrength(final double x, final double y, final double z) {
-		final int dx = center + Utils.floor(x) - cx;
-		final int dy = center + Utils.floor(y) - cy;
-		final int dz = center + Utils.floor(z) - cz ;
-		final int index = dx+fY*dy+fZ*dz;
-		if ( index<0 || index>= strength.length) return 0.0f; // outside of possible bounds.
-		if ( sequence[index] != seqMax) return 0.0f; // unaffected // WARNING: this uses seqMax, which has been set in getExplodingBlocks !
+	public final float getStrength(final double x, final double y, final double z) {
+		final int index = getValidIndex(Utils.floor(x), Utils.floor(y), Utils.floor(z));
+		if (index == -1) return 0.0f;
 		return strength[index]; // effective radius / strength
+	}
+	
+	/**
+	 * 1-dim matrix index , still check if out of range: if ( index<0 || index>= strength.length)
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return
+	 */
+	private final int getIndex(final int x, final int y, final int z){
+		final int dx = center + x - cx;
+		final int dy = center + y - cy;
+		final int dz = center + z - cz ;
+		return dx+fY*dy+fZ*dz;
+	}
+	
+	/**
+	 * Return -1 if invalid.
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return
+	 */
+	private final int getValidIndex(final int x, final int y, final int z){
+		final int index  = getIndex(x,y,z);
+		if ( index<0 || index>= strength.length) return -1;
+		if ( sequence[index] != seqMax) return -1;
+		return index;
+	}
+	
+	@Override
+	public final int getTypeId(final int x, final int y, final int z){
+		final int index = getValidIndex(x, y, z);
+		if (index == -1) return -1;
+		return ids[index];
 	}
 
 	@Override
