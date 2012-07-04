@@ -140,34 +140,21 @@ STACK
 - !(add) flags to control some more stuff (forgot)...
 - !(add) Possibility to control ordinary explosions (not replace) ?
 
-*** SPECIFIC/CONFINEMENT SETTINGS
-? name for confinement
-?CHECK confinement = inside + outside settings + settings just as normal ? 
-- ?(add) Confinement/outside: allow-explosion, allow-block-damage, allow-entity-damage, 
-!(add) confinement: minY, maxY [maybe tweak the resistance for those to not add the blocks in the first place?]
 
 *** FILTER SETTINGS
 - ! block settings: allow null as well, so only set them once if not specified otherwise.
 - ! block settings: maybe allow named sets of block ids (defined ONCE) + allow remove ids + add ids !
 - (add) What to handle, greedy-flags, 
 
-*** CLEANUP OF SETTINGS
-- ?Check:  allow block names !
-- defaults, world-specific, entity-specific, 
-- ?(add) PriorityValue with filter technique for effective settings (defaults, worlds, entities: exploding+affected, ...)?
 
+*** UNSORTED
 ? add WorldGuard hook (fast explosion denial heuristics).
 ! maybe refill random array every so and so explosions.
 ! DO TRY: Preset directions, maybe include some diagonals + malus for directions ? 
 !CHECK: randomized version: prevent collection of that many blocks !
-!REFACTOR: Introduce ExplosionSettings or SettingsMixins to be read from paths: world-setings, entity-settings, etc. - use PriorityValues !
 !CHECK final settings in FatTnt (maye get rid of final)
 !REFACTOR: Propagation/ArrayPropagation: Less fixed variables, use settings.
 
-*** BUGS
-- typo in config: resistance
-
-*** UNSORTED
 - Do: statistics file for the test setup for comparison
 
 *** ITERATION -------------------------------------------------------------------------------------
@@ -176,6 +163,21 @@ STACK
 WorldSettings: handle-explosions: entities+entities-as-blacklist, handle-all-explosions, prevent-other-explosions, replace-other-explosions
 ? also cancel other explosions -> config flag !
 ! prevent-all-explosions [-> Entity Settings + handle Explosions = part of world settings ?]
+
+*** SPECIFIC/CONFINEMENT SETTINGS
+? name for confinement
+?CHECK confinement = inside + outside settings + settings just as normal ? 
+- ?(add) Confinement/outside: allow-explosion, allow-block-damage, allow-entity-damage, <- ? damage settings for outside?
+!(add) confinement: minY, maxY [maybe tweak the resistance for those to not add the blocks in the first place?]
+
+*** CLEANUP OF SETTINGS
+- ?Check:  allow block names !
+- defaults, world-specific, entity-specific, 
+- ?(add) PriorityValue with filter technique for effective settings (defaults, worlds, entities: exploding+affected, ...)?
+
+*** BUGS
+- typo in config: resistance
+
 
 *** Entity settings (extra multiplicators, to be multiplied).
 
