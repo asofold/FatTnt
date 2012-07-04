@@ -48,6 +48,10 @@ Planned:
 ? (add) EntityCombust for tnt : create primed tnt for item
   
 Maybe:
+optimize: consider direct hacks to get entities: use the chunk wise storage of entities for faster getting (only affects servers with MANY entities)?
+optimize: smart randomization: Option to or change to only use randomization of propagated explosion strength for destroyed blocks ? (performance trick)
+? evaluate: use chunks, store chunks ? use getChunkSnapShot for faster processing ? -> Check if Async processing would be possible.
+?optimize do not use getBlock but collect positions, calculate involved chunks and create craftblocks directly ! 
 ? (add) Ways to damage blocks over time ?[Use damage values ? hat with block break?]
 ! (add) Ways to damage blocks more by many explosions within one or several ticks [remember blocks + timestamp ?].
 - WorldGuard: add a quick switch to prevent explosions if touching WorldGuard regions
@@ -76,7 +80,7 @@ SCHEDULE (Might include ideas, points to check.)
 ! add: control over block/entity effects based on conditions (y-coordinate, explosion in material).
 ? EVALUATE: altered block list for event: entity effects are different that way.
 ! Evaluate: use array of continuations
-! Evaluate: emulate vanilla style explosions ?
+! Evaluate: emulate vanilla propagation model for explosions ?
 ! Evaluate: add something random, or the position bias (entity at some offset)
 !EVALUATE: use ray.distance array to allow splitting maximum radius from resistance (and eventually giving the path multiplier a PURPOSE).
 ! EVALUATE: maximum block destruction  distance? [from entities : calculate the rays only, along the ray but usual method?]
@@ -148,10 +152,11 @@ STACK
 - (add) What to handle, greedy-flags, 
 
 *** CLEANUP OF SETTINGS
+- ?Check:  allow block names !
 - defaults, world-specific, entity-specific, 
 - ?(add) PriorityValue with filter technique for effective settings (defaults, worlds, entities: exploding+affected, ...)?
 
-? add WorldGuard hook (check some flags)
+? add WorldGuard hook (fast explosion denial heuristics).
 ! maybe refill random array every so and so explosions.
 ! DO TRY: Preset directions, maybe include some diagonals + malus for directions ? 
 !CHECK: randomized version: prevent collection of that many blocks !
@@ -159,30 +164,21 @@ STACK
 !CHECK final settings in FatTnt (maye get rid of final)
 !REFACTOR: Propagation/ArrayPropagation: Less fixed variables, use settings.
 
+*** BUGS
+- typo in config: resistance
+
+*** UNSORTED
+- Do: statistics file for the test setup for comparison
+
 
 *** Greedy / handle-explosions settings !
 WorldSettings: handle-explosions: entities+entities-as-blacklist, handle-all-explosions, prevent-other-explosions, replace-other-explosions
 ? also cancel other explosions -> config flag !
 
-*** UNSORTED
-- Entities: get them from chunks, check what the code does (CraftBukkit side as well). Log number of checked entities !
-- Do: statistics file for the test setup for comparison
-
-*** Fastest way to get a type id ? World.getTypeIdAt is thead safe ??
-
-*** consider hacks to get entities: use the chunk wise storage of entities for faster getting (only affects servers with MANY entities)?
-
-*** smart randomization: Option to or change to only use randomization of propagated explosion strength for destroyed blocks ? (performance trick)
-
-*** Check event processing to rule out time used up by protection plugins etc.
 
 *** Entity settings (extra multiplicators, to be multiplied).
 
-? experiment: no physics updates at first, but delayed in tasks.
-? evaluate: use chunks, store chunks ? use getChunkSnapShot for faster processing ? -> Check if Async processing would be possible.
 
-
-?optimize do not use getBlock but collect positions, calculate involved chunks and create craftblocks directly ! 
 
 VERSION HISTORY (only done changes)
 -----------------------------------------------------------------
@@ -190,8 +186,8 @@ VERSION HISTORY (only done changes)
 *** [Beta/Dev stage]
 
 (0.2.0-DEV-3)
-- (optimize) Store ids of visited blocks, onle set seq when changed.
-- (adjust) Adjust getNearbyEntities to spawn an arrow as fake entity.
+- (optimize) Store ids of visited blocks.
+- (adjust) Adjust getNearbyEntities to spawn an arrow as fake entity instead of a chicken.
 - (update) config/compatlayer
 
 (0.2.0-DEV-2)
