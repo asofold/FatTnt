@@ -18,6 +18,7 @@ public class ArrayPropagation extends Propagation {
 	
 	private int[] sequence;
 	private float[] strength;
+	private int[] ids;
 	private int seqMax = 0;
 	
 	private int center = -1;
@@ -185,6 +186,7 @@ public class ArrayPropagation extends Propagation {
 		iCenter = center+ center*fY + center*fZ; // TODO: check if such is right
 		sequence = new int[sz];
 		strength = new float[sz];
+		ids = new int[sz];
 		for ( int i = 0; i<sz; i++){
 			sequence[i] = 0;
 		}
@@ -255,7 +257,7 @@ public class ArrayPropagation extends Propagation {
 	 * @param x Current real world pos.
 	 * @param y
 	 * @param z
-	 * @param i index of  array
+	 * @param i index of  array(s)
 	 * @param dir Last direction taken to this point
 	 * @param mpl maximum path length allowed from here.
 	 * @param expStr Strength of explosion, or radius
@@ -320,15 +322,21 @@ public class ArrayPropagation extends Propagation {
 			final int id;
 			float dur ; // AIR
 			final boolean ign;
+			final boolean isSeq = sequence[i] == seqMax;
 			if ( y>=yMin && y <= yMax){// TODO: maybe +-1 ?
-				id = w.getBlockTypeIdAt(x,y,z);
+				if (isSeq) id = ids[i];
+				else{
+					id = w.getBlockTypeIdAt(x,y,z);
+					ids[i] = id;
+				}
+				
 				if ( id == 0 ){
 					ign = true;
 					dur = resistance[0];
 				}
 				else if (id>0 && id<4096){
 					dur = resistance[id];
-					if ( sequence[i] == seqMax && strength[i] >= dur) ign = true; // TODO: might be unnecessary
+					if ( isSeq && strength[i] >= dur) ign = true; // TODO: might be unnecessary
 					else ign = false;
 				}
 				else{
@@ -344,13 +352,18 @@ public class ArrayPropagation extends Propagation {
 			}
 			else{
 				// Confinement: no destruction, use pass-through resistance.
-				id = w.getBlockTypeIdAt(x,y,z);
+				// TODO: Get stored id if available.
+				if (isSeq) id = ids[i];
+				else{
+					id = w.getBlockTypeIdAt(x,y,z);
+					ids[i] = id;
+				}
 				dur = passthrough[id];
 				ign = true;
 			}
 			// Resistance check:
 			// Matrix position:
-			sequence[i] = seqMax;
+			if (!isSeq) sequence[i] = seqMax;
 			strength[i] = expStr;
 //			if ( randDec > 0.0) dur += random.nextFloat()*randDec;
 			

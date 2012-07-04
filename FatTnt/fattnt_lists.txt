@@ -179,7 +179,10 @@ WorldSettings: handle-explosions: entities+entities-as-blacklist, handle-all-exp
 *** Entity settings (extra multiplicators, to be multiplied).
 
 ? experiment: no physics updates at first, but delayed in tasks.
-? evaluate: use chunks, store chunks ? use getChunkSnapShot for faster processing ? -> Async processing possible ?
+? evaluate: use chunks, store chunks ? use getChunkSnapShot for faster processing ? -> Check if Async processing would be possible.
+
+
+?optimize do not use getBlock but collect positions, calculate involved chunks and create craftblocks directly ! 
 
 VERSION HISTORY (only done changes)
 -----------------------------------------------------------------
@@ -187,6 +190,7 @@ VERSION HISTORY (only done changes)
 *** [Beta/Dev stage]
 
 (0.2.0-DEV-3)
+- (optimize) Store ids of visited blocks, onle set seq when changed.
 - (adjust) Adjust getNearbyEntities to spawn an arrow as fake entity.
 - (update) config/compatlayer
 
