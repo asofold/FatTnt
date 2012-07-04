@@ -154,8 +154,9 @@ STACK
 !CHECK: randomized version: prevent collection of that many blocks !
 !CHECK final settings in FatTnt (maye get rid of final)
 !REFACTOR: Propagation/ArrayPropagation: Less fixed variables, use settings.
-
 - Do: statistics file for the test setup for comparison
+
+? check: Schedule the calculations for a tick later (effect on stats)?
 
 *** ITERATION -------------------------------------------------------------------------------------
 
