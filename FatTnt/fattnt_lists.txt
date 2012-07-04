@@ -170,11 +170,12 @@ STACK
 *** UNSORTED
 - Do: statistics file for the test setup for comparison
 
+*** ITERATION -------------------------------------------------------------------------------------
 
 *** Greedy / handle-explosions settings !
 WorldSettings: handle-explosions: entities+entities-as-blacklist, handle-all-explosions, prevent-other-explosions, replace-other-explosions
 ? also cancel other explosions -> config flag !
-
+! prevent-all-explosions [-> Entity Settings + handle Explosions = part of world settings ?]
 
 *** Entity settings (extra multiplicators, to be multiplied).
 
