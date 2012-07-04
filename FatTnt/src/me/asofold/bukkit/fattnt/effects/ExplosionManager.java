@@ -108,8 +108,11 @@ public class ExplosionManager {
 	 */
 	public static void applyBlockEffects(World world, double x, double y, double z, float realRadius, List<Block> blocks, float defaultYield, Settings settings, Propagation propagation, FatExplosionSpecs specs){
 //		final List<block> directExplode = new LinkedList<block>(); // if set in config. - maybe later (split method to avoid recursion !)
-		for (Block block : blocks){
-			if (block.getType() == Material.TNT){
+		final int tntId = Material.TNT.getId();
+		for (final Block block : blocks){
+			int id = propagation.getTypeId(block.getX(), block.getY(), block.getZ());
+			if (id == -1) id = block.getTypeId();
+			if (id == tntId){
 				if (settings.stepPhysics) block.setTypeId(0, false);
 				else block.setTypeId(0, true);
 				Location loc = blockCenter(world, block);
