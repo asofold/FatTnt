@@ -194,6 +194,8 @@ VERSION HISTORY (only done changes)
 *** [Beta/Dev stage]
 
 (0.2.0-DEV-3)
+- (add) Explosion scheduling.
+- (refactor) Configuration structure: Explosion settings are used and can be used per world per entity and default. For exploding entity same way: default, per world.
 - (optimize) Store ids of visited blocks.
 - (adjust) Adjust getNearbyEntities to spawn an arrow as fake entity instead of a chicken.
 - (update) config/compatlayer
