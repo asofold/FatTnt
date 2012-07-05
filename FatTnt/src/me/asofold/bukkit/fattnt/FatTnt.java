@@ -16,6 +16,7 @@ import me.asofold.bukkit.fattnt.propagation.Propagation;
 import me.asofold.bukkit.fattnt.propagation.PropagationFactory;
 import me.asofold.bukkit.fattnt.scheduler.ProcessHandler;
 import me.asofold.bukkit.fattnt.scheduler.ScheduledExplosion;
+import me.asofold.bukkit.fattnt.scheduler.ScheduledItemSpawn;
 import me.asofold.bukkit.fattnt.scheduler.ScheduledTntSpawn;
 import me.asofold.bukkit.fattnt.scheduler.SchedulerSet;
 import me.asofold.bukkit.fattnt.stats.Stats;
@@ -102,7 +103,7 @@ public class FatTnt extends JavaPlugin implements Listener {
 	private final ProcessHandler<ScheduledExplosion> explHandler = new ProcessHandler<ScheduledExplosion>() {
 		@Override
 		public final void process(final ScheduledExplosion explosion) {
-			createExplosion(explosion.world, explosion.x, explosion.y, explosion.z, explosion.radius, explosion.fire, explosion.explEntity, explosion.entityType);
+			createExplosion(explosion.world, explosion.x, explosion.y, explosion.z, explosion.getRadius(), explosion.isFire(), explosion.getExplEntity(), explosion.getEntityType());
 		}
 	};
 	
@@ -110,6 +111,13 @@ public class FatTnt extends JavaPlugin implements Listener {
 		@Override
 		public final void process(final ScheduledTntSpawn spawnTnt) {
 			ExplosionManager.addTntPrimed(spawnTnt);
+		}
+	};
+	
+	private final ProcessHandler<ScheduledItemSpawn> itemHandler = new ProcessHandler<ScheduledItemSpawn>() {
+		@Override
+		public final void process(final ScheduledItemSpawn spawnItem) {
+			ExplosionManager.spawnItem(spawnItem);
 		}
 	};
 	
@@ -127,6 +135,7 @@ public class FatTnt extends JavaPlugin implements Listener {
 				boolean needRun = false;
 				if (schedulers.explosions.onTick(explHandler, stats, statsProcessExpl, statsNExpl, statsNExplStore)) needRun = true;
 				if (schedulers.spawnTnt.onTick(tntHandler, stats, statsProcessTnt, statsNTnt, statsNTntStore)) needRun = true;
+				if (schedulers.spawnItems.onTick(itemHandler, stats, statsProcessItem, statsNItem, statsNItemStore)) needRun = true;
 				// TODO: other schedulers.
 				if (!needRun){
 					getServer().getScheduler().cancelTask(taskIdScheduler);
