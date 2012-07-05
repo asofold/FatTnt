@@ -13,7 +13,7 @@ import me.asofold.bukkit.fattnt.config.compatlayer.CompatConfig;
 import me.asofold.bukkit.fattnt.utils.Utils;
 
 /**
- * 
+ * Store entries chunk-wise for a somewhat fair processing order. 
  * @author mc_dev
  *
  */
@@ -59,10 +59,10 @@ public final class ChunkWiseScheduler<T extends ScheduledEntry> {
 	
 	public void fromConfig(CompatConfig cfg, String prefix){
 		ChunkWiseScheduler<T> ref = new ChunkWiseScheduler<T>(); // TODO maybe a settings class.
-		maxProcessTotal = cfg.getInt(prefix + Path.process + Path.sep + Path.maxTotal, ref.maxProcessTotal);
 		chunkSize = cfg.getInt(prefix + Path.chunkSize, ref.chunkSize);
 		maxStoreTotal = cfg.getInt(prefix + Path.store + Path.sep + Path.maxTotal, ref.maxStoreTotal);
 		maxStoreChunk = cfg.getInt(prefix + Path.store + Path.sep + Path.maxChunk, ref.maxStoreChunk);
+		maxProcessTotal = cfg.getInt(prefix + Path.process + Path.sep + Path.maxTotal, ref.maxProcessTotal);
 		maxProcessNanos = cfg.getLong(prefix + Path.process + Path.sep + Path.maxNanos, ref.maxProcessNanos);
 		maxStoreLifetime = cfg.getLong(prefix + Path.process + Path.sep + Path.maxMillis, ref.maxStoreLifetime);
 	}
