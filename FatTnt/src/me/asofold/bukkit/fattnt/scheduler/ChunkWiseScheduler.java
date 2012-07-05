@@ -73,7 +73,7 @@ public final class ChunkWiseScheduler<T extends ScheduledEntry> {
 	 * Simple getting algorithm, loop through all "chunks" and add one by one till limit reached. If many chunks are there, reorder the processed ones to the end, to prevent starvation.
 	 * @return
 	 */
-	public final List<T> getNextExplosions(){
+	public final List<T> getNextEntries(){
 		final long ts = System.currentTimeMillis();
 		final List<T> next = new LinkedList<T>();
 		if (stored.isEmpty()) return next;
@@ -123,18 +123,18 @@ public final class ChunkWiseScheduler<T extends ScheduledEntry> {
 	}
 	
 	/**
-	 * Add the explosion, remove one if too many.
-	 * @param explosion
+	 * Add the ebtry, remove one if too many.
+	 * @param entry
 	 */
-	public final void addExplosion(final T explosion){
+	public final void addEntry(final T entry){
 		if (totalSize >= maxStoreTotal) reduceStore();
-		final ChunkPos pos = new ChunkPos(Utils.floor(explosion.getBlockX() / chunkSize), Utils.floor(explosion.getBlockZ() / chunkSize));
+		final ChunkPos pos = new ChunkPos(Utils.floor(entry.getBlockX() / chunkSize), Utils.floor(entry.getBlockZ() / chunkSize));
 		List<T> list = stored.get(pos);
 		if (list == null){
 			list = new LinkedList<T>();
 			stored.put(pos, list);
 		}
-		list.add(explosion);
+		list.add(entry);
 		totalSize ++;
 		if (list.size() > maxStoreChunk){
 			list.remove(0);
@@ -208,12 +208,12 @@ public final class ChunkWiseScheduler<T extends ScheduledEntry> {
 		if (hasEntries()){
 			stats.addStats(idNStore, getTotalSize());
 			final long ns = System.nanoTime();
-			final List<T> entries = getNextExplosions();
+			final List<T> entries = getNextEntries();
 			boolean abort = false;
 			int done = 0;
 			for (final T entry : entries){
 				if (abort){
-				addExplosion(entry);
+				addEntry(entry);
 					continue;
 				}
 				handler.process(entry);
