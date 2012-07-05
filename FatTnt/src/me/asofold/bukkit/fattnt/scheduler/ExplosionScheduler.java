@@ -86,6 +86,18 @@ public final class ExplosionScheduler {
 				final ScheduledExplosion candidate = list.remove(0);
 				if (ts - candidate.ts > maxStoreLifetime){
 					totalSize--;
+					if (list.isEmpty()){
+						rem.add(entry.getKey());
+						break;
+					}
+					while(ts - list.get(0).ts > maxStoreLifetime){
+						list.remove(0);
+						totalSize --;
+						if (list.isEmpty()){
+							rem.add(entry.getKey());
+							break;
+						}
+					}
 					continue;
 				}
 				next.add(candidate);
@@ -145,8 +157,18 @@ public final class ExplosionScheduler {
 			for (final Entry<ChunkPos, List<ScheduledExplosion>> entry : stored.entrySet()){
 				final List<ScheduledExplosion> list = entry.getValue();
 				final int lsz = list.size();
-				
-				if (lsz > maxStoreChunk || ts - list.get(0).ts > maxStoreLifetime);
+				if (ts - list.get(0).ts > maxStoreLifetime){
+					do {
+						list.remove(0);
+						totalSize --;
+						if (list.isEmpty()){
+							rem.add(entry.getKey());
+							break;
+						}
+					} while (ts - list.get(0).ts > maxStoreLifetime);
+					continue;
+				}
+				if (lsz > maxStoreChunk);
 				else if (avOk && lsz <= av) continue;
 				else if (!anyOk && lsz == 1) continue;
 				
