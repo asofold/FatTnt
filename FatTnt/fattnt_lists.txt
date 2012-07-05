@@ -156,8 +156,6 @@ STACK
 !REFACTOR: Propagation/ArrayPropagation: Less fixed variables, use settings.
 - Do: statistics file for the test setup for comparison
 
-? check: Schedule the calculations for a tick later (effect on stats)?
-
 *** ITERATION -------------------------------------------------------------------------------------
 
 *** Greedy / handle-explosions settings !
@@ -182,6 +180,12 @@ WorldSettings: handle-explosions: entities+entities-as-blacklist, handle-all-exp
 
 *** Entity settings (extra multiplicators, to be multiplied).
 
+? check: Schedule the explosion handling for a tick later (effect on stats, better consistency)? + allows for number of explosions / tick control. => ExplosionScheduler
+
+
+? make a settingsCache ?
+
+! check : where to remove the explEntity and other stuff that is not needed for ExplosionSettings passing.
 
 
 VERSION HISTORY (only done changes)
