@@ -9,6 +9,7 @@ import me.asofold.bukkit.fattnt.config.ExplosionSettings;
 import me.asofold.bukkit.fattnt.events.FatEntityDamageEvent;
 import me.asofold.bukkit.fattnt.events.FatEntityExplodeEvent;
 import me.asofold.bukkit.fattnt.propagation.Propagation;
+import me.asofold.bukkit.fattnt.scheduler.SchedulerSet;
 import me.asofold.bukkit.fattnt.stats.Stats;
 import me.asofold.bukkit.fattnt.utils.Utils;
 
@@ -47,6 +48,7 @@ public class ExplosionManager {
 	
 	private static Stats stats = null;
 	
+	
 	/**
 	 * This does not create the explosion effect (FX) but calculates and applies the world changes !
 	 * @param world
@@ -62,7 +64,7 @@ public class ExplosionManager {
 	 * @param propagation
 	 */
 	public static boolean applyExplosionEffects(World world, double x, double y, double z, float realRadius, boolean fire, Entity explEntity, EntityType entityType,
-			List<Entity> nearbyEntities, float damageMultiplier, ExplosionSettings settings, Propagation propagation, DamageProcessor damageProcessor) {
+			List<Entity> nearbyEntities, float damageMultiplier, ExplosionSettings settings, Propagation propagation, DamageProcessor damageProcessor, SchedulerSet schedulers) {
 		if ( realRadius > settings.maxRadius){
 			// TODO: settings ?
 			realRadius = settings.maxRadius;
