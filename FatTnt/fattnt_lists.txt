@@ -175,18 +175,19 @@ WorldSettings: handle-explosions: entities+entities-as-blacklist, handle-all-exp
 - ?(add) PriorityValue with filter technique for effective settings (defaults, worlds, entities: exploding+affected, ...)?
 
 *** BUGS
-- typo in config: resistance
 
 
-*** Entity settings (extra multiplicators, to be multiplied).
 ? maybe consider FatExplosionCancelEvent (reason: SCHED_MAX_CHUNK SCHED_MAX_TOTAL CONFIG and similar.)
 ? check: Schedule the explosion handling for a tick later (effect on stats, better consistency)? + allows for number of explosions / tick control. => ExplosionScheduler
 
 
-? consider: scheduler: first explosion effect then explosion scheduled ? => rather not
 
 ! check : where to remove the explEntity and other stuff that is not needed for ExplosionSettings passing.
 
+consider: keep track of spawned entities (including tnt) + make caps + keep track of worlds, in terms of intensity of tnt.
+consider: panic command (set all caps as max , remove tnt,  clear scheduler, stop new explosions).
+consider: cleanup command: remove tnt + scheduled explosions
+consider: world item cap (risky: could remove any sort of items, probably restrict to dirt, stone, sand, gravel, netherrack)
 
 VERSION HISTORY (only done changes)
 -----------------------------------------------------------------
