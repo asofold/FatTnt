@@ -316,10 +316,12 @@ public class FatTnt extends JavaPlugin implements Listener {
 		final ItemStack stack = item.getItemStack();
 		if ( stack.getType() != Material.TNT) return;
 		final Location loc = entity.getLocation();
-		if (!settings.getApplicableExplosionSettings(loc.getWorld().getName(), null).itemTnt) return;
+		ExplosionSettings es = settings.getApplicableExplosionSettings(loc.getWorld().getName(), null);
+		if (!es.itemTnt) return;
 		event.setCancelled(true);
 		// TODO might have to be scheduled
-		ExplosionManager.replaceByTNTPrimed(item);		
+		if (es.scheduleTnt) schedulers.spawnTnt.addEntry(ExplosionManager.getScheduledTnt(item));
+		else ExplosionManager.replaceByTNTPrimed(item);		
 	}
 	
 	/**
