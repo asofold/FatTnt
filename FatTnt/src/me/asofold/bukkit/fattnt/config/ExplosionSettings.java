@@ -13,7 +13,7 @@ import org.bukkit.configuration.Configuration;
  */
 public class ExplosionSettings extends PrioritySettings{
 	
-	public ConfinementSettings confine = new ConfinementSettings();
+	public ConfinementSettings confine;
 	
 	/**
 	 * Explosion strength is cut off there.
@@ -185,7 +185,7 @@ public class ExplosionSettings extends PrioritySettings{
 	public boolean stepPhysics = false;
 	
 	public ExplosionSettings(int priority) {
-		// TODO Auto-generated constructor stub
+		confine = new ConfinementSettings(priority);
 	}
 
 	private void initBlockIds() {
@@ -207,7 +207,7 @@ public class ExplosionSettings extends PrioritySettings{
 		ExplosionSettings ref = new ExplosionSettings(0); // default settings.
 		if (cfg.contains(prefix + Path.passthrough)) passthrough = new float[Defaults.blockArraySize];
 		if (cfg.contains(prefix + Path.resistance)) resistance = new float[Defaults.blockArraySize];
-		propagateDamage = new boolean[Defaults.blockArraySize];
+		if (cfg.contains(prefix + Path.damagePropagate)) propagateDamage = new boolean[Defaults.blockArraySize];
 		minResistance = Float.MAX_VALUE;		
 		radiusMultiplier = cfg.getDouble(prefix + Path.multRadius, (double) ref.radiusMultiplier).floatValue();
 		damageMultiplier = cfg.getDouble(prefix + Path.multDamage, (double) ref.damageMultiplier).floatValue();
@@ -256,11 +256,13 @@ public class ExplosionSettings extends PrioritySettings{
 		
 		// TODO: Lazy treatment of the follwing settings (keep null or set).
 		initBlockIds();
-		readResistance(cfg, prefix + Path.resistance, resistance, defaultResistance);
-		readResistance(cfg, prefix + Path.passthrough, passthrough, defaultPassthrough);
-		List<Integer> ids = Defaults.getIdList(cfg, prefix + Path.damagePropagate);
-		for ( Integer id : ids){
-			propagateDamage[id] = true;
+		if (resistance != null) readResistance(cfg, prefix + Path.resistance, resistance, defaultResistance);
+		if (passthrough != null) readResistance(cfg, prefix + Path.passthrough, passthrough, defaultPassthrough);
+		if (propagateDamage != null){
+			List<Integer> ids = Defaults.getIdList(cfg, prefix + Path.damagePropagate);
+			for ( Integer id : ids){
+				propagateDamage[id] = true;
+			}
 		}
 	}
 
@@ -281,15 +283,35 @@ public class ExplosionSettings extends PrioritySettings{
 	public void setHandleExplosions(boolean handle) {
 		handleExplosions = handle;
 	}
+	
+	public void applySettings(ExplosionSettings other) {
+		super.applySettings(other);
+		confine.applySettings(other.confine);
+	}
+
+	@Override
+	public void setPriority(int priority) {
+		super.setPriority(priority);
+		// TODO: confine.setPriority ?
+	}
+
+	@Override
+	public boolean hasValues() {
+		return super.hasValues() || confine.hasValues();
+	}
+
+	@Override
+	public void resetAllValues(int priority) {
+		confine.resetAllValues(priority);
+		super.resetAllValues(priority);
+	}
 
 	public void toConfig(Configuration cfg, String prefix) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void applySettings(ExplosionSettings settings) {
-		// TODO Auto-generated method stub
-		
-	}
+	
+	
 
 }

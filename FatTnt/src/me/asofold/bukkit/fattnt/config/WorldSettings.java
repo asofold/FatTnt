@@ -76,11 +76,6 @@ public class WorldSettings {
 		
 	}
 
-	public void setHandleExplosions(boolean handle) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	/**
 	 * Get maximal maxRadius.
 	 * @return

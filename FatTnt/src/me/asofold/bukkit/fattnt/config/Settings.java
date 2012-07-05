@@ -17,7 +17,15 @@ import org.bukkit.entity.EntityType;
  *
  */
 public class Settings {
+	
+	private final Map<String, Map<EntityType, ExplosionSettings>> cache = new HashMap<String, Map<EntityType,ExplosionSettings>>();
+	
 	public final Stats stats;
+	
+	/**
+	 * This is an override.
+	 */
+	private boolean handleExplosions = true;
 	
 	// World dependent settings:
 	
@@ -47,6 +55,7 @@ public class Settings {
 	}
 	
 	public void applyConfig(CompatConfig cfg){
+		cache.clear();
 		// world settings:
 		defaultWorldSettings = new WorldSettings();
 		defaultWorldSettings.fromConfig(cfg, "");
@@ -62,11 +71,11 @@ public class Settings {
 	}
 
 	/**
-	 * Set handleExplosions for default explosion settings.
+	 * Set handleExplosions override.
 	 * @param handle
 	 */
 	public void setHandleExplosions(boolean handle){
-		defaultWorldSettings.setHandleExplosions(handle);
+		handleExplosions = handle;
 	}
 	
 	/**
@@ -88,15 +97,16 @@ public class Settings {
 	}
 	
 	public ExplosionSettings getApplicableExplosionSettings(String worldName, EntityType type){
-		// TODO: check if in cache map
-		ExplosionSettings out = new ExplosionSettings(Integer.MIN_VALUE);
+		ExplosionSettings out = getCacheEntry(worldName, type);
+		if (out != null) return out;
+		out = new ExplosionSettings(Integer.MIN_VALUE);
+		out.applySettings(Defaults.defaultExplosionSettings);
 		defaultWorldSettings.applyExplosionSettings(out, type);
 		WorldSettings ref = worldSettings.get(worldName.trim().toLowerCase());
 		if (ref != null){
 			ref.applyExplosionSettings(out, type);
 		}
-		// TODO: maybe ensure some defaults here ?
-		// TODO: put to cache map !
+		setCacheEntry(worldName, type, out);
 		return out;
 	}
 
@@ -106,9 +116,27 @@ public class Settings {
 	 * @param type
 	 * @return
 	 */
-	public boolean handlesExplosions(String name, EntityType type) {
-		// TODO Auto-generated method stub
-		return true;
+	public final boolean handlesExplosions(final String worldName, final EntityType type) {
+		if (!handleExplosions) return false;
+		// adds to the cache, could be abused to query chicken.
+		final ExplosionSettings settings = getApplicableExplosionSettings(worldName, type);
+		return settings.handleExplosions;
+	}
+	
+	private ExplosionSettings getCacheEntry(String worldName, EntityType type){
+		Map<EntityType, ExplosionSettings> map = cache.get(worldName.toLowerCase());
+		if (map == null) return null;
+		return map.get(type);
+	}
+	
+	private void setCacheEntry(String worldName, EntityType type, ExplosionSettings settings){
+		String lcwn = worldName.toLowerCase();
+		Map<EntityType, ExplosionSettings> map = cache.get(lcwn);
+		if (map == null){
+			map = new HashMap<EntityType, ExplosionSettings>();
+			cache.put(lcwn, map);
+		}
+		map.put(type, settings);
 	}
 
 }

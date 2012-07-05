@@ -19,9 +19,6 @@ public class ConfinementSettings extends PrioritySettings{
 	public PriorityNumber yMax = (PriorityNumber) addValue("yMax", new PriorityNumber(null, priority, OverridePolicy.OVERRIDE));
 	public PriorityNumber yMin = (PriorityNumber) addValue("yMin", new PriorityNumber(null, priority, OverridePolicy.OVERRIDE));
 	
-	public ConfinementSettings(){	
-	}
-	
 	public ConfinementSettings(int priority){
 		this.priority = priority;
 		setPriority(priority);

@@ -126,8 +126,14 @@ public class Defaults {
 	 */
 	static CompatConfig simpleDefaults;
 	
+	/**
+	 * Default config with all necessary values set.
+	 */
+	public static ExplosionSettings defaultExplosionSettings;
+	
 	static{
 		simpleDefaults = getSimpleDefaultConfiguration();
+		defaultExplosionSettings = getDefaultExplosionSettings();
 	}
 	
 	/**
@@ -220,6 +226,16 @@ public class Defaults {
 		cfg.set(Path.confineYMax, 255);
 		
 		return cfg;
+	}
+	
+	public static ExplosionSettings getDefaultExplosionSettings(){
+		ExplosionSettings out = new ExplosionSettings(Integer.MIN_VALUE);
+		out.confine = new ConfinementSettings(Integer.MIN_VALUE);
+		out.passthrough = new float[Defaults.blockArraySize];
+		out.resistance = new float[Defaults.blockArraySize];
+		out.propagateDamage = new boolean[Defaults.blockArraySize];
+		out.applyConfig(simpleDefaults, "", Integer.MIN_VALUE);
+		return out;
 	}
 	
 	/**
