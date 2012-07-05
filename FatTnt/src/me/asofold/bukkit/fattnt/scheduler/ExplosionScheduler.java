@@ -50,6 +50,7 @@ public final class ExplosionScheduler {
 	private int chunkSize = 16;
 	private int maxStoreTotal = 5000;
 	private int maxStoreChunk = 50; 
+	private long maxStoreLifetime = 2000;
 	public long maxExplodeNanos = 3500000;
 	
 	private final Map<ChunkPos, List<ScheduledExplosion>> stored = new LinkedHashMap<ExplosionScheduler.ChunkPos, List<ScheduledExplosion>>(300);
@@ -63,6 +64,7 @@ public final class ExplosionScheduler {
 		maxStoreTotal = cfg.getInt(Path.schedMaxStoreTotal, ref.maxStoreTotal);
 		maxStoreChunk = cfg.getInt(Path.schedMaxStoreChunk, ref.maxStoreChunk);
 		maxExplodeNanos = cfg.getLong(Path.schedMaxExplodeNanos, ref.maxExplodeNanos);
+		maxStoreLifetime = cfg.getLong(Path.schedMaxStoreLifetime, ref.maxStoreLifetime);
 	}
 	
 	/**
@@ -71,6 +73,7 @@ public final class ExplosionScheduler {
 	 * @return
 	 */
 	public final List<ScheduledExplosion> getNextExplosions(){
+		final long ts = System.currentTimeMillis();
 		final List<ScheduledExplosion> next = new LinkedList<ScheduledExplosion>();
 		if (stored.isEmpty()) return next;
 		int done = 0;
@@ -80,7 +83,12 @@ public final class ExplosionScheduler {
 		while (!stored.isEmpty() && done < maxExplodeTotal){
 			for (final Entry<ChunkPos, List<ScheduledExplosion>> entry : stored.entrySet()){
 				final List<ScheduledExplosion> list = entry.getValue();
-				next.add(list.remove(0));
+				final ScheduledExplosion candidate = list.remove(0);
+				if (ts - candidate.ts > maxStoreLifetime){
+					totalSize--;
+					continue;
+				}
+				next.add(candidate);
 				if (list.isEmpty()) rem.add(entry.getKey());
 				else if (many) reSchedule.add(entry.getKey());
 				done ++;
@@ -125,6 +133,7 @@ public final class ExplosionScheduler {
 	 * Attempt at first: 
 	 */
 	private final void reduceStore() {
+		final long ts = System.currentTimeMillis();
 		boolean avOk = true;
 		boolean anyOk = false;
 		final int av;
@@ -137,7 +146,7 @@ public final class ExplosionScheduler {
 				final List<ScheduledExplosion> list = entry.getValue();
 				final int lsz = list.size();
 				
-				if (lsz > maxStoreChunk);
+				if (lsz > maxStoreChunk || ts - list.get(0).ts > maxStoreLifetime);
 				else if (avOk && lsz <= av) continue;
 				else if (!anyOk && lsz == 1) continue;
 				

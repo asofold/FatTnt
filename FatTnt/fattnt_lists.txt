@@ -196,6 +196,8 @@ maybe also schedule similar way: entities to spawn, LIMIT to maximum, spawn dela
 
 Refactor ? Schedulers into Explosion manager + the task checker!
 
+? cut down to average rightaway, depending on amount that must be reduced (one more flag) [but first remove expired !]?
+
 *** Try to find out how arises the strong lag (items? primed tnt? )
 
 VERSION HISTORY (only done changes)

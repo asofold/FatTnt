@@ -5,7 +5,8 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 
 /**
- * Just store settings to let the explosion go off at any point of time.
+ * Just store settings to let the explosion go off at any point of time.<br>
+ * Creates a timestamp on creation, which might lead to expiration.
  * @author mc_dev
  *
  */
@@ -18,7 +19,8 @@ public final class ScheduledExplosion {
 	public final boolean fire;
 	public final Entity explEntity;
 	public final EntityType entityType;
-
+	final long ts;
+	
 	public ScheduledExplosion(World world, double x, double y, double z, float radius, boolean fire, Entity explEntity, EntityType entityType){
 		this.world = world;
 		this.x = x;
@@ -28,5 +30,6 @@ public final class ScheduledExplosion {
 		this.fire = fire;
 		this.explEntity = explEntity;
 		this.entityType = entityType;
+		ts = System.currentTimeMillis();
 	}
 }
