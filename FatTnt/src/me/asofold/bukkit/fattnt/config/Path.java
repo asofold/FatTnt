@@ -83,9 +83,10 @@ public class Path {
 	public static final String schedChunkSize = sched + sep + "chunk-size"; 
 	public static final String schedExplode = sched + sep + "explode";
 	public static final String schedMaxExplodeTotal = schedExplode + sep + "max-total";
-	public static final String schedMaxExplodeNanos = schedExplode + "max-nanos";
+	public static final String schedMaxExplodeNanos = schedExplode + sep + "max-nanos";
 	public static final String schedStore = sched + sep + "store";
-	public static final String schedMaxStoreTotal = schedStore + "max-total";
-	public static final String schedMaxStoreChunk = schedStore + "max-chunk";
+	public static final String schedMaxStoreTotal = schedStore + sep + "max-total";
+	public static final String schedMaxStoreChunk = schedStore + sep + "max-chunk";
+	public static final String schedMaxStoreLifetime = schedStore + sep + "max-millis";
 
 }
