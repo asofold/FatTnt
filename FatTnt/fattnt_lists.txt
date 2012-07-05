@@ -201,7 +201,7 @@ Refactor ? Schedulers into Explosion manager + the task checker!
 
 consider: after removing expired:_ reschedule the chunk ? => rather not
 
-? maybe refactor to get int coordinates with getBlockX() for an entry !
+? maybe refactor to have the processing loop inside of scheduler ?
 
 VERSION HISTORY (only done changes)
 -----------------------------------------------------------------
