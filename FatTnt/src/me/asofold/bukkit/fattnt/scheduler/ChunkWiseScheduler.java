@@ -85,13 +85,13 @@ public final class ChunkWiseScheduler<T extends ScheduledEntry> {
 			for (final Entry<ChunkPos, List<T>> entry : stored.entrySet()){
 				final List<T> list = entry.getValue();
 				final T candidate = list.remove(0);
-				if (ts - candidate.getExpirationTime() > maxStoreLifetime){
+				if (ts - candidate.getCreationTime() > maxStoreLifetime){
 					totalSize--;
 					if (list.isEmpty()){
 						rem.add(entry.getKey());
 						break;
 					}
-					while(ts - list.get(0).getExpirationTime() > maxStoreLifetime){
+					while(ts - list.get(0).getCreationTime() > maxStoreLifetime){
 						list.remove(0);
 						totalSize --;
 						if (list.isEmpty()){
@@ -158,7 +158,7 @@ public final class ChunkWiseScheduler<T extends ScheduledEntry> {
 			for (final Entry<ChunkPos, List<T>> entry : stored.entrySet()){
 				final List<T> list = entry.getValue();
 				final int lsz = list.size();
-				if (ts - list.get(0).getExpirationTime() > maxStoreLifetime){
+				if (ts - list.get(0).getCreationTime() > maxStoreLifetime){
 					do {
 						list.remove(0);
 						totalSize --;
@@ -166,7 +166,7 @@ public final class ChunkWiseScheduler<T extends ScheduledEntry> {
 							rem.add(entry.getKey());
 							break;
 						}
-					} while (ts - list.get(0).getExpirationTime() > maxStoreLifetime);
+					} while (ts - list.get(0).getCreationTime() > maxStoreLifetime);
 					continue;
 				}
 				if (lsz > maxStoreChunk);

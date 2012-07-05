@@ -40,7 +40,7 @@ public final class ScheduledExplosion implements ScheduledEntry{
 	}
 
 	@Override
-	public long getExpirationTime() {
+	public long getCreationTime() {
 		return ts;
 	}
 
