@@ -84,13 +84,13 @@ public final class ChunkWiseScheduler<T extends ScheduledEntry> {
 			for (final Entry<ChunkPos, List<T>> entry : stored.entrySet()){
 				final List<T> list = entry.getValue();
 				final T candidate = list.remove(0);
-				if (ts - candidate.ts > maxStoreLifetime){
+				if (ts - candidate.getExpirationTime() > maxStoreLifetime){
 					totalSize--;
 					if (list.isEmpty()){
 						rem.add(entry.getKey());
 						break;
 					}
-					while(ts - list.get(0).ts > maxStoreLifetime){
+					while(ts - list.get(0).getExpirationTime() > maxStoreLifetime){
 						list.remove(0);
 						totalSize --;
 						if (list.isEmpty()){
@@ -127,7 +127,7 @@ public final class ChunkWiseScheduler<T extends ScheduledEntry> {
 	 */
 	public final void addExplosion(final T explosion){
 		if (totalSize >= maxStoreTotal) reduceStore();
-		final ChunkPos pos = new ChunkPos(Utils.floor(explosion.x / chunkSize), Utils.floor(explosion.z / chunkSize));
+		final ChunkPos pos = new ChunkPos(Utils.floor(explosion.getBlockX() / chunkSize), Utils.floor(explosion.getBlockZ() / chunkSize));
 		List<T> list = stored.get(pos);
 		if (list == null){
 			list = new LinkedList<T>();
@@ -157,7 +157,7 @@ public final class ChunkWiseScheduler<T extends ScheduledEntry> {
 			for (final Entry<ChunkPos, List<T>> entry : stored.entrySet()){
 				final List<T> list = entry.getValue();
 				final int lsz = list.size();
-				if (ts - list.get(0).ts > maxStoreLifetime){
+				if (ts - list.get(0).getExpirationTime() > maxStoreLifetime){
 					do {
 						list.remove(0);
 						totalSize --;
@@ -165,7 +165,7 @@ public final class ChunkWiseScheduler<T extends ScheduledEntry> {
 							rem.add(entry.getKey());
 							break;
 						}
-					} while (ts - list.get(0).ts > maxStoreLifetime);
+					} while (ts - list.get(0).getExpirationTime() > maxStoreLifetime);
 					continue;
 				}
 				if (lsz > maxStoreChunk);
