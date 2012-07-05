@@ -10,17 +10,17 @@ import org.bukkit.entity.EntityType;
  */
 public class FatExplosionSpecs {
 	
-	
-	
+	private final String worldName;
 	private final EntityType entityType;
 
-	public FatExplosionSpecs(EntityType entityType){
+	public FatExplosionSpecs(String worldName, EntityType entityType){
+		this.worldName = worldName;
 		this.entityType = entityType;
 	}
 	
 	@ Override
 	public FatExplosionSpecs clone(){
-		return new FatExplosionSpecs(entityType);
+		return new FatExplosionSpecs(worldName, entityType);
 	}
 	
 	public EntityType getEntityType(){

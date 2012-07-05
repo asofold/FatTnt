@@ -76,7 +76,7 @@ public class ExplosionManager {
 		stats.addStats(FatTnt.statsBlocksCollected, affected.size()); // counting average number of collected blocks.
 		stats.addStats(FatTnt.statsStrength, (long) realRadius); // just counting average explosion strength !
 		ns = System.nanoTime();
-		FatExplosionSpecs specs = new FatExplosionSpecs(Utils.usedEntityType(explEntity, entityType));
+		FatExplosionSpecs specs = new FatExplosionSpecs(world.getName(), Utils.usedEntityType(explEntity, entityType));
 		EntityExplodeEvent exE = new FatEntityExplodeEvent(explEntity, new Location(world,x,y,z), affected, settings.yield , specs);
 		pm.callEvent(exE);
 		stats.addStats(FatTnt.statsExplodeEvent, System.nanoTime()-ns);
