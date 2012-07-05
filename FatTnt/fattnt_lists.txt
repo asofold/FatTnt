@@ -190,7 +190,11 @@ consider: cleanup command: remove tnt + scheduled explosions
 consider: world item cap (risky: could remove any sort of items, probably restrict to dirt, stone, sand, gravel, netherrack)
 
 ***
+Try the ordering of propagation: first the inner cube !
 
+thinking further: schedule block changes... intricate system how schedulers relate and might release resources for the important stuff. 
+
+!add item maximums etc to combusted items !
 maybe also schedule similar way: entities to spawn, LIMIT to maximum, spawn delayed same scheduler principle. [refactor: abstract chunk base scheduler, probably: bigger chunks ?]
 
 Refactor ? Schedulers into Explosion manager + the task checker!
@@ -212,13 +216,18 @@ TODO: use schedulers everywhere. applyENtityeffects adn applyBlockEffects: item 
 ? somehow log the removed N ? 
 get fuseTick settings in place everywhere.
 
+***
+- SchedulerSet -> Runnable + taskId + register(Plugin) + cancel. 
+
+EntitySchedule not just tnt 
+
 VERSION HISTORY (only done changes)
 -----------------------------------------------------------------
 
 *** [Beta/Dev stage]
 
 (0.2.0-DEV-3)
-- (add) Explosion scheduling.
+- (add) Explosion scheduling, Entity scheduling, Item scheduling.
 - (refactor) Configuration structure: Explosion settings are used and can be used per world per entity and default. For exploding entity same way: default, per world.
 - (optimize) Store ids of visited blocks.
 - (adjust) Adjust getNearbyEntities to spawn an arrow as fake entity instead of a chicken.

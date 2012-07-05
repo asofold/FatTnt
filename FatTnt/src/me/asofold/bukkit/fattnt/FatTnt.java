@@ -15,9 +15,9 @@ import me.asofold.bukkit.fattnt.events.FatExplodeEvent;
 import me.asofold.bukkit.fattnt.propagation.Propagation;
 import me.asofold.bukkit.fattnt.propagation.PropagationFactory;
 import me.asofold.bukkit.fattnt.scheduler.ProcessHandler;
+import me.asofold.bukkit.fattnt.scheduler.ScheduledEntitySpawn;
 import me.asofold.bukkit.fattnt.scheduler.ScheduledExplosion;
 import me.asofold.bukkit.fattnt.scheduler.ScheduledItemSpawn;
-import me.asofold.bukkit.fattnt.scheduler.ScheduledTntSpawn;
 import me.asofold.bukkit.fattnt.scheduler.SchedulerSet;
 import me.asofold.bukkit.fattnt.stats.Stats;
 import me.asofold.bukkit.fattnt.utils.Utils;
@@ -107,10 +107,10 @@ public class FatTnt extends JavaPlugin implements Listener {
 		}
 	};
 	
-	private final ProcessHandler<ScheduledTntSpawn> entityHandler = new ProcessHandler<ScheduledTntSpawn>() {
+	private final ProcessHandler<ScheduledEntitySpawn> entityHandler = new ProcessHandler<ScheduledEntitySpawn>() {
 		@Override
-		public final void process(final ScheduledTntSpawn spawnTnt) {
-			spawnTnt.spawn();
+		public final void process(final ScheduledEntitySpawn spawnEnt) {
+			spawnEnt.spawn();
 		}
 	};
 	

@@ -13,7 +13,7 @@ public class SchedulerSet{
 	/**
 	 * TODO: Maybe refactor this one to entities ...
 	 */
-	public final ChunkWiseScheduler<ScheduledTntSpawn> spawnEntities = new ChunkWiseScheduler<ScheduledTntSpawn>();
+	public final ChunkWiseScheduler<ScheduledEntitySpawn> spawnEntities = new ChunkWiseScheduler<ScheduledEntitySpawn>();
 	
 	public final ChunkWiseScheduler<ScheduledItemSpawn> spawnItems = new ChunkWiseScheduler<ScheduledItemSpawn>();
 	
