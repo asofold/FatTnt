@@ -56,10 +56,11 @@ public final class ExplosionScheduler {
 	private int totalSize = 0;
 	
 	public void fromConfig(CompatConfig cfg){
-		maxExplodeTotal = cfg.getInt(Path.schedMaxExplodeTotal, 50);
-		chunkSize = cfg.getInt(Path.schedChunkSize, 16);
-		maxStoreTotal = cfg.getInt(Path.schedMaxStoreTotal, 50);
-		maxStoreChunk = cfg.getInt(Path.schedMaxStoreChunk, 10);
+		ExplosionScheduler ref = new ExplosionScheduler();
+		maxExplodeTotal = cfg.getInt(Path.schedMaxExplodeTotal, ref.maxExplodeTotal);
+		chunkSize = cfg.getInt(Path.schedChunkSize, ref.chunkSize);
+		maxStoreTotal = cfg.getInt(Path.schedMaxStoreTotal, ref.maxStoreTotal);
+		maxStoreChunk = cfg.getInt(Path.schedMaxStoreChunk, ref.maxStoreChunk);
 	}
 	
 	/**
