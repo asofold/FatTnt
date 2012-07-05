@@ -3,7 +3,7 @@ package me.asofold.bukkit.fattnt.effects;
 import java.util.HashMap;
 import java.util.Map;
 
-import me.asofold.bukkit.fattnt.config.Settings;
+import me.asofold.bukkit.fattnt.config.ExplosionSettings;
 
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -25,12 +25,10 @@ import org.bukkit.inventory.PlayerInventory;
  */
 public class DamageProcessor {
 	
-	Settings settings;
-	
 	Map<Material, Integer> shield = new HashMap<Material, Integer>(); 
 	
-	public DamageProcessor(Settings settings){
-		this.settings = settings;
+	public DamageProcessor(){
+
 		initShield();
 	}
 	
@@ -78,7 +76,7 @@ public class DamageProcessor {
 	 * @param event
 	 * @return damage dealt, 0 if none or if not applicable.
 	 */
-	public int damageEntity(EntityDamageEvent event) {
+	public int damageEntity(EntityDamageEvent event, ExplosionSettings settings) {
 		int damage = event.getDamage();
 		if ( damage == 0) return 0; // TODO: ret-hink this
 		Entity entity = event.getEntity();
@@ -89,7 +87,7 @@ public class DamageProcessor {
 		// TODO: check if in boat / minecart !
 		if ( type.isAlive()){
 			LivingEntity living = (LivingEntity) entity;
-			int[] armorDamage = getArmorDamage(living, type, cause, damage);
+			int[] armorDamage = getArmorDamage(living, type, cause, damage, settings);
 			if (armorDamage != null ) damage = armorDamage[0];
 			
 			final int noDamageTicks = living.getNoDamageTicks() ;
@@ -126,7 +124,7 @@ public class DamageProcessor {
 	 * @param damage
 	 * @return null or an Array with to be dealt damage, then durability losses for: helmet, chestplate, leggings, boots.
 	 */
-	public int[] getArmorDamage(LivingEntity living, EntityType damager, DamageCause cause, int damage) {
+	public int[] getArmorDamage(LivingEntity living, EntityType damager, DamageCause cause, int damage, ExplosionSettings settings) {
 		if ( cause != DamageCause.ENTITY_EXPLOSION) return null; // current limit.
 		if ( living instanceof HumanEntity){
 			int base = settings.armorBaseDepletion; // TODO: entity specific ?
