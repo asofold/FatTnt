@@ -71,13 +71,13 @@ public class FatTnt extends JavaPlugin implements Listener {
 	public static final Integer statsBlocksCollected = stats.getNewId("blocks_collected");
 	public static final Integer statsDamage = stats.getNewId("damage");
 	// Scheduling of explosions:
-	public static final Integer statsProcessExpl = stats.getNewId("sched_proc_ent");
-	public static final Integer statsNExpl = stats.getNewId("sched_n_ent");
-	public static final Integer statsNExplStore = stats.getNewId("sched_store_ent");
+	public static final Integer statsProcessExpl = stats.getNewId("sched_proc_expl");
+	public static final Integer statsNExpl = stats.getNewId("sched_n_expl");
+	public static final Integer statsNExplStore = stats.getNewId("sched_store_expl");
 	// Scheduling of spawning tnt:
-	public static final Integer statsProcessEnt = stats.getNewId("sched_proc_tnt");
-	public static final Integer statsNEnt = stats.getNewId("sched_n_tnt");
-	public static final Integer statsNEntStore = stats.getNewId("sched_store_tnt");
+	public static final Integer statsProcessEnt = stats.getNewId("sched_proc_ent");
+	public static final Integer statsNEnt = stats.getNewId("sched_n_ent");
+	public static final Integer statsNEntStore = stats.getNewId("sched_store_ent");
 	// Scheduling of spawning items:
 	public static final Integer statsProcessItem = stats.getNewId("sched_proc_item");
 	public static final Integer statsNItem = stats.getNewId("sched_n_item");
