@@ -75,9 +75,9 @@ public class FatTnt extends JavaPlugin implements Listener {
 	public static final Integer statsNExpl = stats.getNewId("sched_n_explode");
 	public static final Integer statsNExplStore = stats.getNewId("sched_store_expl");
 	// Scheduling of spawning tnt:
-	public static final Integer statsProcessTnt = stats.getNewId("sched_proc_tnt");
-	public static final Integer statsNTnt = stats.getNewId("sched_n_tnt");
-	public static final Integer statsNTntStore = stats.getNewId("sched_store_tnt");
+	public static final Integer statsProcessEnt = stats.getNewId("sched_proc_tnt");
+	public static final Integer statsNEnt = stats.getNewId("sched_n_tnt");
+	public static final Integer statsNEntStore = stats.getNewId("sched_store_tnt");
 	// Scheduling of spawning items:
 	public static final Integer statsProcessItem = stats.getNewId("sched_proc_item");
 	public static final Integer statsNItem = stats.getNewId("sched_n_item");
@@ -100,14 +100,14 @@ public class FatTnt extends JavaPlugin implements Listener {
 	
 	private final SchedulerSet schedulers = new SchedulerSet();
 	
-	private final ProcessHandler<ScheduledExplosion> explHandler = new ProcessHandler<ScheduledExplosion>() {
+	private final ProcessHandler<ScheduledExplosion> explosionHandler = new ProcessHandler<ScheduledExplosion>() {
 		@Override
 		public final void process(final ScheduledExplosion explosion) {
 			createExplosion(explosion.world, explosion.x, explosion.y, explosion.z, explosion.getRadius(), explosion.isFire(), explosion.getExplEntity(), explosion.getEntityType());
 		}
 	};
 	
-	private final ProcessHandler<ScheduledTntSpawn> tntHandler = new ProcessHandler<ScheduledTntSpawn>() {
+	private final ProcessHandler<ScheduledTntSpawn> entityHandler = new ProcessHandler<ScheduledTntSpawn>() {
 		@Override
 		public final void process(final ScheduledTntSpawn spawnTnt) {
 			spawnTnt.spawn();
@@ -133,8 +133,8 @@ public class FatTnt extends JavaPlugin implements Listener {
 			@Override
 			public void run() {
 				boolean needRun = false;
-				if (schedulers.explosions.onTick(explHandler, stats, statsProcessExpl, statsNExpl, statsNExplStore)) needRun = true;
-				if (schedulers.spawnTnt.onTick(tntHandler, stats, statsProcessTnt, statsNTnt, statsNTntStore)) needRun = true;
+				if (schedulers.explosions.onTick(explosionHandler, stats, statsProcessExpl, statsNExpl, statsNExplStore)) needRun = true;
+				if (schedulers.spawnEntities.onTick(entityHandler, stats, statsProcessEnt, statsNEnt, statsNEntStore)) needRun = true;
 				if (schedulers.spawnItems.onTick(itemHandler, stats, statsProcessItem, statsNItem, statsNItemStore)) needRun = true;
 				// TODO: other schedulers.
 				if (!needRun){
@@ -329,7 +329,7 @@ public class FatTnt extends JavaPlugin implements Listener {
 		if (!es.itemTnt) return;
 		event.setCancelled(true);
 		// TODO might have to be scheduled
-		if (es.scheduleTnt) schedulers.spawnTnt.addEntry(ExplosionManager.getScheduledTnt(item));
+		if (es.scheduleTnt) schedulers.spawnEntities.addEntry(ExplosionManager.getScheduledTnt(item));
 		else ExplosionManager.replaceByTNTPrimed(item);		
 	}
 	

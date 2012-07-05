@@ -121,7 +121,7 @@ public class ExplosionManager {
 			else block.setTypeId(0, true);
 			if (id == tntId){
 				Location loc = blockCenter(world, block);
-				if (settings.scheduleTnt) schedulers.spawnTnt.addEntry(getScheduledTnt(world, x, defaultYield, z, loc, realRadius, settings, propagation));
+				if (settings.scheduleTnt) schedulers.spawnEntities.addEntry(getScheduledTnt(world, x, defaultYield, z, loc, realRadius, settings, propagation));
 				else addTNTPrimed(world, x, y, z, loc, realRadius, settings, propagation);
 			}
 			else{
@@ -335,7 +335,7 @@ public class ExplosionManager {
 					item.remove();
 					for ( int i = 0; i< Math.min(settings.maxItems, stack.getAmount()); i++){
 						// TODO: FUSE TICKS !
-						if (settings.scheduleExplosions) schedulers.spawnTnt.addEntry(getScheduledTnt(world, maxD, y, z, loc, realRadius, settings, propagation));
+						if (settings.scheduleExplosions) schedulers.spawnEntities.addEntry(getScheduledTnt(world, maxD, y, z, loc, realRadius, settings, propagation));
 						else addTNTPrimed(world, x, y, z, loc.add(new Vector(0.0,0.5,0.0)), realRadius, settings, propagation);
 					}
 					continue;
