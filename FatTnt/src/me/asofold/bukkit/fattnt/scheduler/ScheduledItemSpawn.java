@@ -1,47 +1,26 @@
 package me.asofold.bukkit.fattnt.scheduler;
 
-import me.asofold.bukkit.fattnt.utils.Utils;
-
 import org.bukkit.World;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Vector;
 
-public final class ScheduledItemSpawn implements ScheduledEntry {
+public final class ScheduledItemSpawn extends ScheduledLocation {
 	
-	public final long ts;
-	public final World world;
-	public final double x;
-	public final double y;
-	public final double z;
-
-	private final int bX;
-	private final int bZ;
+	private final ItemStack stack;
+	private final Vector velocity;
 	
-	public final ItemStack stack;
-	
-	public ScheduledItemSpawn(World world, double x, double y, double z,  ItemStack stack){
-		ts = System.currentTimeMillis();
-		this.world = world;
-		this.x = x;
-		this.bX = Utils.floor(x);
-		this.y = y;
-		this.z = z;
-		this.bZ = Utils.floor(z);
+	public ScheduledItemSpawn(World world, double x, double y, double z,  ItemStack stack, Vector velocity){
+		super(world, x, y, z);
 		this.stack = stack.clone();
+		this.velocity = velocity;
 	}
 
-	@Override
-	public long getCreationTime() {
-		return ts;
+	public Vector getVelocity() {
+		return velocity;
 	}
 
-	@Override
-	public int getBlockX() {
-		return bX;
-	}
-
-	@Override
-	public int getBlockZ() {
-		return bZ;
+	public ItemStack getStack() {
+		return stack;
 	}
 
 }
