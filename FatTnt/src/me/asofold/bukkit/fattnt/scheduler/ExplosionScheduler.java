@@ -46,7 +46,7 @@ public final class ExplosionScheduler {
 		
 	}
 	
-	private int maxExplodeTotal = 50;
+	private int maxExplodeTotal = 10;
 	private int chunkSize = 16;
 	private int maxStoreTotal = 5000;
 	private int maxStoreChunk = 50; 
@@ -82,6 +82,7 @@ public final class ExplosionScheduler {
 				else if (many) reSchedule.add(entry.getKey());
 				done ++;
 				totalSize --;
+				if (done == maxExplodeTotal) break;
 			}
 			for (final ChunkPos pos : rem){
 				stored.remove(pos);
