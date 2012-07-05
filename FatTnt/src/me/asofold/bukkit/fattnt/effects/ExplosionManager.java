@@ -9,6 +9,7 @@ import me.asofold.bukkit.fattnt.config.ExplosionSettings;
 import me.asofold.bukkit.fattnt.events.FatEntityDamageEvent;
 import me.asofold.bukkit.fattnt.events.FatEntityExplodeEvent;
 import me.asofold.bukkit.fattnt.propagation.Propagation;
+import me.asofold.bukkit.fattnt.scheduler.ScheduledItemSpawn;
 import me.asofold.bukkit.fattnt.scheduler.ScheduledTntSpawn;
 import me.asofold.bukkit.fattnt.scheduler.SchedulerSet;
 import me.asofold.bukkit.fattnt.stats.Stats;
@@ -116,29 +117,32 @@ public class ExplosionManager {
 		for (final Block block : blocks){
 			int id = propagation.getTypeId(block.getX(), block.getY(), block.getZ());
 			if (id == -1) id = block.getTypeId();
+			if (settings.stepPhysics) block.setTypeId(0, false);
+			else block.setTypeId(0, true);
 			if (id == tntId){
-				if (settings.stepPhysics) block.setTypeId(0, false);
-				else block.setTypeId(0, true);
 				Location loc = blockCenter(world, block);
 				if (settings.scheduleTnt) schedulers.spawnTnt.addEntry(getScheduledTnt(world, x, defaultYield, z, loc, realRadius, settings, propagation));
 				else addTNTPrimed(world, x, y, z, loc, realRadius, settings, propagation);
-				continue;
 			}
-			// All other blocks:
-			Collection<ItemStack> drops = block.getDrops();
-			for (ItemStack drop : drops){
-				if (random.nextFloat()<=defaultYield){
-//					Location loc = block.getLocation().add(Defaults.vCenter);
-					Location loc = blockCenter(world, block);
-					// TODO schedule item !
-					Item item = world.dropItemNaturally(loc, drop); // .clone());
-					if (item==null) continue;
-					// TODO: settings !
-					//addRandomVelocity(item, loc, x,y,z, realRadius);
+			else{
+				// All other blocks:
+				Collection<ItemStack> drops = block.getDrops();
+				for (ItemStack drop : drops){
+					// TODO: another way than yield to control number ?
+					if (random.nextFloat()<=defaultYield){
+						// TODO: settings !
+						//getSomeRandomVelocity(item, loc, x,y,z, realRadius);
+						if (settings.scheduleItems){
+							schedulers.spawnItems.addEntry(new ScheduledItemSpawn(block, drop));
+						}
+						else{
+							Location loc = blockCenter(world, block);
+							world.dropItemNaturally(loc, drop); // .clone());
+						}
+						
+					}
 				}
 			}
-			if (settings.stepPhysics) block.setTypeId(0, false);
-			else block.setTypeId(0, true);
 		}
 		if (settings.stepPhysics){
 			for ( Block block : blocks){
@@ -472,5 +476,14 @@ public class ExplosionManager {
 		if (tnt == null) return;
 		if (spawnTnt.getVelocity() != null) tnt.setVelocity(spawnTnt.getVelocity());
 		tnt.setFuseTicks(spawnTnt.getFuseTicks());
+	}
+
+	public static Item spawnItem(ScheduledItemSpawn spawnItem) {
+		final Vector v = spawnItem.getVelocity();
+		if (v == null) return spawnItem.world.dropItemNaturally(spawnItem.getLocation(), spawnItem.getStack());
+		Item item = spawnItem.world.dropItem(spawnItem.getLocation(), spawnItem.getStack());
+		if (item == null) return null;
+		item.setVelocity(v);
+		return item;
 	}
 }
