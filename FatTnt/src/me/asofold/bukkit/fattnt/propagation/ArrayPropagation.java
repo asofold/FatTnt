@@ -325,6 +325,7 @@ public class ArrayPropagation extends Propagation {
 		
 		final float defaultResistance = settings.defaultResistance;
 		final boolean useRand = settings.randRadius > 0;
+		final float randRadius = settings.randRadius;
 		final float fStraight = settings.fStraight;
 		final float minRes = settings.minResistance;
 		// TODO: use minPassthrough ?
@@ -413,7 +414,7 @@ public class ArrayPropagation extends Propagation {
 			if (useRand){
 				// TODO: find out something fast, probably just have a task running filling in random numbers now and then.
 				// TODO: maybe the memory size matters...
-				expStr += rand[ir];
+				expStr += rand[ir] * randRadius;
 				ir += iinc;
 				if (ir>is) ir =  mpl;
 			}
