@@ -29,7 +29,7 @@ public class SchedulerSet{
 
 	public void fromConfig(CompatConfig cfg) {
 		explosions.fromConfig(cfg, Path.schedExplosions + Path.sep);
-		spawnEntities.fromConfig(cfg, Path.schedTnt + Path.sep);
+		spawnEntities.fromConfig(cfg, Path.schedEntities + Path.sep);
 		spawnItems.fromConfig(cfg, Path.schedItems + Path.sep);
 	}
 }
