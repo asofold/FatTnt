@@ -205,8 +205,8 @@ public class ExplosionSettings extends PrioritySettings{
 		confine.applyConfig(cfg, prefix);
 		
 		ExplosionSettings ref = new ExplosionSettings(0); // default settings.
-		passthrough = new float[Defaults.blockArraySize];
-		resistance = new float[Defaults.blockArraySize];
+		if (cfg.contains(prefix + Path.passthrough)) passthrough = new float[Defaults.blockArraySize];
+		if (cfg.contains(prefix + Path.resistance)) resistance = new float[Defaults.blockArraySize];
 		propagateDamage = new boolean[Defaults.blockArraySize];
 		minResistance = Float.MAX_VALUE;		
 		radiusMultiplier = cfg.getDouble(prefix + Path.multRadius, (double) ref.radiusMultiplier).floatValue();
@@ -215,7 +215,7 @@ public class ExplosionSettings extends PrioritySettings{
 		entityDistanceMultiplier = cfg.getDouble(prefix + Path.multEntityDistance, (double) ref.entityDistanceMultiplier).floatValue();
 		maxPathMultiplier = cfg.getDouble(prefix + Path.multMaxPath, (double) ref.maxPathMultiplier).floatValue();
 		defaultPassthrough = cfg.getDouble(prefix + Path.defaultPassthrough, (double) ref.defaultPassthrough).floatValue();
-		defaultResistance = cfg.getDouble(prefix + Path.defaultResistence, (double) ref.defaultResistance).floatValue();
+		defaultResistance = cfg.getDouble(prefix + Path.defaultResistance, (double) ref.defaultResistance).floatValue();
 		minResistance = Math.min(Math.min(minResistance, defaultResistance), defaultPassthrough);
 		maxRadius = cfg.getDouble(prefix + Path.maxRadius, (double) ref.maxRadius).floatValue();
 		randRadius = cfg.getDouble(prefix + Path.randRadius, (double) ref.randRadius).floatValue();
@@ -256,7 +256,7 @@ public class ExplosionSettings extends PrioritySettings{
 		
 		// TODO: Lazy treatment of the follwing settings (keep null or set).
 		initBlockIds();
-		readResistance(cfg, prefix + Path.resistence, resistance, defaultResistance);
+		readResistance(cfg, prefix + Path.resistance, resistance, defaultResistance);
 		readResistance(cfg, prefix + Path.passthrough, passthrough, defaultPassthrough);
 		List<Integer> ids = Defaults.getIdList(cfg, prefix + Path.damagePropagate);
 		for ( Integer id : ids){

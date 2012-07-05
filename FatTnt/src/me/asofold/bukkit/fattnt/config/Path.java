@@ -21,8 +21,8 @@ public class Path {
 	// explosion/propagation settings:
 	public static final String passthrough= "passthrough";
 	public static final String defaultPassthrough= passthrough +  sep + "default";
-	public static final String resistence = "resistence";
-	public static final String defaultResistence = resistence +  sep + "default";
+	public static final String resistance = "resistance";
+	public static final String defaultResistance = resistance +  sep + "default";
 	public static final String radius = "radius";
 	public static final String maxRadius = radius +  sep + "max";
 	public static final String randRadius = radius +  sep + "random"; // UNUSED

@@ -149,7 +149,7 @@ public class Defaults {
 		int[][] ids = new int[][]{defaultLowResistance, defaultHigherResistance, defaultStrongResistance, defaultMaxResistance};
 		String[] keys = new String[]{"low", "higher", "strongest", "indestructible"};
 		for ( int i = 0; i<v.length; i++){
-			String base = Path.resistence+"."+keys[i];
+			String base = Path.resistance+"."+keys[i];
 			List<Integer> resSet = new LinkedList<Integer>();
 			for ( int id: ids[i]) {
 				resSet.add(id);
@@ -157,7 +157,7 @@ public class Defaults {
 			cfg.set(base+".value", v[i]);
 			cfg.set(base+".ids", resSet);
 		}
-		cfg.set(Path.defaultResistence, defaults.defaultResistance);
+		cfg.set(Path.defaultResistance, defaults.defaultResistance);
 		
 		// damage propagation
 		List<Integer> entries = new LinkedList<Integer>();
