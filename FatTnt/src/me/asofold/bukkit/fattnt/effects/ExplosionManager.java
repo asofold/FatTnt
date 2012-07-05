@@ -120,7 +120,8 @@ public class ExplosionManager {
 				if (settings.stepPhysics) block.setTypeId(0, false);
 				else block.setTypeId(0, true);
 				Location loc = blockCenter(world, block);
-				addTNTPrimed(world, x, y, z, loc, realRadius, settings, propagation);
+				if (settings.scheduleTnt) schedulers.spawnTnt.addEntry(getScheduledTnt(world, x, defaultYield, z, loc, realRadius, settings, propagation));
+				else addTNTPrimed(world, x, y, z, loc, realRadius, settings, propagation);
 				continue;
 			}
 			// All other blocks:
@@ -129,6 +130,7 @@ public class ExplosionManager {
 				if (random.nextFloat()<=defaultYield){
 //					Location loc = block.getLocation().add(Defaults.vCenter);
 					Location loc = blockCenter(world, block);
+					// TODO schedule item !
 					Item item = world.dropItemNaturally(loc, drop); // .clone());
 					if (item==null) continue;
 					// TODO: settings !
@@ -163,7 +165,7 @@ public class ExplosionManager {
 		return spawnTNTPrimed(world, loc, fuseTicks, v);
 	}
 	
-	public static ScheduledTntSpawn getScheduledTnts(World world, double x, double y, double z,
+	public static ScheduledTntSpawn getScheduledTnt(World world, double x, double y, double z,
 			Location loc, float realRadius, ExplosionSettings settings, Propagation propagation) {
 		final float effRad = propagation.getStrength(loc); // effective strength/radius
 		int fuseTicks = 80; 
@@ -201,7 +203,7 @@ public class ExplosionManager {
 	
 	public static Arrow addArrow(World world, double x, double y,
 			double z, Location loc, float realRadius, ExplosionSettings settings,
-			Propagation propagation) {
+			Propagation propagation, SchedulerSet schedulers) {
 		final float effRad = propagation.getStrength(loc); // effective strength/radius
 //		if ( effRad > thresholdTntDirect){
 //			directExplode.add(block);
@@ -335,7 +337,7 @@ public class ExplosionManager {
 				else if (mat == Material.ARROW && settings.itemArrows){
 					item.remove();
 					for ( int i = 0; i< Math.min(settings.maxItems, stack.getAmount()); i++){
-						addArrow(world, x, y, z, loc, realRadius, settings, propagation);
+						addArrow(world, x, y, z, loc, realRadius, settings, propagation, schedulers);
 					}
 				} 
 				// TODO: maybe splash potions !
@@ -354,7 +356,7 @@ public class ExplosionManager {
 						Arrow arrow = (Arrow) entity;
 						if ( arrow.isDead() || arrow.getVelocity().length()<0.25){
 							entity.remove();
-							addArrow(world, x, y, z, loc, realRadius, settings, propagation);
+							addArrow(world, x, y, z, loc, realRadius, settings, propagation, schedulers);
 							continue;
 						}
 					}
@@ -468,7 +470,7 @@ public class ExplosionManager {
 	public static void addTntPrimed(ScheduledTntSpawn spawnTnt) {
 		TNTPrimed tnt = spawnTnt.world.spawn(new Location(spawnTnt.world, spawnTnt.x, spawnTnt.y, spawnTnt.z), TNTPrimed.class);
 		if (tnt == null) return;
-		tnt.setVelocity(spawnTnt.getVelocity());
+		if (spawnTnt.getVelocity() != null) tnt.setVelocity(spawnTnt.getVelocity());
 		tnt.setFuseTicks(spawnTnt.getFuseTicks());
 	}
 }
