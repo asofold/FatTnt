@@ -26,4 +26,8 @@ public class FatExplosionSpecs {
 	public EntityType getEntityType(){
 		return entityType;
 	}
+	
+	public String getWorldName(){
+		return worldName;
+	}
 }
