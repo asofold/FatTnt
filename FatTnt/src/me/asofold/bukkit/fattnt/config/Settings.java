@@ -148,7 +148,7 @@ public class Settings {
 		preventExplosions = true;
 	}
 	
-	public boolean getPreventExplosions(String worldName, EntityType type){
+	public boolean preventsExplosions(String worldName, EntityType type){
 		// TODO: query settings / cache etc.
 		return preventExplosions; // global override.
 	}

@@ -258,12 +258,12 @@ public class FatTnt extends JavaPlugin implements Listener {
 
 	@EventHandler(priority=EventPriority.HIGHEST, ignoreCancelled=true)
 	final void onExplosionPrime(final ExplosionPrimeEvent event){
-		final EntityType type = event.getEntityType();
 		final Entity entity = event.getEntity();
 		final Location loc = entity.getLocation();
 		final World world = loc.getWorld();
 		final String worldName = world.getName();
-		if (settings.getPreventExplosions(worldName, type)){
+		final EntityType type = (entity == null) ? null:entity.getType();
+		if (settings.preventsExplosions(worldName, type)){
 			event.setCancelled(true);
 			return;
 		}
@@ -281,8 +281,7 @@ public class FatTnt extends JavaPlugin implements Listener {
 		final World world = loc.getWorld();
 		final String worldName = world.getName();
 		final Entity entity = event.getEntity();
-		final EntityType type = event.getEntityType();
-		if (settings.getPreventExplosions(worldName, (type==null & entity!=null)?entity.getType():type )){
+		if (settings.preventsExplosions(worldName, (entity==null)?null:entity.getType())){
 			event.setCancelled(true);
 			return;
 		}
