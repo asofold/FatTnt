@@ -134,7 +134,9 @@ public class ExplosionManager {
 						// TODO: settings !
 						//getSomeRandomVelocity(item, loc, x,y,z, realRadius);
 						if (settings.scheduleItems){
-							schedulers.spawnItems.addEntry(new ScheduledItemSpawn(block, drop));
+							ItemStack item = drop.clone();
+							item.setAmount(1);
+							schedulers.spawnItems.addEntry(new ScheduledItemSpawn(block, item));
 						}
 						else{
 							Location loc = blockCenter(world, block);

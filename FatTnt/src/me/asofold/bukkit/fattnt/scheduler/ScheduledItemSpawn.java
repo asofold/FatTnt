@@ -24,12 +24,12 @@ public final class ScheduledItemSpawn extends ScheduledEntitySpawn{
 	
 	public ScheduledItemSpawn(Location Location, ItemStack stack, Vector velocity){
 		super(Location, velocity);
-		this.stack = stack.clone();
+		this.stack = stack;
 	}
 	
 	public ScheduledItemSpawn(World world, double x, double y, double z,  ItemStack stack, Vector velocity){
 		super(world, x, y, z, velocity);
-		this.stack = stack.clone();
+		this.stack = stack;
 	}
 
 	public ItemStack getStack() {
