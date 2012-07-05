@@ -10,6 +10,7 @@ import java.util.Set;
 
 import me.asofold.bukkit.fattnt.config.Path;
 import me.asofold.bukkit.fattnt.config.compatlayer.CompatConfig;
+import me.asofold.bukkit.fattnt.stats.Stats;
 import me.asofold.bukkit.fattnt.utils.Utils;
 
 /**
@@ -201,5 +202,30 @@ public final class ChunkWiseScheduler<T extends ScheduledEntry> {
 
 	public long getTotalSize() {
 		return totalSize;
+	}
+
+	public boolean onTick(final ProcessHandler<T> handler, Stats stats, Integer idProcess, Integer idNProcess, Integer idNStore) {
+		if (hasEntries()){
+			stats.addStats(idNStore, getTotalSize());
+			final long ns = System.nanoTime();
+			final List<T> entries = getNextExplosions();
+			boolean abort = false;
+			int done = 0;
+			for (final T entry : entries){
+				if (abort){
+				addExplosion(entry);
+					continue;
+				}
+				handler.process(entry);
+				final long nsDone = System.nanoTime() - ns;
+				done ++;
+				if (nsDone > maxProcessNanos){
+					abort = true;
+				}
+			}
+			stats.addStats(idProcess, System.nanoTime() - ns);
+			stats.addStats(idNProcess, done);
+		}
+		return hasEntries();
 	}
 }

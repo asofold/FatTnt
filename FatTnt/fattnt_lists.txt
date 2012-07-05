@@ -199,6 +199,8 @@ Refactor ? Schedulers into Explosion manager + the task checker!
 
 *** Try to find out how arises the strong lag (items? primed tnt? )
 
+// TODO: add %n for schedulers to let them run not every tick (delayed spawning for drops at least) OR LOAD dependent
+
 consider: after removing expired:_ reschedule the chunk ? => rather not
 
 ? maybe refactor to have the processing loop inside of scheduler ?

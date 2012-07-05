@@ -16,6 +16,7 @@ import me.asofold.bukkit.fattnt.events.FatExplodeEvent;
 import me.asofold.bukkit.fattnt.propagation.Propagation;
 import me.asofold.bukkit.fattnt.propagation.PropagationFactory;
 import me.asofold.bukkit.fattnt.scheduler.ChunkWiseScheduler;
+import me.asofold.bukkit.fattnt.scheduler.ProcessHandler;
 import me.asofold.bukkit.fattnt.scheduler.ScheduledExplosion;
 import me.asofold.bukkit.fattnt.stats.Stats;
 import me.asofold.bukkit.fattnt.utils.Utils;
@@ -101,6 +102,13 @@ public class FatTnt extends JavaPlugin implements Listener {
 		super();
 	}
 	
+	private final ProcessHandler<ScheduledExplosion> explHandler = new ProcessHandler<ScheduledExplosion>() {
+		@Override
+		public void process(final ScheduledExplosion explosion) {
+			createExplosion(explosion.world, explosion.x, explosion.y, explosion.z, explosion.radius, explosion.fire, explosion.explEntity, explosion.entityType);
+		}
+	};
+	
 	public void checkScheduler(){
 		// TODO: in case of halted: halt ...
 		if (taskIdScheduler != -1) return;
@@ -108,29 +116,10 @@ public class FatTnt extends JavaPlugin implements Listener {
 		taskIdScheduler = getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
 			@Override
 			public void run() {
-				if (scheduler.hasEntries()){
-					stats.addStats(statsNExplStore, scheduler.getTotalSize());
-					final long ns = System.nanoTime();
-					final List<ScheduledExplosion> explosions = scheduler.getNextExplosions();
-					boolean abort = false;
-					int done = 0;
-					for (final ScheduledExplosion explosion : explosions){
-						if (abort){
-							scheduler.addExplosion(explosion);
-							continue;
-						}
-						createExplosion(explosion.world, explosion.x, explosion.y, explosion.z, explosion.radius, explosion.fire, explosion.explEntity, explosion.entityType);
-						final long nsDone = System.nanoTime() - ns;
-						done ++;
-						if (nsDone > scheduler.maxProcessNanos){
-							abort = true;
-						}
-					}
-					stats.addStats(statsProcessExpl, System.nanoTime() - ns);
-					stats.addStats(statsNExpl, done);
-				}
-				
-				if (!scheduler.hasEntries()){
+				boolean needRun = false;
+				if (scheduler.onTick(explHandler, stats, statsProcessExpl, statsNExpl, statsNExplStore)) needRun = true;
+				// TODO: other schedulers.
+				if (!needRun){
 					getServer().getScheduler().cancelTask(taskIdScheduler);
 					taskIdScheduler = -1;
 				}
