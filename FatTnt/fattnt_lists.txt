@@ -222,6 +222,7 @@ get fuseTick settings in place everywhere.
 - SchedulerSet -> Runnable + taskId + register(Plugin) + cancel. 
 
 spawnItem ?
+*** items dont spawn ...
 
 VERSION HISTORY (only done changes)
 -----------------------------------------------------------------

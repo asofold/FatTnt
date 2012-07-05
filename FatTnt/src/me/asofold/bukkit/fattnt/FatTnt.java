@@ -133,6 +133,7 @@ public class FatTnt extends JavaPlugin implements Listener {
 			@Override
 			public void run() {
 				boolean needRun = false;
+				// TODO: consider order ! 
 				if (schedulers.explosions.onTick(explosionHandler, stats, statsProcessExpl, statsNExpl, statsNExplStore)) needRun = true;
 				if (schedulers.spawnEntities.onTick(entityHandler, stats, statsProcessEnt, statsNEnt, statsNEntStore)) needRun = true;
 				if (schedulers.spawnItems.onTick(itemHandler, stats, statsProcessItem, statsNItem, statsNItemStore)) needRun = true;
