@@ -77,5 +77,14 @@ public class Path {
 	// other / general
 	public static final String priority = "priority";
 	public static final String worldSettings = "world-settings";
+	
+	// Scheduler:
+	public static final String sched = "scheduler";
+	public static final String schedChunkSize = sched + sep + "chunk-size"; 
+	public static final String schedExplode = sched + sep + "explode";
+	public static final String schedMaxExplodeTotal = schedExplode + sep + "max-total";
+	public static final String schedStore = sched + sep + "store";
+	public static final String schedMaxStoreTotal = schedStore + "max-total";
+	public static final String schedMaxStoreChunk = schedStore + "max-chunk";
 
 }

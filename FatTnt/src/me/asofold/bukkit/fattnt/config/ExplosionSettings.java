@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.List;
 
 import me.asofold.bukkit.fattnt.config.compatlayer.CompatConfig;
+import me.asofold.bukkit.fattnt.config.priorityvalues.OverridePolicy;
+import me.asofold.bukkit.fattnt.config.priorityvalues.PriorityObject;
 import me.asofold.bukkit.fattnt.config.priorityvalues.PrioritySettings;
 import me.asofold.bukkit.fattnt.config.priorityvalues.PriorityValue;
 
@@ -142,15 +144,15 @@ public class ExplosionSettings extends PrioritySettings{
 	 * If a block can not be destroyed this will be checked for further propagation.
 	 * created in applyConfig
 	 */
-	public final PriorityValue<float[]> passthrough = addValue("passthrough", new PriorityValue<float[]>());
+	public final PriorityValue<float[]> passthrough = addValue("passthrough", new PriorityObject<float[]>(null, 0, OverridePolicy.OVERRIDE));
 	
 	/**
 	 * Explosion resistance values for blocks.
 	 * created in applyConfig
 	 */
-	public final PriorityValue<float[]> resistance = addValue("resistance", null);
+	public final PriorityValue<float[]> resistance = addValue("resistance", new PriorityObject<float[]>(null, 0, OverridePolicy.OVERRIDE));
 	
-	public final PriorityValue<boolean[]> propagateDamage = addValue("propagateDamage", null);
+	public final PriorityValue<boolean[]> propagateDamage = addValue("propagateDamage", new PriorityObject<boolean[]>(null, 0, OverridePolicy.OVERRIDE));
 	
 	/**
 	 * Multiplier for the distance based damage to entities.

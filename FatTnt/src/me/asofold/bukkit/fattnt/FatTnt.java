@@ -12,6 +12,7 @@ import me.asofold.bukkit.fattnt.effects.DamageProcessor;
 import me.asofold.bukkit.fattnt.effects.ExplosionManager;
 import me.asofold.bukkit.fattnt.propagation.Propagation;
 import me.asofold.bukkit.fattnt.propagation.PropagationFactory;
+import me.asofold.bukkit.fattnt.scheduler.ExplosionScheduler;
 import me.asofold.bukkit.fattnt.stats.Stats;
 import me.asofold.bukkit.fattnt.utils.Utils;
 
@@ -69,6 +70,9 @@ public class FatTnt extends JavaPlugin implements Listener {
 	private DamageProcessor damageProcessor = new DamageProcessor();
 	
 	private Propagation propagation = null;
+	
+	private final ExplosionScheduler scheduler = new ExplosionScheduler();
+	private int taskId = -1;
 	
 	public FatTnt(){
 		super();
