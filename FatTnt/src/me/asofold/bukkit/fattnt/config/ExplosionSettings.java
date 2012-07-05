@@ -183,7 +183,7 @@ public class ExplosionSettings extends PrioritySettings{
 	
 	public boolean scheduleExplosions = true;
 	public boolean scheduleItems = true;
-	public boolean scheduleTnt = true;
+	public boolean scheduleEntities = true;
 	
 	/**
 	 * Experimental:Currently does explosions without applying physics (not good),
