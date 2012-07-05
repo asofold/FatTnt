@@ -27,7 +27,7 @@ public class ConfinementSettings extends PrioritySettings{
 		setPriority(priority);
 	}
 	
-	public void fromConfig(CompatConfig cfg, String prefix){
+	public void applyConfig(CompatConfig cfg, String prefix){
 		String p = prefix + Path.confinePriority;
 		priority = 0;
 		if (cfg.contains(p)){

@@ -26,7 +26,7 @@ public class Path {
 	public static final String radius = "radius";
 	public static final String maxRadius = radius +  sep + "max";
 	public static final String randRadius = radius +  sep + "random"; // UNUSED
-	public static final String entities= "entities";
+	public static final String explodingEntities= "exploding-entities";
 	public static final String damagePropagate = "propagate-damage";
 	
 	// confine:

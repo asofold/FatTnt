@@ -135,15 +135,11 @@ public class Defaults {
 	 * @return
 	 */
 	public static CompatConfig getSimpleDefaultConfiguration(){
-		Settings defaults = new Settings(null); // read defaults from here.
+		ExplosionSettings defaults = new ExplosionSettings(0); // read defaults from here.
 		CompatConfig cfg = new NewConfig(null);
 		
 		// entities: 
-		List<String> entities = new LinkedList<String>();
-		for (String et : handledEntities){
-			entities.add(et);
-		}
-		cfg.set(Path.entities, entities);
+		// TODO: just set the greedy flags !
 		
 		// passthrough
 		cfg.set(Path.defaultPassthrough, defaults.defaultPassthrough);
