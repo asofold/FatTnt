@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import me.asofold.bukkit.fattnt.FatTnt;
-import me.asofold.bukkit.fattnt.config.Settings;
+import me.asofold.bukkit.fattnt.config.ExplosionSettings;
 import me.asofold.bukkit.fattnt.events.FatEntityDamageEvent;
 import me.asofold.bukkit.fattnt.events.FatEntityExplodeEvent;
 import me.asofold.bukkit.fattnt.propagation.Propagation;
@@ -54,14 +54,14 @@ public class ExplosionManager {
 	 * @param z
 	 * @param realRadius
 	 * @param fire
-	 * @param explEntity
+	 * @param explEntity 
 	 * @param entityType
 	 * @param nearbyEntities can be null
 	 * @param settings
 	 * @param propagation
 	 */
 	public static boolean applyExplosionEffects(World world, double x, double y, double z, float realRadius, boolean fire, Entity explEntity, EntityType entityType,
-			List<Entity> nearbyEntities, float damageMultiplier, Settings settings, Propagation propagation, DamageProcessor damageProcessor) {
+			List<Entity> nearbyEntities, float damageMultiplier, ExplosionSettings settings, Propagation propagation, DamageProcessor damageProcessor) {
 		if ( realRadius > settings.maxRadius){
 			// TODO: settings ?
 			realRadius = settings.maxRadius;
@@ -70,7 +70,7 @@ public class ExplosionManager {
 		
 		// blocks:
 		long ns = System.nanoTime();
-		List<Block> affected = propagation.getExplodingBlocks(world , x, y, z, realRadius);
+		List<Block> affected = propagation.getExplodingBlocks(world , x, y, z, realRadius, settings);
 		stats.addStats(FatTnt.statsGetBlocks, System.nanoTime()-ns); // Time measurement
 		stats.addStats(FatTnt.statsBlocksCollected, affected.size()); // counting average number of collected blocks.
 		stats.addStats(FatTnt.statsStrength, (long) realRadius); // just counting average explosion strength !
@@ -106,7 +106,7 @@ public class ExplosionManager {
 	 * @param propagation
 	 * @param specs 
 	 */
-	public static void applyBlockEffects(World world, double x, double y, double z, float realRadius, List<Block> blocks, float defaultYield, Settings settings, Propagation propagation, FatExplosionSpecs specs){
+	public static void applyBlockEffects(World world, double x, double y, double z, float realRadius, List<Block> blocks, float defaultYield, ExplosionSettings settings, Propagation propagation, FatExplosionSpecs specs){
 //		final List<block> directExplode = new LinkedList<block>(); // if set in config. - maybe later (split method to avoid recursion !)
 		final int tntId = Material.TNT.getId();
 		for (final Block block : blocks){
@@ -146,7 +146,7 @@ public class ExplosionManager {
 	}
 	
 	public static TNTPrimed addTNTPrimed(World world, double x, double y, double z,
-			Location loc, float realRadius, Settings settings, Propagation propagation) {
+			Location loc, float realRadius, ExplosionSettings settings, Propagation propagation) {
 		final float effRad = propagation.getStrength(loc); // effective strength/radius
 //		if ( effRad > thresholdTntDirect){
 //			directExplode.add(block);
@@ -192,7 +192,7 @@ public class ExplosionManager {
 	}
 	
 	public static Arrow addArrow(World world, double x, double y,
-			double z, Location loc, float realRadius, Settings settings,
+			double z, Location loc, float realRadius, ExplosionSettings settings,
 			Propagation propagation) {
 		final float effRad = propagation.getStrength(loc); // effective strength/radius
 //		if ( effRad > thresholdTntDirect){
@@ -239,7 +239,7 @@ public class ExplosionManager {
 	 * @param specs 
 	 * @param damageProcessor 
 	 */
-	public static void applyEntityEffects(World world, double x, double y, double z, float realRadius, List<Entity> nearbyEntities, float damageMultiplier, Settings settings, Propagation propagation, FatExplosionSpecs specs, DamageProcessor damageProcessor) {
+	public static void applyEntityEffects(World world, double x, double y, double z, float realRadius, List<Entity> nearbyEntities, float damageMultiplier, ExplosionSettings settings, Propagation propagation, FatExplosionSpecs specs, DamageProcessor damageProcessor) {
 		if ( realRadius > settings.maxRadius){
 			// TODO: settings ?
 			realRadius = settings.maxRadius;
@@ -390,7 +390,7 @@ public class ExplosionManager {
 	 * @param max max radius
 	 */
 	public static void addRandomVelocity(Entity entity, Location loc, double x, double y,
-			double z, float part, float max, Settings settings) {
+			double z, float part, float max, ExplosionSettings settings) {
 		// TODO: make some things configurable, possible entity dependent and !
 		if (!settings.velUse) return;
 		Vector v = entity.getVelocity().clone();
