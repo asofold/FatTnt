@@ -17,7 +17,7 @@ import me.asofold.bukkit.fattnt.utils.Utils;
  * @author mc_dev
  *
  */
-public final class ExplosionScheduler {
+public final class ChunkWiseScheduler<T extends ScheduledEntry> {
 	
 	private static final class ChunkPos{
 		private static final int p1 = 73856093;
@@ -46,25 +46,25 @@ public final class ExplosionScheduler {
 		
 	}
 	
-	private int maxExplodeTotal = 20;
+	private int maxProcessTotal = 20;
 	private int chunkSize = 16;
 	private int maxStoreTotal = 5000;
 	private int maxStoreChunk = 50; 
 	private long maxStoreLifetime = 2000;
-	public long maxExplodeNanos = 3500000;
+	public long maxProcessNanos = 3500000;
 	
-	private final Map<ChunkPos, List<ScheduledExplosion>> stored = new LinkedHashMap<ExplosionScheduler.ChunkPos, List<ScheduledExplosion>>(300);
+	private final Map<ChunkPos, List<T>> stored = new LinkedHashMap<ChunkWiseScheduler.ChunkPos, List<T>>(300);
 	
 	private int totalSize = 0;
 	
-	public void fromConfig(CompatConfig cfg){
-		ExplosionScheduler ref = new ExplosionScheduler();
-		maxExplodeTotal = cfg.getInt(Path.schedMaxExplodeTotal, ref.maxExplodeTotal);
-		chunkSize = cfg.getInt(Path.schedChunkSize, ref.chunkSize);
-		maxStoreTotal = cfg.getInt(Path.schedMaxStoreTotal, ref.maxStoreTotal);
-		maxStoreChunk = cfg.getInt(Path.schedMaxStoreChunk, ref.maxStoreChunk);
-		maxExplodeNanos = cfg.getLong(Path.schedMaxExplodeNanos, ref.maxExplodeNanos);
-		maxStoreLifetime = cfg.getLong(Path.schedMaxStoreLifetime, ref.maxStoreLifetime);
+	public void fromConfig(CompatConfig cfg, String prefix){
+		ChunkWiseScheduler<T> ref = new ChunkWiseScheduler<T>(); // TODO maybe a settings class.
+		maxProcessTotal = cfg.getInt(prefix + Path.process + Path.sep + Path.maxTotal, ref.maxProcessTotal);
+		chunkSize = cfg.getInt(prefix + Path.chunkSize, ref.chunkSize);
+		maxStoreTotal = cfg.getInt(prefix + Path.store + Path.sep + Path.maxTotal, ref.maxStoreTotal);
+		maxStoreChunk = cfg.getInt(prefix + Path.store + Path.sep + Path.maxChunk, ref.maxStoreChunk);
+		maxProcessNanos = cfg.getLong(prefix + Path.process + Path.sep + Path.maxNanos, ref.maxProcessNanos);
+		maxStoreLifetime = cfg.getLong(prefix + Path.process + Path.sep + Path.maxMillis, ref.maxStoreLifetime);
 	}
 	
 	/**
@@ -72,18 +72,18 @@ public final class ExplosionScheduler {
 	 * Simple getting algorithm, loop through all "chunks" and add one by one till limit reached. If many chunks are there, reorder the processed ones to the end, to prevent starvation.
 	 * @return
 	 */
-	public final List<ScheduledExplosion> getNextExplosions(){
+	public final List<T> getNextExplosions(){
 		final long ts = System.currentTimeMillis();
-		final List<ScheduledExplosion> next = new LinkedList<ScheduledExplosion>();
+		final List<T> next = new LinkedList<T>();
 		if (stored.isEmpty()) return next;
 		int done = 0;
 		final List<ChunkPos> rem = new LinkedList<ChunkPos>();
 		final Set<ChunkPos> reSchedule = new LinkedHashSet<ChunkPos>();
-		boolean many = stored.size() > maxExplodeTotal;
-		while (!stored.isEmpty() && done < maxExplodeTotal){
-			for (final Entry<ChunkPos, List<ScheduledExplosion>> entry : stored.entrySet()){
-				final List<ScheduledExplosion> list = entry.getValue();
-				final ScheduledExplosion candidate = list.remove(0);
+		boolean many = stored.size() > maxProcessTotal;
+		while (!stored.isEmpty() && done < maxProcessTotal){
+			for (final Entry<ChunkPos, List<T>> entry : stored.entrySet()){
+				final List<T> list = entry.getValue();
+				final T candidate = list.remove(0);
 				if (ts - candidate.ts > maxStoreLifetime){
 					totalSize--;
 					if (list.isEmpty()){
@@ -105,7 +105,7 @@ public final class ExplosionScheduler {
 				else if (many) reSchedule.add(entry.getKey());
 				done ++;
 				totalSize --;
-				if (done == maxExplodeTotal) break;
+				if (done == maxProcessTotal) break;
 			}
 			for (final ChunkPos pos : rem){
 				stored.remove(pos);
@@ -113,7 +113,7 @@ public final class ExplosionScheduler {
 			}
 			rem.clear();
 		}
-		if (stored.size() > maxExplodeTotal){
+		if (stored.size() > maxProcessTotal){
 			for (final ChunkPos pos : reSchedule){
 				stored.put(pos, stored.remove(pos));
 			}
@@ -125,12 +125,12 @@ public final class ExplosionScheduler {
 	 * Add the explosion, remove one if too many.
 	 * @param explosion
 	 */
-	public final void addExplosion(final ScheduledExplosion explosion){
+	public final void addExplosion(final T explosion){
 		if (totalSize >= maxStoreTotal) reduceStore();
 		final ChunkPos pos = new ChunkPos(Utils.floor(explosion.x / chunkSize), Utils.floor(explosion.z / chunkSize));
-		List<ScheduledExplosion> list = stored.get(pos);
+		List<T> list = stored.get(pos);
 		if (list == null){
-			list = new LinkedList<ScheduledExplosion>();
+			list = new LinkedList<T>();
 			stored.put(pos, list);
 		}
 		list.add(explosion);
@@ -153,9 +153,9 @@ public final class ExplosionScheduler {
 		if (totalSize == sz) av = 0;
 		else av = totalSize / stored.size();
 		final List<ChunkPos> rem = new LinkedList<ChunkPos>();
-		while (totalSize > maxExplodeTotal){
-			for (final Entry<ChunkPos, List<ScheduledExplosion>> entry : stored.entrySet()){
-				final List<ScheduledExplosion> list = entry.getValue();
+		while (totalSize > maxProcessTotal){
+			for (final Entry<ChunkPos, List<T>> entry : stored.entrySet()){
+				final List<T> list = entry.getValue();
 				final int lsz = list.size();
 				if (ts - list.get(0).ts > maxStoreLifetime){
 					do {
@@ -175,7 +175,7 @@ public final class ExplosionScheduler {
 				list.remove(0);
 				totalSize --;
 				if (lsz == 1) rem.add(entry.getKey());
-				if (totalSize <= maxExplodeTotal) break;
+				if (totalSize <= maxProcessTotal) break;
 			}
 			for (final ChunkPos pos : rem){
 				stored.remove(pos);

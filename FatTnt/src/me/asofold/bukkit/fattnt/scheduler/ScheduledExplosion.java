@@ -10,26 +10,21 @@ import org.bukkit.entity.EntityType;
  * @author mc_dev
  *
  */
-public final class ScheduledExplosion {
+public final class ScheduledExplosion extends ScheduledEntry{
 	public final World world;
-	public final double x;
 	public final double y;
-	public final double z;
 	public final float radius;
 	public final boolean fire;
 	public final Entity explEntity;
 	public final EntityType entityType;
-	final long ts;
 	
 	public ScheduledExplosion(World world, double x, double y, double z, float radius, boolean fire, Entity explEntity, EntityType entityType){
+		super(x, z);
 		this.world = world;
-		this.x = x;
 		this.y = y;
-		this.z = z;
 		this.radius =  radius;
 		this.fire = fire;
 		this.explEntity = explEntity;
 		this.entityType = entityType;
-		ts = System.currentTimeMillis();
 	}
 }

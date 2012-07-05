@@ -80,13 +80,16 @@ public class Path {
 	
 	// Scheduler:
 	public static final String sched = "scheduler";
-	public static final String schedChunkSize = sched + sep + "chunk-size"; 
-	public static final String schedExplode = sched + sep + "explode";
-	public static final String schedMaxExplodeTotal = schedExplode + sep + "max-total";
-	public static final String schedMaxExplodeNanos = schedExplode + sep + "max-nanos";
-	public static final String schedStore = sched + sep + "store";
-	public static final String schedMaxStoreTotal = schedStore + sep + "max-total";
-	public static final String schedMaxStoreChunk = schedStore + sep + "max-chunk";
-	public static final String schedMaxStoreLifetime = schedStore + sep + "max-millis";
+	public static final String schedExplosions = sched + sep + "explosions";
+	public static final String schedEntities = sched + sep + "entities";
+	
+	public static final String process = "process";
+	public static final String store = "store";
+	public static final String chunkSize = "chunk-size"; 
+	public static final String maxTotal = "max-total";
+	public static final String maxNanos = "max-nanos";
+	public static final String maxChunk = "max-chunk";
+	public static final String maxMillis = "max-millis";
+	
 
 }

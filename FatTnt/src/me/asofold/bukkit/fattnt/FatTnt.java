@@ -6,6 +6,7 @@ import java.util.List;
 
 import me.asofold.bukkit.fattnt.config.Defaults;
 import me.asofold.bukkit.fattnt.config.ExplosionSettings;
+import me.asofold.bukkit.fattnt.config.Path;
 import me.asofold.bukkit.fattnt.config.Settings;
 import me.asofold.bukkit.fattnt.config.compatlayer.CompatConfig;
 import me.asofold.bukkit.fattnt.config.compatlayer.NewConfig;
@@ -14,7 +15,7 @@ import me.asofold.bukkit.fattnt.effects.ExplosionManager;
 import me.asofold.bukkit.fattnt.events.FatExplodeEvent;
 import me.asofold.bukkit.fattnt.propagation.Propagation;
 import me.asofold.bukkit.fattnt.propagation.PropagationFactory;
-import me.asofold.bukkit.fattnt.scheduler.ExplosionScheduler;
+import me.asofold.bukkit.fattnt.scheduler.ChunkWiseScheduler;
 import me.asofold.bukkit.fattnt.scheduler.ScheduledExplosion;
 import me.asofold.bukkit.fattnt.stats.Stats;
 import me.asofold.bukkit.fattnt.utils.Utils;
@@ -79,7 +80,7 @@ public class FatTnt extends JavaPlugin implements Listener {
 	
 	private Propagation propagation = null;
 	
-	private final ExplosionScheduler scheduler = new ExplosionScheduler();
+	private final ChunkWiseScheduler<ScheduledExplosion> scheduler = new ChunkWiseScheduler<ScheduledExplosion>();
 	private int taskIdScheduler = -1;
 	
 	public FatTnt(){
@@ -107,7 +108,7 @@ public class FatTnt extends JavaPlugin implements Listener {
 						createExplosion(explosion.world, explosion.x, explosion.y, explosion.z, explosion.radius, explosion.fire, explosion.explEntity, explosion.entityType);
 						final long nsDone = System.nanoTime() - ns;
 						done ++;
-						if (nsDone > scheduler.maxExplodeNanos){
+						if (nsDone > scheduler.maxProcessNanos){
 							abort = true;
 						}
 					}
@@ -230,7 +231,7 @@ public class FatTnt extends JavaPlugin implements Listener {
 				onIdle();
 			}
 		}, 217, 217); // TODO ?
-		scheduler.fromConfig(cfg);
+		scheduler.fromConfig(cfg, Path.schedExplosions + Path.sep);
 		checkScheduler();
 	}
 	
