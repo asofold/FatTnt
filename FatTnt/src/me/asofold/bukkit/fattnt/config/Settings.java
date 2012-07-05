@@ -27,6 +27,11 @@ public class Settings {
 	 */
 	private boolean handleExplosions = true;
 	
+	/**
+	 * This is an override.
+	 */
+	private boolean preventExplosions = false;
+	
 	// World dependent settings:
 	
 	/**
@@ -137,6 +142,15 @@ public class Settings {
 			cache.put(lcwn, map);
 		}
 		map.put(type, settings);
+	}
+
+	public void setPreventExplosions(boolean prevent) {
+		preventExplosions = true;
+	}
+	
+	public boolean getPreventExplosions(String worldName, EntityType type){
+		// TODO: query settings / cache etc.
+		return preventExplosions; // global override.
 	}
 
 }

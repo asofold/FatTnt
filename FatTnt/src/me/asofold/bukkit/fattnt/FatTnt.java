@@ -1,6 +1,7 @@
 package me.asofold.bukkit.fattnt;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.List;
 
 import me.asofold.bukkit.fattnt.config.Defaults;
@@ -10,6 +11,7 @@ import me.asofold.bukkit.fattnt.config.compatlayer.CompatConfig;
 import me.asofold.bukkit.fattnt.config.compatlayer.NewConfig;
 import me.asofold.bukkit.fattnt.effects.DamageProcessor;
 import me.asofold.bukkit.fattnt.effects.ExplosionManager;
+import me.asofold.bukkit.fattnt.events.FatExplodeEvent;
 import me.asofold.bukkit.fattnt.propagation.Propagation;
 import me.asofold.bukkit.fattnt.propagation.PropagationFactory;
 import me.asofold.bukkit.fattnt.scheduler.ExplosionScheduler;
@@ -27,10 +29,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
+import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityCombustEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
@@ -143,36 +147,66 @@ public class FatTnt extends JavaPlugin implements Listener {
 		label = label.toLowerCase();
 		if ( !label.equals("fattnt") && !label.equals("ftnt")) return false;
 		int len = args.length;
-		if (len==1 && args[0].equalsIgnoreCase("reload")){
+		String cmd = null;
+		if (len > 0) cmd = args[0].trim().toLowerCase();
+		if (len==1 && cmd.equals("reload")){
 			if ( !Utils.checkPerm(sender, "fattnt.cmd.reload")) return true;
 			reloadSettings();
 			Utils.send(sender, "Settings reloaded.");
 			return true;
 		} 
-		else if (len==1 && args[0].equalsIgnoreCase("enable")){
+		else if (len==1 && cmd.equals("enable")){
 			if ( !Utils.checkPerm(sender, "fattnt.cmd.enable")) return true;
 			settings.setHandleExplosions(true);
 			Utils.send( sender, "Explosions will be handled by FatTnt."); 
 			return true;
 		}
-		else if (len==1 && args[0].equalsIgnoreCase("disable")){
+		else if (len==1 && cmd.equals("disable")){
 			if ( !Utils.checkPerm(sender, "fattnt.cmd.disable")) return true;
 			settings.setHandleExplosions(false);
 			Utils.send( sender, "Explosions are back to default behavior (disregarding other plugins)."); 
 			return true;
 		}
-		else if (len==1 && (args[0].equalsIgnoreCase("stats") || args[0].equalsIgnoreCase("st"))){
+		else if (len==1 && (cmd.equals("stats") || args[0].equalsIgnoreCase("st"))){
 			if ( !Utils.checkPerm(sender, "fattnt.cmd.stats.see")) return true;
 			Utils.send(sender, stats.getStatsStr(true), false);
 			return true;
 		}
-		else if (len==2 && (args[0].equalsIgnoreCase("stats") || args[0].equalsIgnoreCase("st")) && args[1].equalsIgnoreCase("reset")){
+		else if (len==2 && (cmd.equals("stats") || args[0].equalsIgnoreCase("st")) && args[1].equalsIgnoreCase("reset")){
 			if ( !Utils.checkPerm(sender, "fattnt.cmd.stats.reset")) return true;
 			stats.clear();
 			Utils.send(sender, "Stats reset.");
 			return true;
 		}
+		else if (len == 1 && cmd.equals("panic")){
+			if ( !Utils.checkPerm(sender, "fattnt.cmd.panic")) return true;
+			onPanic();
+			sender.sendMessage("[FatTnt] Removed all primed tnt and scheduled explosions, prevent explosions.");
+			return true;
+		}
+		else if (len == 1 && cmd.equals("unpanic")){
+			if ( !Utils.checkPerm(sender, "fattnt.cmd.unpanic")) return true;
+			settings.setPreventExplosions(false);
+			sender.sendMessage("[FatTnt] Allowing explosions.");
+			return true;
+		}
 		return false;
+	}
+
+	private void onPanic() {
+		settings.setPreventExplosions(true);
+		removeAllPrimedTnt();
+		scheduler.clear();
+	}
+
+	public static void removeAllPrimedTnt() {
+		for (World world : Bukkit.getServer().getWorlds()){
+			Collection<TNTPrimed> primed = world.getEntitiesByClass(TNTPrimed.class);
+			if (primed == null) continue; // TODO: remove this.
+			for (TNTPrimed tnt : primed){
+				tnt.remove();
+			}
+		}
 	}
 
 	/**
@@ -224,18 +258,36 @@ public class FatTnt extends JavaPlugin implements Listener {
 
 	@EventHandler(priority=EventPriority.HIGHEST, ignoreCancelled=true)
 	final void onExplosionPrime(final ExplosionPrimeEvent event){
-//		waitingEP = null;
-		if (event.isCancelled()) return;
 		final EntityType type = event.getEntityType();
 		final Entity entity = event.getEntity();
 		final Location loc = entity.getLocation();
 		final World world = loc.getWorld();
-		if (!settings.handlesExplosions(world.getName(), type)) return;
+		final String worldName = world.getName();
+		if (settings.getPreventExplosions(worldName, type)){
+			event.setCancelled(true);
+			return;
+		}
+		if (!settings.handlesExplosions(worldName, type)) return;
 		// do prepare to handle this explosion:
 		event.setCancelled(true);
 		if (!entity.isDead()) entity.remove();
 		scheduler.addExplosion(new ScheduledExplosion(world, loc.getX(), loc.getY(), loc.getZ(), event.getRadius(), event.getFire(), entity, type));
 		checkScheduler();
+	}
+	
+	@EventHandler(priority=EventPriority.LOWEST, ignoreCancelled=true)
+	final void onEntityExplode(final EntityExplodeEvent event){
+		final Location loc = event.getLocation();
+		final World world = loc.getWorld();
+		final String worldName = world.getName();
+		final Entity entity = event.getEntity();
+		final EntityType type = event.getEntityType();
+		if (settings.getPreventExplosions(worldName, (type==null & entity!=null)?entity.getType():type )){
+			event.setCancelled(true);
+			return;
+		}
+		if (event instanceof FatExplodeEvent) return; // do not handle these
+		// TODO: check greedy settings !
 	}
 	
 	@EventHandler(priority=EventPriority.HIGHEST)

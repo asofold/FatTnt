@@ -4,6 +4,6 @@ version: 0.2.0-DEV-3
 commands:
   fattnt:
     description: 'Reload, enable, disable etc.'
-    usage: '/fattnt reload | /fattnt enable | /fattnt disable | /fattnt stats | /fattnt stats reset |'
+    usage: '/fattnt reload | /fattnt panic | /ftnt unpanic | /fattnt enable | /fattnt disable | /fattnt stats | /fattnt stats reset |'
     aliases:
     - ftnt

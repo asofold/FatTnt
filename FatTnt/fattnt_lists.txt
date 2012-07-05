@@ -189,6 +189,15 @@ consider: panic command (set all caps as max , remove tnt,  clear scheduler, sto
 consider: cleanup command: remove tnt + scheduled explosions
 consider: world item cap (risky: could remove any sort of items, probably restrict to dirt, stone, sand, gravel, netherrack)
 
+***
+must add: prevent-explosions flag for ExplosionSettings (for simple disable of all, overrides all)
+consider: max lifetime of scheduled entries (!) [might need slight refactoring of selection algorithm]
+maybe also schedule similar way: entities to spawn, LIMIT to maximum, spawn delayed same scheduler principle. [refactor: abstract chunk base scheduler, probably: bigger chunks ?]
+
+Refactor ? Schedulers into Explosion manager + the task checker!
+
+*** Try to find out how arises the strong lag (items? primed tnt? )
+
 VERSION HISTORY (only done changes)
 -----------------------------------------------------------------
 
