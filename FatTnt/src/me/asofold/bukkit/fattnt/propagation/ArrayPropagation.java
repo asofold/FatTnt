@@ -307,8 +307,8 @@ public class ArrayPropagation extends Propagation {
 		
 		final int[][] rInts = this.rInts;
 		final float[] rFloats = this.rFloats;
-		final float[] resistance = settings.resistance;
-		final float[] passthrough = settings.passthrough;
+		final float[] resistance = settings.resistance.value;
+		final float[] passthrough = settings.passthrough.value;
 		final float[] strength = this.strength;
 		final int[] sequence = this.sequence;
 		// kk exaggerated maybe...

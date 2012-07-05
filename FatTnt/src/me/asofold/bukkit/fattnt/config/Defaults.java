@@ -231,9 +231,9 @@ public class Defaults {
 	public static ExplosionSettings getDefaultExplosionSettings(){
 		ExplosionSettings out = new ExplosionSettings(Integer.MIN_VALUE);
 		out.confine = new ConfinementSettings(Integer.MIN_VALUE);
-		out.passthrough = new float[Defaults.blockArraySize];
-		out.resistance = new float[Defaults.blockArraySize];
-		out.propagateDamage = new boolean[Defaults.blockArraySize];
+		out.passthrough.value = new float[Defaults.blockArraySize];
+		out.resistance.value = new float[Defaults.blockArraySize];
+		out.propagateDamage.value = new boolean[Defaults.blockArraySize];
 		out.applyConfig(simpleDefaults, "", Integer.MIN_VALUE);
 		return out;
 	}

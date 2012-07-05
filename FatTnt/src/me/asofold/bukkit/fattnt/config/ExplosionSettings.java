@@ -5,6 +5,7 @@ import java.util.List;
 
 import me.asofold.bukkit.fattnt.config.compatlayer.CompatConfig;
 import me.asofold.bukkit.fattnt.config.priorityvalues.PrioritySettings;
+import me.asofold.bukkit.fattnt.config.priorityvalues.PriorityValue;
 
 import org.bukkit.configuration.Configuration;
 
@@ -14,7 +15,7 @@ import org.bukkit.configuration.Configuration;
 public class ExplosionSettings extends PrioritySettings{
 	
 	public ConfinementSettings confine;
-	
+
 	/**
 	 * Explosion strength is cut off there.
 	 */
@@ -141,15 +142,15 @@ public class ExplosionSettings extends PrioritySettings{
 	 * If a block can not be destroyed this will be checked for further propagation.
 	 * created in applyConfig
 	 */
-	public float[] passthrough = null;
+	public final PriorityValue<float[]> passthrough = addValue("passthrough", null);
 	
 	/**
 	 * Explosion resistance values for blocks.
 	 * created in applyConfig
 	 */
-	public float[] resistance = null;
+	public final PriorityValue<float[]> resistance = addValue("resistance", null);
 	
-	public boolean[] propagateDamage = null;
+	public final PriorityValue<boolean[]> propagateDamage = addValue("propagateDamage", null);
 	
 	/**
 	 * Multiplier for the distance based damage to entities.
@@ -186,13 +187,18 @@ public class ExplosionSettings extends PrioritySettings{
 	
 	public ExplosionSettings(int priority) {
 		confine = new ConfinementSettings(priority);
+		setPriority(priority);
 	}
-
-	private void initBlockIds() {
-		for (int i = 0;i<passthrough.length;i++){
-			passthrough[i] = defaultPassthrough;
-			resistance[i] = defaultResistance;
-			propagateDamage[i] = false;
+	
+	private void initFloats(float[] a, float def){
+		for (int i = 0;i<a.length;i++){
+			a[i] = def;
+		}
+	}
+	
+	private void initBools(boolean[] a, boolean def){
+		for (int i = 0;i<a.length;i++){
+			a[i] = def;
 		}
 	}
 	
@@ -205,9 +211,9 @@ public class ExplosionSettings extends PrioritySettings{
 		confine.applyConfig(cfg, prefix);
 		
 		ExplosionSettings ref = new ExplosionSettings(0); // default settings.
-		if (cfg.contains(prefix + Path.passthrough)) passthrough = new float[Defaults.blockArraySize];
-		if (cfg.contains(prefix + Path.resistance)) resistance = new float[Defaults.blockArraySize];
-		if (cfg.contains(prefix + Path.damagePropagate)) propagateDamage = new boolean[Defaults.blockArraySize];
+		if (cfg.contains(prefix + Path.defaultPassthrough)) passthrough.value = new float[Defaults.blockArraySize];
+		if (cfg.contains(prefix + Path.defaultResistance)) resistance.value = new float[Defaults.blockArraySize];
+		if (cfg.contains(prefix + Path.damagePropagate)) propagateDamage.value = new boolean[Defaults.blockArraySize];
 		minResistance = Float.MAX_VALUE;		
 		radiusMultiplier = cfg.getDouble(prefix + Path.multRadius, (double) ref.radiusMultiplier).floatValue();
 		damageMultiplier = cfg.getDouble(prefix + Path.multDamage, (double) ref.damageMultiplier).floatValue();
@@ -255,13 +261,19 @@ public class ExplosionSettings extends PrioritySettings{
 		if ( maxRadius > Defaults.radiusLock) maxRadius = Defaults.radiusLock; // safety check
 		
 		// TODO: Lazy treatment of the follwing settings (keep null or set).
-		initBlockIds();
-		if (resistance != null) readResistance(cfg, prefix + Path.resistance, resistance, defaultResistance);
-		if (passthrough != null) readResistance(cfg, prefix + Path.passthrough, passthrough, defaultPassthrough);
-		if (propagateDamage != null){
+		if (resistance.value != null){
+			initFloats(resistance.value, defaultResistance);
+			readResistance(cfg, prefix + Path.resistance, resistance.value, defaultResistance);
+		}
+		if (passthrough.value != null){
+			initFloats(passthrough.value, defaultPassthrough);
+			readResistance(cfg, prefix + Path.passthrough, passthrough.value, defaultPassthrough);
+		}
+		if (propagateDamage.value != null){
+			initBools(propagateDamage.value, false);
 			List<Integer> ids = Defaults.getIdList(cfg, prefix + Path.damagePropagate);
 			for ( Integer id : ids){
-				propagateDamage[id] = true;
+				propagateDamage.value[id] = true;
 			}
 		}
 	}
@@ -292,7 +304,7 @@ public class ExplosionSettings extends PrioritySettings{
 	@Override
 	public void setPriority(int priority) {
 		super.setPriority(priority);
-		// TODO: confine.setPriority ?
+		confine.setPriority(priority);
 	}
 
 	@Override

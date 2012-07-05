@@ -283,7 +283,7 @@ public class ExplosionManager {
 						for ( int i = 0 ; i< max; i++){
 							int id = world.getBlockTypeIdAt(current);
 							if (FatTnt.DEBUG_LOTS) System.out.println("[FatTnt] dist-damage at id: "+id);
-							if (!settings.propagateDamage[id]) break;
+							if (!settings.propagateDamage.value[id]) break;
 							float str = propagation.getStrength(current);
 							if (str > 0.0f){
 								// modify effStr according to settings.
