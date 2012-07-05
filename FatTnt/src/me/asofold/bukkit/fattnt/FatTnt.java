@@ -275,7 +275,7 @@ public class FatTnt extends JavaPlugin implements Listener {
 		// do prepare to handle this explosion:
 		event.setCancelled(true);
 		if (!entity.isDead()) entity.remove();
-		scheduler.addExplosion(new ScheduledExplosion(world, loc.getX(), loc.getY(), loc.getZ(), event.getRadius(), event.getFire(), entity, type));
+		scheduler.addEntry(new ScheduledExplosion(world, loc.getX(), loc.getY(), loc.getZ(), event.getRadius(), event.getFire(), entity, type));
 		checkScheduler();
 	}
 	
