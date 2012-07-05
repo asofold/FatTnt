@@ -367,7 +367,7 @@ public class ExplosionManager {
 				EntityDamageEvent event = new FatEntityDamageEvent(entity, DamageCause.ENTITY_EXPLOSION, damage, specs);
 				pm.callEvent(event);
 				if (!event.isCancelled()){
-					if (damageProcessor.damageEntity(event) > 0){
+					if (damageProcessor.damageEntity(event, settings) > 0){
 						// (declined: consider using "effective damage" for stats.)
 						// (but:) Only include >0 damage (that might lose some armored players later, but prevents including invalid entities. 
 						stats.addStats(FatTnt.statsDamage, damage); 
