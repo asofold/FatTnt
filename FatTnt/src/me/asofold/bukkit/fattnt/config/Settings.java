@@ -145,7 +145,7 @@ public class Settings {
 	}
 
 	public void setPreventExplosions(boolean prevent) {
-		preventExplosions = true;
+		preventExplosions = prevent;
 	}
 	
 	public boolean preventsExplosions(String worldName, EntityType type){
