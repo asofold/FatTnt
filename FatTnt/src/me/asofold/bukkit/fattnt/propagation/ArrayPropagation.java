@@ -6,8 +6,8 @@ import java.util.Random;
 
 import me.asofold.bukkit.fattnt.FatTnt;
 import me.asofold.bukkit.fattnt.config.Defaults;
+import me.asofold.bukkit.fattnt.config.ExplosionSettings;
 import me.asofold.bukkit.fattnt.config.Settings;
-import me.asofold.bukkit.fattnt.config.WorldSettings;
 import me.asofold.bukkit.fattnt.effects.ExplosionManager;
 import me.asofold.bukkit.fattnt.utils.Utils;
 
@@ -38,14 +38,6 @@ public class ArrayPropagation extends Propagation {
 	private int cx = 0;
 	private int cy = 0;
 	private int cz = 0;
-	
-	private float fStraight;
-	
-	private float minRes;
-	
-	private float maxPath;
-	
-	private float randRadius;
 	
 	private static final int[] ortDir = new int[]{2,4,6,8,10,12};
 	
@@ -164,15 +156,9 @@ public class ArrayPropagation extends Propagation {
 	 * Maximum path lenght/recursion depth.
 	 */
 	int maxDepth = 0;
-	private final boolean useRand;
 	
 	public ArrayPropagation(Settings settings) {
 		super(settings);
-		fStraight = settings.fStraight;
-		minRes = settings.minResistance;
-		maxPath = settings.maxPathMultiplier;
-		randRadius = settings.randRadius;
-		useRand = randRadius > 0.0f;
 		createArrays();
 	}
 	
@@ -209,7 +195,7 @@ public class ArrayPropagation extends Propagation {
 		// random arrays:
 		Random temp = ExplosionManager.random;
 		for (int i = 0; i <rand.length; i++){
-			rand[i] = randRadius*(temp.nextFloat()-0.5f);
+			rand[i] = temp.nextFloat()-0.5f;
 		}
 	}
 
@@ -257,14 +243,20 @@ public class ArrayPropagation extends Propagation {
 
 	@Override
 	public List<Block> getExplodingBlocks(World world, double cx, double cy,
-			double cz, float realRadius) {
+			double cz, float realRadius, ExplosionSettings settings) {
 		{
-			if ( realRadius > maxRadius){
-				// TODO: setttings ?
-				realRadius = maxRadius;
+			if (realRadius > settings.maxRadius) realRadius = settings.maxRadius;
+			if (realRadius > maxRadius) realRadius = maxRadius;
+			if (realRadius == 0.0){
+				// TODO: maybe more checks (minRes).
+				return new LinkedList<Block>();
 			}
+			
+			final float maxPath = settings.maxPathMultiplier;
+			final float minRes = settings.minResistance;
+			
 			if ( this.blocks != null) this.blocks.clear(); // maybe gc :), should only happen on errors.
-			List<Block> blocks = new LinkedList<Block>(); // could change this to an array, but ....
+			final List<Block> blocks = new LinkedList<Block>(); // could change this to an array, but ....
 			this.blocks = blocks;
 			seqMax ++; // new round !
 			// starting at center block decrease weight and check neighbor blocks recursively, while weight > durability continue, only check
@@ -273,7 +265,7 @@ public class ArrayPropagation extends Propagation {
 			this.cy = Utils.floor(cy);
 			this.cz = Utils.floor(cz);
 			n = 0;
-			propagate(world, this.cx, this.cy, this.cz, iCenter, 0, 1+(int)(realRadius*maxPath), realRadius);
+			propagate(world, this.cx, this.cy, this.cz, iCenter, 0, 1+(int)(realRadius*maxPath), realRadius, settings);
 			if (FatTnt.DEBUG) System.out.println(Defaults.msgPrefix+"Strength="+realRadius+"("+maxRadius+"/"+minRes+"), visited="+n+", blocks="+blocks.size());
 			stats.addStats(FatTnt.statsBlocksVisited, n);
 			this.blocks = null;
@@ -296,17 +288,16 @@ public class ArrayPropagation extends Propagation {
 	 * @param blocks
 	 */
 	final void propagate(final World w, int x, int y, int z, 
-			int i, int dir, int mpl, float expStr){
+			int i, int dir, int mpl, float expStr, final ExplosionSettings settings){
 		// preparation:
 		// TODO: also set these from the configuration.
 		final int wyMin = 0;
 		final int wyMax = w.getMaxHeight();
 		final int yMin;
 		final int yMax;
-		final WorldSettings ws = settings.getApplicableWorldSettings(w.getName());
-		if (ws.confine.enabled.getValue(false)){
-			yMin = ws.confine.yMin.getValue(wyMin).intValue();
-			yMax = ws.confine.yMax.getValue(wyMax).intValue();
+		if (settings.confine.enabled.getValue(false)){
+			yMin = settings.confine.yMin.getValue(wyMin).intValue();
+			yMax = settings.confine.yMax.getValue(wyMax).intValue();
 		} else{
 			yMin = wyMin;
 			yMax = wyMax;
@@ -316,8 +307,8 @@ public class ArrayPropagation extends Propagation {
 		
 		final int[][] rInts = this.rInts;
 		final float[] rFloats = this.rFloats;
-		final float[] resistance = this.resistance;
-		final float[] passthrough = this.passthrough;
+		final float[] resistance = settings.resistance;
+		final float[] passthrough = settings.passthrough;
 		final float[] strength = this.strength;
 		final int[] sequence = this.sequence;
 		// kk exaggerated maybe...
@@ -331,6 +322,12 @@ public class ArrayPropagation extends Propagation {
 		int ir = ExplosionManager.random.nextInt(rand.length);
 		final int is = rand.length-1;
 		final int iinc = ExplosionManager.random.nextInt(4) + 1;
+		
+		final float defaultResistance = settings.defaultResistance;
+		final boolean useRand = settings.randRadius > 0;
+		final float fStraight = settings.fStraight;
+		final float minRes = settings.minResistance;
+		// TODO: use minPassthrough ?
 
 		// iterate while points to check are there:
 		int n = 0;
