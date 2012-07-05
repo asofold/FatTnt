@@ -240,6 +240,7 @@ public class Defaults {
 	public static List<Integer> getIdList(CompatConfig cfg, String path){
 		List<Integer> out = new LinkedList<Integer>();
 		List<String> ref = cfg.getStringList(path);
+		if (ref == null) return out;
 		for ( Object x : ref){
 			Integer id = null;
 			if ( x instanceof Number){
