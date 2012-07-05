@@ -57,6 +57,8 @@ public class FatTnt extends JavaPlugin implements Listener {
 	public static final Integer statsNearbyEntities = stats.getNewId("nearby_entities");
 	public static final Integer statsBlocksVisited = stats.getNewId("blocks_visited");
 	public static final Integer statsBlocksCollected = stats.getNewId("blocks_collected");
+	public static final Integer statsScheduler = stats.getNewId("scheduler");
+	public static final Integer statsSchedulerEntries = stats.getNewId("scheduler_entries");
 	public static final Integer statsStrength = stats.getNewId("strength");
 	public static final Integer statsDamage = stats.getNewId("damage");
 	public static final Integer statsAll = stats.getNewId("all");
@@ -86,10 +88,16 @@ public class FatTnt extends JavaPlugin implements Listener {
 		taskIdScheduler = getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
 			@Override
 			public void run() {
-				final List<ScheduledExplosion> explosions = scheduler.getNextExplosions();
-				for (final ScheduledExplosion explosion : explosions){
-					createExplosion(explosion.world, explosion.x, explosion.y, explosion.z, explosion.radius, explosion.fire, explosion.explEntity, explosion.entityType);
+				if (scheduler.hasEntries()){
+					final long ns = System.nanoTime();
+					final List<ScheduledExplosion> explosions = scheduler.getNextExplosions();
+					for (final ScheduledExplosion explosion : explosions){
+						createExplosion(explosion.world, explosion.x, explosion.y, explosion.z, explosion.radius, explosion.fire, explosion.explEntity, explosion.entityType);
+					}
+					stats.addStats(statsScheduler, System.nanoTime() - ns);
+					stats.addStats(statsSchedulerEntries, explosions.size());
 				}
+				
 				if (!scheduler.hasEntries()){
 					getServer().getScheduler().cancelTask(taskIdScheduler);
 					taskIdScheduler = -1;
