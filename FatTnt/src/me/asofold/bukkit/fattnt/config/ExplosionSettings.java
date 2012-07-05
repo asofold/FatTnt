@@ -142,7 +142,7 @@ public class ExplosionSettings extends PrioritySettings{
 	 * If a block can not be destroyed this will be checked for further propagation.
 	 * created in applyConfig
 	 */
-	public final PriorityValue<float[]> passthrough = addValue("passthrough", null);
+	public final PriorityValue<float[]> passthrough = addValue("passthrough", new PriorityValue<float[]>());
 	
 	/**
 	 * Explosion resistance values for blocks.
