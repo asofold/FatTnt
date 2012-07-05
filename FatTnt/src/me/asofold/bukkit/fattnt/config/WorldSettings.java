@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import me.asofold.bukkit.fattnt.config.compatlayer.CompatConfig;
-import me.asofold.bukkit.fattnt.config.priorityvalues.PrioritySettings;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.Configuration;
@@ -17,32 +16,40 @@ import org.bukkit.entity.EntityType;
  * @author mc_dev
  *
  */
-public class WorldSettings extends PrioritySettings {
+public class WorldSettings {
 
 	public int priority = 0;
 	
-	public ExplosionSettings explosion = new ExplosionSettings(0);
+	public ExplosionSettings explosion;
 	
-	public Map <EntityType, ExplodingEntitySettings> entities = new HashMap<EntityType, ExplodingEntitySettings>();
+	public Map<EntityType, ExplosionSettings> entities = new HashMap<EntityType, ExplosionSettings>();
 	
 	public WorldSettings(){
 	}
 	
 	public WorldSettings(int priority){
 		this.priority = priority;
-		setPriority(priority);
+		explosion = new ExplosionSettings(priority);
 	}
-	
+
+	public boolean hasValues() {
+		if (explosion.hasValues()) return true;
+		for (ExplosionSettings ees : entities.values()){
+			if (ees.hasValues()) return true;
+		}
+		return false;
+	}
+
 	public void fromConfig(CompatConfig cfg, String prefix){
 		priority = 0;
 		if (cfg.contains(prefix + Path.priority)) priority  = cfg.getInt(prefix + Path.priority, (int) 0);
-		resetAllValues(priority);
 		
 		// ExplosionSettings:
 		explosion = new ExplosionSettings(priority);
 		explosion.applyConfig(cfg, prefix, priority);
 		
 		// Entity settings:
+		entities.clear();
 		for (String key : cfg.getStringKeys(prefix + Path.explodingEntities)){
 			EntityType type;
 			try{
@@ -52,8 +59,8 @@ public class WorldSettings extends PrioritySettings {
 				Bukkit.getLogger().warning("[FatTnt] Bad entity type ("+key+") at: " + prefix + Path.explodingEntities);
 				continue;
 			}
-			ExplodingEntitySettings ees = new ExplodingEntitySettings(priority);
-			ees.applyConfig(cfg, prefix + Path.explodingEntities + Path.sep + key);
+			ExplosionSettings ees = new ExplosionSettings(priority);
+			ees.applyConfig(cfg, prefix + Path.explodingEntities + Path.sep + key, priority);
 			entities.put(type, ees);
 		}
 	}
@@ -63,7 +70,7 @@ public class WorldSettings extends PrioritySettings {
 		
 		explosion.toConfig(cfg, prefix);
 		
-		for (Entry<EntityType, ExplodingEntitySettings> entry : entities.entrySet()){
+		for (Entry<EntityType, ExplosionSettings> entry : entities.entrySet()){
 			entry.getValue().toConfig(cfg, prefix + Path.explodingEntities + Path.sep + entry.getKey().toString() + Path.sep);
 		}
 		
@@ -74,17 +81,23 @@ public class WorldSettings extends PrioritySettings {
 		
 	}
 
+	/**
+	 * Get maximal maxRadius.
+	 * @return
+	 */
 	public float getMaxRadius(){
 		float maxRadius = explosion.maxRadius;
-		for (ExplodingEntitySettings ees : entities.values()){
-			maxRadius = Math.max(maxRadius, ees.explosionSettings.maxRadius);
+		for (ExplosionSettings ees : entities.values()){
+			maxRadius = Math.max(maxRadius, ees.maxRadius);
 		}
 		return maxRadius;
 	}
 
-	public ExplosionSettings getApplicableExplosionSettings(EntityType explodingEntity) {
-		// TODO Auto-generated method stub
-		return explosion;
+	public void applyExplosionSettings(ExplosionSettings out, EntityType type) {
+		out.applySettings(explosion);
+		if (type == null) return;
+		ExplosionSettings ees = entities.get(type);
+		if (ees != null) out.applySettings(ees);
 	}
 	
 }

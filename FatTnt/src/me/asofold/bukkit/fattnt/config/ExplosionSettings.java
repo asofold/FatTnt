@@ -3,14 +3,15 @@ package me.asofold.bukkit.fattnt.config;
 import java.util.Collection;
 import java.util.List;
 
-import org.bukkit.configuration.Configuration;
-
 import me.asofold.bukkit.fattnt.config.compatlayer.CompatConfig;
+import me.asofold.bukkit.fattnt.config.priorityvalues.PrioritySettings;
+
+import org.bukkit.configuration.Configuration;
 
 /**
  * General explosion settings, may have sub settings, may appear as default, world specific and entity specific.
  */
-public class ExplosionSettings {
+public class ExplosionSettings extends PrioritySettings{
 	
 	public ConfinementSettings confine = new ConfinementSettings();
 	
@@ -262,11 +263,6 @@ public class ExplosionSettings {
 			propagateDamage[id] = true;
 		}
 	}
-	
-	private void resetAllValues(int priority) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	private void readResistance(CompatConfig cfg, String path, float[] array, float defaultResistance){
 		Collection<String> keys = cfg.getStringKeys(path);
@@ -291,7 +287,7 @@ public class ExplosionSettings {
 		
 	}
 
-	public void applySettings(ExplosionSettings applicableExplosionSettings) {
+	public void applySettings(ExplosionSettings settings) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -31,6 +31,9 @@ public class Settings {
 	 */
 	private final Map<String, WorldSettings> worldSettings = new HashMap<String, WorldSettings>();
 	
+	/**
+	 * Absolute maximum.
+	 */
 	private float maxRadius = 0;
 
 	/**
@@ -87,10 +90,10 @@ public class Settings {
 	public ExplosionSettings getApplicableExplosionSettings(String worldName, EntityType type){
 		// TODO: check if in cache map
 		ExplosionSettings out = new ExplosionSettings(Integer.MIN_VALUE);
-		out.applySettings(defaultWorldSettings.getApplicableExplosionSettings(type));
+		defaultWorldSettings.applyExplosionSettings(out, type);
 		WorldSettings ref = worldSettings.get(worldName.trim().toLowerCase());
 		if (ref != null){
-			out.applySettings(ref.getApplicableExplosionSettings(type));
+			ref.applyExplosionSettings(out, type);
 		}
 		// TODO: maybe ensure some defaults here ?
 		// TODO: put to cache map !
