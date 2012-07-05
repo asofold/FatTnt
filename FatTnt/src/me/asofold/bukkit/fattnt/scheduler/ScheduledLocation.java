@@ -14,8 +14,8 @@ public class ScheduledLocation implements ScheduledEntry {
 	public final double y;
 	public final double z;
 
-	private final int bX;
-	private final int bZ;
+	protected final int bX;
+	protected final int bZ;
 	
 	public ScheduledLocation(final Location location){
 		this(location.getWorld(), location.getX(), location.getY(), location.getZ());

@@ -190,6 +190,8 @@ consider: cleanup command: remove tnt + scheduled explosions
 consider: world item cap (risky: could remove any sort of items, probably restrict to dirt, stone, sand, gravel, netherrack)
 
 ***
+
+get entities from chunks maybe.
 Try the ordering of propagation: first the inner cube !
 
 thinking further: schedule block changes... intricate system how schedulers relate and might release resources for the important stuff. 
@@ -219,7 +221,6 @@ get fuseTick settings in place everywhere.
 ***
 - SchedulerSet -> Runnable + taskId + register(Plugin) + cancel. 
 
-EntitySchedule not just tnt 
 
 VERSION HISTORY (only done changes)
 -----------------------------------------------------------------

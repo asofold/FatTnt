@@ -329,7 +329,7 @@ public class FatTnt extends JavaPlugin implements Listener {
 		if (!es.itemTnt) return;
 		event.setCancelled(true);
 		// TODO might have to be scheduled
-		if (es.scheduleTnt) schedulers.spawnEntities.addEntry(ExplosionManager.getScheduledTnt(item));
+		if (es.scheduleEntities) schedulers.spawnEntities.addEntry(ExplosionManager.getScheduledTnt(item));
 		else ExplosionManager.replaceByTNTPrimed(item);		
 	}
 	

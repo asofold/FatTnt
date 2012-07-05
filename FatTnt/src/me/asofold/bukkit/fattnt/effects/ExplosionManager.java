@@ -9,6 +9,7 @@ import me.asofold.bukkit.fattnt.config.ExplosionSettings;
 import me.asofold.bukkit.fattnt.events.FatEntityDamageEvent;
 import me.asofold.bukkit.fattnt.events.FatEntityExplodeEvent;
 import me.asofold.bukkit.fattnt.propagation.Propagation;
+import me.asofold.bukkit.fattnt.scheduler.ScheduledArrowSpawn;
 import me.asofold.bukkit.fattnt.scheduler.ScheduledItemSpawn;
 import me.asofold.bukkit.fattnt.scheduler.ScheduledTntSpawn;
 import me.asofold.bukkit.fattnt.scheduler.SchedulerSet;
@@ -121,7 +122,7 @@ public class ExplosionManager {
 			else block.setTypeId(0, true);
 			if (id == tntId){
 				Location loc = blockCenter(world, block);
-				if (settings.scheduleTnt) schedulers.spawnEntities.addEntry(getScheduledTnt(world, x, defaultYield, z, loc, realRadius, settings, propagation));
+				if (settings.scheduleEntities) schedulers.spawnEntities.addEntry(getScheduledTnt(world, x, defaultYield, z, loc, realRadius, settings, propagation));
 				else addTNTPrimed(world, x, y, z, loc, realRadius, settings, propagation);
 			}
 			else{
@@ -215,28 +216,33 @@ public class ExplosionManager {
 //		}
 		// do spawn tnt-primed
 		if ( effRad == 0.0f) return null; // not affected
-		Arrow arrow = spawnArrow(world, loc);
-		if ( arrow == null) return null;
 		Vector fromCenter = new Vector(loc.getX()-x,loc.getY()-y,loc.getZ()-z).normalize().multiply(0.5);
 		if ( loc.getBlock().getRelative(BlockFace.DOWN).getType()!=Material.AIR) fromCenter.setY(Math.abs(fromCenter.getY())+0.7);
-		arrow.setVelocity(fromCenter);
-		if (settings.velOnPrime) addRandomVelocity(arrow, loc, x,y,z, effRad, realRadius, settings);
-		return arrow;
+		
+		if (settings.velOnPrime) fromCenter = addRandomVelocity(EntityType.ARROW, fromCenter, loc, x,y,z, effRad, realRadius, settings);
+		if (settings.scheduleEntities){
+			schedulers.spawnEntities.addEntry(new ScheduledArrowSpawn(loc, fromCenter));
+			return null; // hmm
+		}
+		else{
+			Arrow arrow = spawnArrow(world, loc);
+			if ( arrow == null) return null;
+			arrow.setVelocity(fromCenter);
+			return arrow;
+		}
 	}
 
 	public  static Arrow spawnArrow(World world, Location loc) {
-		try{
-			Entity entity = world.spawn(loc, CraftArrow.class);
-			if (entity == null) return null;
-			if ( !(entity instanceof Arrow)){
-				entity.remove();
-				return null;
-			}
-			return (Arrow) entity;
-		} catch( Throwable t){
-			// maybe later log
-			return null;
-		}
+		Arrow arrow = world.spawn(loc, CraftArrow.class);
+		if (arrow == null) return null;
+		return arrow;
+	}
+	
+	public static Arrow spawnArrow(World world, Location location, Vector velocity) {
+		Arrow arrow = spawnArrow(world, location);
+		if (arrow == null) return null;
+		if (velocity != null) arrow.setVelocity(velocity);
+		return arrow;
 	}
 
 	/**
@@ -270,7 +276,8 @@ public class ExplosionManager {
 			final Location loc = entity.getLocation();
 			float effStr = propagation.getStrength(loc); // effective strength/radius
 			
-			boolean isAlive = entity.getType().isAlive();
+			final EntityType entityType = entity.getType();
+			boolean isAlive = entityType.isAlive();
 			boolean addVelocity = false;
 			boolean useDamage = true;
 			boolean applyEntityYield = false;
@@ -392,7 +399,7 @@ public class ExplosionManager {
 					addVelocity = true;
 				}
 			}
-			if (addVelocity) addRandomVelocity(entity, loc, x,y,z, effStr, realRadius, settings);
+			if (addVelocity) entity.setVelocity(addRandomVelocity(entityType, entity.getVelocity(), loc, x,y,z, effStr, realRadius, settings));
 		}
 	}
 
@@ -406,12 +413,9 @@ public class ExplosionManager {
 	 * @param part part of radius (effective), as with FatTnt.getExplosionStrength
 	 * @param max max radius
 	 */
-	public static void addRandomVelocity(Entity entity, Location loc, double x, double y,
+	public static Vector addRandomVelocity(EntityType entityType, Vector velocity, Location loc, double x, double y,
 			double z, float part, float max, ExplosionSettings settings) {
-		Vector rv = entity.getVelocity().add(getRandomVelocityToAdd(entity, loc, x, y, z, part, max, settings));
-		if (entity instanceof LivingEntity) ((LivingEntity) entity).setVelocity(rv); 
-		else if (entity instanceof TNTPrimed) ((TNTPrimed) entity).setVelocity(rv);
-		else entity.setVelocity(rv);
+		return velocity.add(getRandomVelocityToAdd(entityType, loc, x, y, z, part, max, settings));
 	}
 	
 	public static Vector getRandomVelocityToAdd(Entity entity, Location loc, double x, double y,
@@ -489,4 +493,5 @@ public class ExplosionManager {
 		item.setVelocity(v);
 		return item;
 	}
+
 }
