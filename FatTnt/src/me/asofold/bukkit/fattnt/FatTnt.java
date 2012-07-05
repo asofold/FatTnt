@@ -55,19 +55,33 @@ public class FatTnt extends JavaPlugin implements Listener {
 	public static final boolean DEBUG_LOTS = false;
 	
 	private static final Stats stats = new Stats(Defaults.msgPrefix.trim()+"[STATS]");
+	
+	// Calculate one explosion
+	public static final Integer statsExplosion = stats.getNewId("explosion");
 	public static final Integer statsGetBlocks = stats.getNewId("get_blocks");
-	public static final Integer statsApplyBlocks = stats.getNewId("apply_blocks");
 	public static final Integer statsExplodeEvent = stats.getNewId("event_explode");
-	public static final Integer statsApplyEntities = stats.getNewId("apply_entities");
+	public static final Integer statsApplyBlocks = stats.getNewId("apply_blocks");
 	public static final Integer statsNearbyEntities = stats.getNewId("nearby_entities");
+	public static final Integer statsApplyEntities = stats.getNewId("apply_entities");
+	// Counts for an explosion:
+	public static final Integer statsStrength = stats.getNewId("strength");
 	public static final Integer statsBlocksVisited = stats.getNewId("blocks_visited");
 	public static final Integer statsBlocksCollected = stats.getNewId("blocks_collected");
-	public static final Integer statsScheduler = stats.getNewId("scheduler");
-	public static final Integer statsSchedulerExplode = stats.getNewId("scheduler_explode");
-	protected static final Integer statsSchedulerStore = stats.getNewId("scheduler_store");
-	public static final Integer statsStrength = stats.getNewId("strength");
 	public static final Integer statsDamage = stats.getNewId("damage");
-	public static final Integer statsAll = stats.getNewId("all");
+	// Scheduling of explosions:
+	public static final Integer statsProcessExpl = stats.getNewId("sched_proc_expl");
+	public static final Integer statsNExpl = stats.getNewId("sched_n_explode");
+	public static final Integer statsNExplStore = stats.getNewId("sched_store_expl");
+	// Scheduling of spawning tnt:
+	public static final Integer statsProcessTnt = stats.getNewId("sched_proc_tnt");
+	public static final Integer statsNTnt = stats.getNewId("sched_n_tnt");
+	public static final Integer statsNTntStore = stats.getNewId("sched_store_tnt");
+	// Scheduling of spawning items:
+	public static final Integer statsProcessItem = stats.getNewId("sched_proc_item");
+	public static final Integer statsNItem = stats.getNewId("sched_n_item");
+	public static final Integer statsNItemStore = stats.getNewId("sched_store_item");
+	
+	
 	static {
 		stats.setLogStats(DEBUG);
 		ExplosionManager.setStats(stats);
@@ -95,7 +109,7 @@ public class FatTnt extends JavaPlugin implements Listener {
 			@Override
 			public void run() {
 				if (scheduler.hasEntries()){
-					stats.addStats(statsSchedulerStore, scheduler.getTotalSize());
+					stats.addStats(statsNExplStore, scheduler.getTotalSize());
 					final long ns = System.nanoTime();
 					final List<ScheduledExplosion> explosions = scheduler.getNextExplosions();
 					boolean abort = false;
@@ -112,8 +126,8 @@ public class FatTnt extends JavaPlugin implements Listener {
 							abort = true;
 						}
 					}
-					stats.addStats(statsScheduler, System.nanoTime() - ns);
-					stats.addStats(statsSchedulerExplode, done);
+					stats.addStats(statsProcessExpl, System.nanoTime() - ns);
+					stats.addStats(statsNExpl, done);
 				}
 				
 				if (!scheduler.hasEntries()){
@@ -411,7 +425,7 @@ public class FatTnt extends JavaPlugin implements Listener {
 			List<Entity> nearbyEntities, float damageMultiplier) {
 		long ns = System.nanoTime();
 		ExplosionManager.applyExplosionEffects(world, x, y, z, realRadius, fire, explEntity, entityType, nearbyEntities, damageMultiplier, settings.getApplicableExplosionSettings(world.getName(), Utils.usedEntityType(explEntity, entityType)), propagation, damageProcessor);
-		stats.addStats(statsAll, System.nanoTime()-ns);
+		stats.addStats(statsExplosion, System.nanoTime()-ns);
 	}
 
 	/**
