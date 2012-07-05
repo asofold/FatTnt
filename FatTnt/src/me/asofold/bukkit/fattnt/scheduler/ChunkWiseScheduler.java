@@ -127,6 +127,7 @@ public final class ChunkWiseScheduler<T extends ScheduledEntry> {
 	 * @param entry
 	 */
 	public final void addEntry(final T entry){
+		if (entry == null) return; // TODO: maybe better make sure by contract.
 		if (totalSize >= maxStoreTotal) reduceStore();
 		final ChunkPos pos = new ChunkPos(Utils.floor(entry.getBlockX() / chunkSize), Utils.floor(entry.getBlockZ() / chunkSize));
 		List<T> list = stored.get(pos);
