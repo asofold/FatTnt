@@ -2,6 +2,7 @@ package me.asofold.bukkit.fattnt.propagation;
 
 import java.util.List;
 
+import me.asofold.bukkit.fattnt.config.ExplosionSettings;
 import me.asofold.bukkit.fattnt.config.Settings;
 import me.asofold.bukkit.fattnt.stats.Stats;
 
@@ -15,23 +16,13 @@ import org.bukkit.block.Block;
  *
  */
 public abstract class Propagation {
-	
-	final float defaultResistance;
-	final float[] resistance;
-	final float[] passthrough;
 
 	float maxRadius = 0;
 	
-	// TODO: add axplosion center into this
-	
 	final Stats stats;
-	final Settings settings;
+
 	public Propagation(Settings settings){
-		this.settings = settings;
-		this.defaultResistance = settings.defaultResistance;
-		this.resistance = settings.resistance;
-		this.passthrough = settings.passthrough;
-		this.maxRadius = settings.maxRadius;
+		this.maxRadius = settings.getMaxRadius(); // absolute possible maximum.
 		this.stats = settings.stats;
 	}
 	
@@ -71,13 +62,15 @@ public abstract class Propagation {
 	 * @param cy
 	 * @param cz
 	 * @param realRadius
+	 * @param settings 
 	 * @return
 	 */
 	public abstract List<Block> getExplodingBlocks(World world, double cx, double cy,
-			double cz, float realRadius);
+			double cz, float realRadius, ExplosionSettings explosionSettings);
 	
 	/**
-	 * To be called periodically, for cleanup action etc.
+	 * To be called periodically, for cleanup action etc., probably.
 	 */
-	public abstract void onIdle();
+	public void onIdle(){
+	}
 }
