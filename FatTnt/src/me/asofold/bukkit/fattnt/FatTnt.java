@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.List;
 
 import me.asofold.bukkit.fattnt.config.Defaults;
+import me.asofold.bukkit.fattnt.config.ExplosionSettings;
 import me.asofold.bukkit.fattnt.config.Settings;
 import me.asofold.bukkit.fattnt.config.compatlayer.CompatConfig;
 import me.asofold.bukkit.fattnt.config.compatlayer.NewConfig;
@@ -65,7 +66,7 @@ public class FatTnt extends JavaPlugin implements Listener {
 //	ExplosionPrimeEvent waitingEP = null;
 	
 	private final Settings settings = new Settings(stats);
-	private DamageProcessor damageProcessor = new DamageProcessor(settings);
+	private DamageProcessor damageProcessor = new DamageProcessor();
 	
 	private Propagation propagation = null;
 	
@@ -157,7 +158,6 @@ public class FatTnt extends JavaPlugin implements Listener {
 		settings.applyConfig(cfg);
 		// TODO: propagation pbased on config (Factory)
 		propagation = PropagationFactory.getPropagation(settings);
-		setDamageProcessor(new DamageProcessor(settings));
 	}
 
 	/**
@@ -168,45 +168,32 @@ public class FatTnt extends JavaPlugin implements Listener {
 		this.damageProcessor = damageProcessor;
 	}
 
-	@EventHandler(priority=EventPriority.HIGHEST)
-	void onExplosionPrimeLowest(ExplosionPrimeEvent event){
+	@EventHandler(priority=EventPriority.HIGHEST, ignoreCancelled=true)
+	final void onExplosionPrime(final ExplosionPrimeEvent event){
 //		waitingEP = null;
-		if (!settings.handleExplosions) return;
-		else if (event.isCancelled()) return;
-		else if (!settings.handledEntities.contains(event.getEntityType())) return;
-		// TODO: maybe apply delay setting here ...
+		if (event.isCancelled()) return;
+		final EntityType type = event.getEntityType();
+		final Entity entity = event.getEntity();
+		final Location loc = entity.getLocation();
+		final World world = loc.getWorld();
+		if (!settings.handlesExplosions(world.getName(), type)) return;
 		// do prepare to handle this explosion:
 		event.setCancelled(true);
-//		waitingEP = event;
-//	}
-//	
-//	@EventHandler(priority=EventPriority.MONITOR)
-//	void onExplosionPrime(ExplosionPrimeEvent event){
-//		// check event 
-//		if ( waitingEP != event) return;
-//		waitingEP = null;
-//		// event is to be handled:
-//		if ( !event.isCancelled()) event.setCancelled(true); // just in case other plugins mess with this one.
-		EntityType type = event.getEntityType();
-		Entity entity = event.getEntity();
-		Location loc = entity.getLocation().clone();
-		double x = loc.getX();
-		double y = loc.getY();
-		double z = loc.getZ();
 		if (!entity.isDead()) entity.remove();
-		createExplosion(loc.getWorld(), x, y, z, event.getRadius(), event.getFire(), entity, type);
+		createExplosion(world, loc.getX(), loc.getY(), loc.getZ(), event.getRadius(), event.getFire(), entity, type);
 	}
 	
 	@EventHandler(priority=EventPriority.HIGHEST)
-	void onEntityCombust(EntityCombustEvent event){
+	final void onEntityCombust(final EntityCombustEvent event){
 		// TODO:
 		if (event.isCancelled()) return;
-		if (!settings.itemTnt) return;
-		Entity entity = event.getEntity();
+		final Entity entity = event.getEntity();
 		if ( !(entity instanceof Item)) return;
-		Item item = (Item) entity;
-		ItemStack stack = item.getItemStack();
+		final Item item = (Item) entity;
+		final ItemStack stack = item.getItemStack();
 		if ( stack.getType() != Material.TNT) return;
+		final Location loc = entity.getLocation();
+		if (!settings.getApplicableExplosionSettings(loc.getWorld().getName(), null).itemTnt) return;
 		event.setCancelled(true);
 		ExplosionManager.replaceByTNTPrimed(item);		
 	}
@@ -245,11 +232,14 @@ public class FatTnt extends JavaPlugin implements Listener {
 		if (radius==0.0f) return;
 		// calculate effects
 		// WORKAROUND:
-		float realRadius = radius*settings.radiusMultiplier;
+		EntityType givenType = entityType;
+		if (givenType == null && explEntity != null) givenType = explEntity.getType();
+		ExplosionSettings explSettings = settings.getApplicableExplosionSettings(world.getName(), givenType);
+		float realRadius = radius*explSettings.radiusMultiplier;
 		List<Entity> nearbyEntities;
 		long ms = System.nanoTime();
-		if (explEntity==null) nearbyEntities = Utils.getNearbyEntities(world, x,y,z, realRadius*settings.entityRadiusMultiplier);
-		else nearbyEntities = explEntity.getNearbyEntities(realRadius, realRadius, realRadius*settings.entityRadiusMultiplier);
+		if (explEntity==null) nearbyEntities = Utils.getNearbyEntities(world, x,y,z, realRadius*explSettings.entityRadiusMultiplier);
+		else nearbyEntities = explEntity.getNearbyEntities(realRadius, realRadius, realRadius*explSettings.entityRadiusMultiplier);
 		stats.addStats(statsNearbyEntities, System.nanoTime()-ms);
 		applyExplosionEffects(world, x, y, z, realRadius, fire, explEntity, entityType, nearbyEntities);
 	}
@@ -315,7 +305,9 @@ public class FatTnt extends JavaPlugin implements Listener {
 	public void applyExplosionEffects(World world, double x, double y, double z, float realRadius, boolean fire, Entity explEntity, EntityType entityType,
 			List<Entity> nearbyEntities, float damageMultiplier) {
 		long ns = System.nanoTime();
-		ExplosionManager.applyExplosionEffects(world, x, y, z, realRadius, fire, explEntity, entityType, nearbyEntities, damageMultiplier, settings, propagation, damageProcessor);
+		EntityType givenType = entityType;
+		if (givenType == null && explEntity != null) givenType = explEntity.getType();
+		ExplosionManager.applyExplosionEffects(world, x, y, z, realRadius, fire, explEntity, entityType, nearbyEntities, damageMultiplier, settings.getApplicableExplosionSettings(world.getName(), givenType), propagation, damageProcessor);
 		stats.addStats(statsAll, System.nanoTime()-ns);
 	}
 
@@ -336,7 +328,7 @@ public class FatTnt extends JavaPlugin implements Listener {
 	 */
 	public List<Block> getExplodingBlocks(World world, double cx, double cy,
 			double cz, float realRadius) {
-		return propagation.getExplodingBlocks(world, cx, cy, cz, realRadius);
+		return propagation.getExplodingBlocks(world, cx, cy, cz, realRadius, settings.getApplicableExplosionSettings(world.getName(), null));
 	}
 	
 	/**

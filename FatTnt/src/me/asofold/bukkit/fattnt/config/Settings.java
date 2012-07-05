@@ -24,12 +24,12 @@ public class Settings {
 	/**
 	 * Default settings for all worlds.
 	 */
-	WorldSettings defaultWorldSettings = new WorldSettings();
+	private WorldSettings defaultWorldSettings = new WorldSettings();
 	
 	/**
 	 * World name (lower-case) to WorldSettings.
 	 */
-	Map<String, WorldSettings> worldSettings = new HashMap<String, WorldSettings>();
+	private final Map<String, WorldSettings> worldSettings = new HashMap<String, WorldSettings>();
 	
 	private float maxRadius = 0;
 
@@ -84,17 +84,28 @@ public class Settings {
 		return maxRadius;
 	}
 	
-	public ExplosionSettings getApplicableExplosionSettings(EntityType explodingEntity, String worldName){
+	public ExplosionSettings getApplicableExplosionSettings(String worldName, EntityType type){
 		// TODO: check if in cache map
 		ExplosionSettings out = new ExplosionSettings(Integer.MIN_VALUE);
-		out.applySettings(defaultWorldSettings.getApplicableExplosionSettings(explodingEntity));
+		out.applySettings(defaultWorldSettings.getApplicableExplosionSettings(type));
 		WorldSettings ref = worldSettings.get(worldName.trim().toLowerCase());
 		if (ref != null){
-			out.applySettings(ref.getApplicableExplosionSettings(explodingEntity));
+			out.applySettings(ref.getApplicableExplosionSettings(type));
 		}
 		// TODO: maybe ensure some defaults here ?
 		// TODO: put to cache map !
 		return out;
+	}
+
+	/**
+	 * Quicker check just for if is handled.
+	 * @param name
+	 * @param type
+	 * @return
+	 */
+	public boolean handlesExplosions(String name, EntityType type) {
+		// TODO Auto-generated method stub
+		return true;
 	}
 
 }
