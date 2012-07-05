@@ -50,6 +50,7 @@ public final class ExplosionScheduler {
 	private int chunkSize = 16;
 	private int maxStoreTotal = 5000;
 	private int maxStoreChunk = 50; 
+	public long maxExplodeNanos = 5000000;
 	
 	private final Map<ChunkPos, List<ScheduledExplosion>> stored = new LinkedHashMap<ExplosionScheduler.ChunkPos, List<ScheduledExplosion>>(300);
 	
@@ -61,6 +62,7 @@ public final class ExplosionScheduler {
 		chunkSize = cfg.getInt(Path.schedChunkSize, ref.chunkSize);
 		maxStoreTotal = cfg.getInt(Path.schedMaxStoreTotal, ref.maxStoreTotal);
 		maxStoreChunk = cfg.getInt(Path.schedMaxStoreChunk, ref.maxStoreChunk);
+		maxExplodeNanos = cfg.getLong(Path.schedMaxExplodeNanos, ref.maxExplodeNanos);
 	}
 	
 	/**

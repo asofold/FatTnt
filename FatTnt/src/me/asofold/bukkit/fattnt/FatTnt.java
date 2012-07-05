@@ -93,11 +93,22 @@ public class FatTnt extends JavaPlugin implements Listener {
 					stats.addStats(statsSchedulerStore, scheduler.getTotalSize());
 					final long ns = System.nanoTime();
 					final List<ScheduledExplosion> explosions = scheduler.getNextExplosions();
+					boolean abort = false;
+					int done = 0;
 					for (final ScheduledExplosion explosion : explosions){
+						if (abort){
+							scheduler.addExplosion(explosion);
+							continue;
+						}
 						createExplosion(explosion.world, explosion.x, explosion.y, explosion.z, explosion.radius, explosion.fire, explosion.explEntity, explosion.entityType);
+						final long nsDone = System.nanoTime() - ns;
+						done ++;
+						if (nsDone > scheduler.maxExplodeNanos){
+							abort = true;
+						}
 					}
 					stats.addStats(statsScheduler, System.nanoTime() - ns);
-					stats.addStats(statsSchedulerExplode, explosions.size());
+					stats.addStats(statsSchedulerExplode, done);
 				}
 				
 				if (!scheduler.hasEntries()){
