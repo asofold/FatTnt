@@ -164,4 +164,8 @@ public final class ExplosionScheduler {
 		stored.clear();
 		totalSize = 0;
 	}
+
+	public long getTotalSize() {
+		return totalSize;
+	}
 }

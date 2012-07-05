@@ -58,7 +58,8 @@ public class FatTnt extends JavaPlugin implements Listener {
 	public static final Integer statsBlocksVisited = stats.getNewId("blocks_visited");
 	public static final Integer statsBlocksCollected = stats.getNewId("blocks_collected");
 	public static final Integer statsScheduler = stats.getNewId("scheduler");
-	public static final Integer statsSchedulerEntries = stats.getNewId("scheduler_entries");
+	public static final Integer statsSchedulerExplode = stats.getNewId("scheduler_explode");
+	protected static final Integer statsSchedulerStore = stats.getNewId("scheduler_store");
 	public static final Integer statsStrength = stats.getNewId("strength");
 	public static final Integer statsDamage = stats.getNewId("damage");
 	public static final Integer statsAll = stats.getNewId("all");
@@ -89,13 +90,14 @@ public class FatTnt extends JavaPlugin implements Listener {
 			@Override
 			public void run() {
 				if (scheduler.hasEntries()){
+					stats.addStats(statsSchedulerStore, scheduler.getTotalSize());
 					final long ns = System.nanoTime();
 					final List<ScheduledExplosion> explosions = scheduler.getNextExplosions();
 					for (final ScheduledExplosion explosion : explosions){
 						createExplosion(explosion.world, explosion.x, explosion.y, explosion.z, explosion.radius, explosion.fire, explosion.explEntity, explosion.entityType);
 					}
 					stats.addStats(statsScheduler, System.nanoTime() - ns);
-					stats.addStats(statsSchedulerEntries, explosions.size());
+					stats.addStats(statsSchedulerExplode, explosions.size());
 				}
 				
 				if (!scheduler.hasEntries()){
