@@ -205,6 +205,8 @@ consider: after removing expired:_ reschedule the chunk ? => rather not
 
 ? maybe refactor to have the processing loop inside of scheduler ?
 
+add booleans to config if to schedule.
+
 VERSION HISTORY (only done changes)
 -----------------------------------------------------------------
 

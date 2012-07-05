@@ -16,6 +16,7 @@ import me.asofold.bukkit.fattnt.propagation.Propagation;
 import me.asofold.bukkit.fattnt.propagation.PropagationFactory;
 import me.asofold.bukkit.fattnt.scheduler.ProcessHandler;
 import me.asofold.bukkit.fattnt.scheduler.ScheduledExplosion;
+import me.asofold.bukkit.fattnt.scheduler.ScheduledTntSpawn;
 import me.asofold.bukkit.fattnt.scheduler.SchedulerSet;
 import me.asofold.bukkit.fattnt.stats.Stats;
 import me.asofold.bukkit.fattnt.utils.Utils;
@@ -100,8 +101,15 @@ public class FatTnt extends JavaPlugin implements Listener {
 	
 	private final ProcessHandler<ScheduledExplosion> explHandler = new ProcessHandler<ScheduledExplosion>() {
 		@Override
-		public void process(final ScheduledExplosion explosion) {
+		public final void process(final ScheduledExplosion explosion) {
 			createExplosion(explosion.world, explosion.x, explosion.y, explosion.z, explosion.radius, explosion.fire, explosion.explEntity, explosion.entityType);
+		}
+	};
+	
+	private final ProcessHandler<ScheduledTntSpawn> tntHandler = new ProcessHandler<ScheduledTntSpawn>() {
+		@Override
+		public final void process(final ScheduledTntSpawn spawnTnt) {
+			ExplosionManager.addTntPrimed(spawnTnt);
 		}
 	};
 	
@@ -118,6 +126,7 @@ public class FatTnt extends JavaPlugin implements Listener {
 			public void run() {
 				boolean needRun = false;
 				if (schedulers.explosions.onTick(explHandler, stats, statsProcessExpl, statsNExpl, statsNExplStore)) needRun = true;
+				if (schedulers.spawnTnt.onTick(tntHandler, stats, statsProcessTnt, statsNTnt, statsNTntStore)) needRun = true;
 				// TODO: other schedulers.
 				if (!needRun){
 					getServer().getScheduler().cancelTask(taskIdScheduler);
@@ -262,21 +271,25 @@ public class FatTnt extends JavaPlugin implements Listener {
 
 	@EventHandler(priority=EventPriority.HIGHEST, ignoreCancelled=true)
 	final void onExplosionPrime(final ExplosionPrimeEvent event){
-		final Entity entity = event.getEntity();
-		final Location loc = entity.getLocation();
+		final Entity explEntity = event.getEntity();
+		final Location loc = explEntity.getLocation();
 		final World world = loc.getWorld();
 		final String worldName = world.getName();
-		final EntityType type = (entity == null) ? null:entity.getType();
-		if (settings.preventsExplosions(worldName, type)){
+		final EntityType entityType = (explEntity == null) ? null:explEntity.getType();
+		if (settings.preventsExplosions(worldName, entityType)){
 			event.setCancelled(true);
 			return;
 		}
-		if (!settings.handlesExplosions(worldName, type)) return;
+		if (!settings.handlesExplosions(worldName, entityType)) return;
 		// do prepare to handle this explosion:
 		event.setCancelled(true);
-		if (!entity.isDead()) entity.remove();
-		schedulers.explosions.addEntry(new ScheduledExplosion(world, loc.getX(), loc.getY(), loc.getZ(), event.getRadius(), event.getFire(), entity, type));
-		checkSchedulers();
+		if (!explEntity.isDead()) explEntity.remove();
+		final ExplosionSettings explSettings = settings.getApplicableExplosionSettings(worldName, Utils.usedEntityType(explEntity, entityType));
+		if (explSettings.scheduleExplosions){
+			schedulers.explosions.addEntry(new ScheduledExplosion(world, loc.getX(), loc.getY(), loc.getZ(), event.getRadius(), event.getFire(), explEntity, entityType));
+			checkSchedulers();
+		}
+		else createExplosion(world, loc.getX(), loc.getY(), loc.getZ(), event.getRadius(), event.getFire(), explEntity, entityType);
 	}
 	
 	@EventHandler(priority=EventPriority.LOWEST, ignoreCancelled=true)
@@ -305,6 +318,7 @@ public class FatTnt extends JavaPlugin implements Listener {
 		final Location loc = entity.getLocation();
 		if (!settings.getApplicableExplosionSettings(loc.getWorld().getName(), null).itemTnt) return;
 		event.setCancelled(true);
+		// TODO might have to be scheduled
 		ExplosionManager.replaceByTNTPrimed(item);		
 	}
 	
@@ -413,7 +427,9 @@ public class FatTnt extends JavaPlugin implements Listener {
 	public void applyExplosionEffects(World world, double x, double y, double z, float realRadius, boolean fire, Entity explEntity, EntityType entityType,
 			List<Entity> nearbyEntities, float damageMultiplier) {
 		long ns = System.nanoTime();
-		ExplosionManager.applyExplosionEffects(world, x, y, z, realRadius, fire, explEntity, entityType, nearbyEntities, damageMultiplier, settings.getApplicableExplosionSettings(world.getName(), Utils.usedEntityType(explEntity, entityType)), propagation, damageProcessor, schedulers);
+		if (ExplosionManager.applyExplosionEffects(world, x, y, z, realRadius, fire, explEntity, entityType, nearbyEntities, damageMultiplier, settings.getApplicableExplosionSettings(world.getName(), Utils.usedEntityType(explEntity, entityType)), propagation, damageProcessor, schedulers)){
+			checkSchedulers(); // simplified.
+		}
 		stats.addStats(statsExplosion, System.nanoTime()-ns);
 	}
 

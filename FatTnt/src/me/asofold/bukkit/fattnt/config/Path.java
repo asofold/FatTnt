@@ -82,6 +82,8 @@ public class Path {
 	public static final String sched = "scheduler";
 	public static final String schedExplosions = sched + sep + "explosions";
 	public static final String schedEntities = sched + sep + "entities";
+	public static final String schedItems = sched + sep + "items";
+	public static final String schedTnt = sched + sep + "tnt";
 	
 	public static final String process = "process";
 	public static final String store = "store";
