@@ -154,7 +154,12 @@ public final class ExplosionScheduler {
 		}
 	}
 	
-	public boolean hasEntries(){
+	public final boolean hasEntries(){
 		return !stored.isEmpty();
+	}
+	
+	public final void clear(){
+		// TODO: maybe do more looping to set members to null.
+		stored.clear();
 	}
 }

@@ -13,6 +13,7 @@ import me.asofold.bukkit.fattnt.effects.ExplosionManager;
 import me.asofold.bukkit.fattnt.propagation.Propagation;
 import me.asofold.bukkit.fattnt.propagation.PropagationFactory;
 import me.asofold.bukkit.fattnt.scheduler.ExplosionScheduler;
+import me.asofold.bukkit.fattnt.scheduler.ScheduledExplosion;
 import me.asofold.bukkit.fattnt.stats.Stats;
 import me.asofold.bukkit.fattnt.utils.Utils;
 
@@ -72,10 +73,33 @@ public class FatTnt extends JavaPlugin implements Listener {
 	private Propagation propagation = null;
 	
 	private final ExplosionScheduler scheduler = new ExplosionScheduler();
-	private int taskId = -1;
+	private int taskIdScheduler = -1;
 	
 	public FatTnt(){
 		super();
+	}
+	
+	public void checkScheduler(){
+		// TODO: in case of halted: halt ...
+		if (taskIdScheduler != -1) return;
+		if (!scheduler.hasEntries()) return;
+		taskIdScheduler = getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
+			@Override
+			public void run() {
+				final List<ScheduledExplosion> explosions = scheduler.getNextExplosions();
+				for (final ScheduledExplosion explosion : explosions){
+					createExplosion(explosion.world, explosion.x, explosion.y, explosion.z, explosion.radius, explosion.fire, explosion.explEntity, explosion.entityType);
+				}
+				if (!scheduler.hasEntries()){
+					getServer().getScheduler().cancelTask(taskIdScheduler);
+					taskIdScheduler = -1;
+				}
+			}
+		}, 1, 1);
+		if (taskIdScheduler == -1){
+			getLogger().severe("[FatTnt] Failed to schedule the scheduler task, clear all waiting explosions!");
+			scheduler.clear();
+		}
 	}
 	
 	@Override
@@ -87,6 +111,8 @@ public class FatTnt extends JavaPlugin implements Listener {
 	
 	@Override
 	public void onDisable() {
+		taskIdScheduler = -1;
+		// TODO: scheduler.clear ?
 		System.out.println(Defaults.msgPrefix+getDescription().getFullName()+" is disabled.");
 	}
 	
@@ -135,6 +161,7 @@ public class FatTnt extends JavaPlugin implements Listener {
 	public void reloadSettings() {
 		BukkitScheduler sched = getServer().getScheduler();
 		sched.cancelTasks(this);
+		taskIdScheduler = -1;
 		File file = new File (getDataFolder(), "config.yml");
 		boolean exists = file.exists();
 		CompatConfig cfg = new NewConfig(file);
@@ -147,7 +174,9 @@ public class FatTnt extends JavaPlugin implements Listener {
 			public void run() {
 				onIdle();
 			}
-		}, 217, 217);
+		}, 217, 217); // TODO ?
+		scheduler.fromConfig(cfg);
+		checkScheduler();
 	}
 	
 	private void onIdle() {
@@ -184,7 +213,8 @@ public class FatTnt extends JavaPlugin implements Listener {
 		// do prepare to handle this explosion:
 		event.setCancelled(true);
 		if (!entity.isDead()) entity.remove();
-		createExplosion(world, loc.getX(), loc.getY(), loc.getZ(), event.getRadius(), event.getFire(), entity, type);
+		scheduler.addExplosion(new ScheduledExplosion(world, loc.getX(), loc.getY(), loc.getZ(), event.getRadius(), event.getFire(), entity, type));
+		checkScheduler();
 	}
 	
 	@EventHandler(priority=EventPriority.HIGHEST)
