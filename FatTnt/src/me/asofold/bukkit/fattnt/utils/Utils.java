@@ -11,6 +11,7 @@ import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
 public class Utils {
@@ -94,5 +95,17 @@ public class Utils {
         final int floor = (int) x;
         return (floor == x)? floor : floor - (int) (Double.doubleToRawLongBits(x) >>> 63);
     }
+	
+	/**
+	 * Auxiliary method to get the EntityType used by FatTnt to determine explosion settings, if the entityType argument is given it will override the entities type, if that is given.
+	 * @param explEntity Exploding entity m,ay be null.
+	 * @param entityType Entity type used for settings, may be null.
+	 * @return entityType if given, otherwise entity.getType() if given, null otherwise.
+	 */
+	public static final EntityType usedEntityType(final Entity explEntity, final EntityType entityType){
+		if (entityType != null) return entityType;
+		else if (explEntity != null) return explEntity.getType();
+		else return null;
+	}
 
 }

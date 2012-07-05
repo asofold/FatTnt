@@ -10,6 +10,7 @@ import me.asofold.bukkit.fattnt.events.FatEntityDamageEvent;
 import me.asofold.bukkit.fattnt.events.FatEntityExplodeEvent;
 import me.asofold.bukkit.fattnt.propagation.Propagation;
 import me.asofold.bukkit.fattnt.stats.Stats;
+import me.asofold.bukkit.fattnt.utils.Utils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -75,7 +76,7 @@ public class ExplosionManager {
 		stats.addStats(FatTnt.statsBlocksCollected, affected.size()); // counting average number of collected blocks.
 		stats.addStats(FatTnt.statsStrength, (long) realRadius); // just counting average explosion strength !
 		ns = System.nanoTime();
-		FatExplosionSpecs specs = new FatExplosionSpecs();
+		FatExplosionSpecs specs = new FatExplosionSpecs(Utils.usedEntityType(explEntity, entityType));
 		EntityExplodeEvent exE = new FatEntityExplodeEvent(explEntity, new Location(world,x,y,z), affected, settings.yield , specs);
 		pm.callEvent(exE);
 		stats.addStats(FatTnt.statsExplodeEvent, System.nanoTime()-ns);

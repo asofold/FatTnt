@@ -339,9 +339,7 @@ public class FatTnt extends JavaPlugin implements Listener {
 		if (radius==0.0f) return;
 		// calculate effects
 		// WORKAROUND:
-		EntityType givenType = entityType;
-		if (givenType == null && explEntity != null) givenType = explEntity.getType();
-		ExplosionSettings explSettings = settings.getApplicableExplosionSettings(world.getName(), givenType);
+		ExplosionSettings explSettings = settings.getApplicableExplosionSettings(world.getName(), Utils.usedEntityType(explEntity, entityType));
 		float realRadius = radius*explSettings.radiusMultiplier;
 		List<Entity> nearbyEntities;
 		long ms = System.nanoTime();
@@ -412,9 +410,7 @@ public class FatTnt extends JavaPlugin implements Listener {
 	public void applyExplosionEffects(World world, double x, double y, double z, float realRadius, boolean fire, Entity explEntity, EntityType entityType,
 			List<Entity> nearbyEntities, float damageMultiplier) {
 		long ns = System.nanoTime();
-		EntityType givenType = entityType;
-		if (givenType == null && explEntity != null) givenType = explEntity.getType();
-		ExplosionManager.applyExplosionEffects(world, x, y, z, realRadius, fire, explEntity, entityType, nearbyEntities, damageMultiplier, settings.getApplicableExplosionSettings(world.getName(), givenType), propagation, damageProcessor);
+		ExplosionManager.applyExplosionEffects(world, x, y, z, realRadius, fire, explEntity, entityType, nearbyEntities, damageMultiplier, settings.getApplicableExplosionSettings(world.getName(), Utils.usedEntityType(explEntity, entityType)), propagation, damageProcessor);
 		stats.addStats(statsAll, System.nanoTime()-ns);
 	}
 
