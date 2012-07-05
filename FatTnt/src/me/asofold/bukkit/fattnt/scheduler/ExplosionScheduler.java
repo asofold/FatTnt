@@ -50,7 +50,7 @@ public final class ExplosionScheduler {
 	private int chunkSize = 16;
 	private int maxStoreTotal = 5000;
 	private int maxStoreChunk = 50; 
-	public long maxExplodeNanos = 5000000;
+	public long maxExplodeNanos = 3500000;
 	
 	private final Map<ChunkPos, List<ScheduledExplosion>> stored = new LinkedHashMap<ExplosionScheduler.ChunkPos, List<ScheduledExplosion>>(300);
 	
