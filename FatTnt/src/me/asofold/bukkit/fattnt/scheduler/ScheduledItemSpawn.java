@@ -1,15 +1,17 @@
 package me.asofold.bukkit.fattnt.scheduler;
 
+import me.asofold.bukkit.fattnt.effects.ExplosionManager;
+
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
-public final class ScheduledItemSpawn extends ScheduledLocation {
+public final class ScheduledItemSpawn extends ScheduledEntitySpawn{
 	
 	private final ItemStack stack;
-	private final Vector velocity;
 	
 	/**
 	 * Convenience method to set to block middle.
@@ -21,23 +23,22 @@ public final class ScheduledItemSpawn extends ScheduledLocation {
 	}
 	
 	public ScheduledItemSpawn(Location Location, ItemStack stack, Vector velocity){
-		super(Location);
+		super(Location, velocity);
 		this.stack = stack.clone();
-		this.velocity = velocity;
 	}
 	
 	public ScheduledItemSpawn(World world, double x, double y, double z,  ItemStack stack, Vector velocity){
-		super(world, x, y, z);
+		super(world, x, y, z, velocity);
 		this.stack = stack.clone();
-		this.velocity = velocity;
-	}
-
-	public Vector getVelocity() {
-		return velocity;
 	}
 
 	public ItemStack getStack() {
 		return stack;
+	}
+
+	@Override
+	public Entity spawn() {
+		return ExplosionManager.spawnItem(this);
 	}
 
 }

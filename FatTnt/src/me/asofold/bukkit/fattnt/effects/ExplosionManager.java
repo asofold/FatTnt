@@ -334,7 +334,9 @@ public class ExplosionManager {
 					// create primed tnt according to settings
 					item.remove();
 					for ( int i = 0; i< Math.min(settings.maxItems, stack.getAmount()); i++){
-						addTNTPrimed(world, x, y, z, loc.add(new Vector(0.0,0.5,0.0)), realRadius, settings, propagation);
+						// TODO: FUSE TICKS !
+						if (settings.scheduleExplosions) schedulers.spawnTnt.addEntry(getScheduledTnt(world, maxD, y, z, loc, realRadius, settings, propagation));
+						else addTNTPrimed(world, x, y, z, loc.add(new Vector(0.0,0.5,0.0)), realRadius, settings, propagation);
 					}
 					continue;
 				} 
@@ -471,11 +473,12 @@ public class ExplosionManager {
 		return new ScheduledTntSpawn(loc.getWorld(), loc.getX(), loc.getY() + 0.5, loc.getZ(), 80, item.getVelocity().clone());
 	}
 
-	public static void addTntPrimed(ScheduledTntSpawn spawnTnt) {
+	public static Entity addTntPrimed(ScheduledTntSpawn spawnTnt) {
 		TNTPrimed tnt = spawnTnt.world.spawn(new Location(spawnTnt.world, spawnTnt.x, spawnTnt.y, spawnTnt.z), TNTPrimed.class);
-		if (tnt == null) return;
+		if (tnt == null) return null;
 		if (spawnTnt.getVelocity() != null) tnt.setVelocity(spawnTnt.getVelocity());
 		tnt.setFuseTicks(spawnTnt.getFuseTicks());
+		return tnt;
 	}
 
 	public static Item spawnItem(ScheduledItemSpawn spawnItem) {
