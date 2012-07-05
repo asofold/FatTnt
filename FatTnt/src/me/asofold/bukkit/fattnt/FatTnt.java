@@ -110,14 +110,14 @@ public class FatTnt extends JavaPlugin implements Listener {
 	private final ProcessHandler<ScheduledTntSpawn> tntHandler = new ProcessHandler<ScheduledTntSpawn>() {
 		@Override
 		public final void process(final ScheduledTntSpawn spawnTnt) {
-			ExplosionManager.addTntPrimed(spawnTnt);
+			spawnTnt.spawn();
 		}
 	};
 	
 	private final ProcessHandler<ScheduledItemSpawn> itemHandler = new ProcessHandler<ScheduledItemSpawn>() {
 		@Override
 		public final void process(final ScheduledItemSpawn spawnItem) {
-			ExplosionManager.spawnItem(spawnItem);
+			spawnItem.spawn();
 		}
 	};
 	
