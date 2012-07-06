@@ -290,7 +290,13 @@ public class FatTnt extends JavaPlugin implements Listener {
 			event.setCancelled(true);
 			return;
 		}
-		if (!settings.handlesExplosions(worldName, entityType)) return;
+		if (!settings.handlesExplosions(worldName, entityType)){
+			if (settings.preventsOtherExplosions(worldName, entityType)){
+				event.setCancelled(true);
+				return;
+			}
+			return;
+		}
 		// do prepare to handle this explosion:
 		event.setCancelled(true);
 		if (!explEntity.isDead()) explEntity.remove();
@@ -308,11 +314,15 @@ public class FatTnt extends JavaPlugin implements Listener {
 		final World world = loc.getWorld();
 		final String worldName = world.getName();
 		final Entity entity = event.getEntity();
-		if (settings.preventsOtherExplosions(worldName, (entity==null)?null:entity.getType())){
+		if (settings.preventsExplosions(worldName, (entity==null)?null:entity.getType())){
 			event.setCancelled(true);
 			return;
 		}
 		if (event instanceof FatExplodeEvent) return; // do not handle these
+		if (settings.preventsOtherExplosions(worldName, (entity==null)?null:entity.getType())){
+			event.setCancelled(true);
+			return;
+		}
 	}
 	
 	@EventHandler(priority=EventPriority.HIGHEST)
