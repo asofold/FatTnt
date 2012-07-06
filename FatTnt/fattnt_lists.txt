@@ -191,7 +191,7 @@ consider: world item cap (risky: could remove any sort of items, probably restri
 
 ***
 
-get entities from chunks maybe.
+*** get entities from chunks maybe.
 Try the ordering of propagation: first the inner cube !
 
 thinking further: schedule block changes... intricate system how schedulers relate and might release resources for the important stuff. 
@@ -219,10 +219,13 @@ TODO: use schedulers everywhere. applyENtityeffects adn applyBlockEffects: item 
 get fuseTick settings in place everywhere.
 
 ***
-- SchedulerSet -> Runnable + taskId + register(Plugin) + cancel. 
-
-spawnItem ?
-*** items dont spawn ...
+!
+ ? SchedulerSet -> Runnable + taskId + register(Plugin) + cancel.
+ 
+ ! (add) remove [<radius>] command 
+ 
+ 
+ *** Settings testing + cleanup
 
 VERSION HISTORY (only done changes)
 -----------------------------------------------------------------

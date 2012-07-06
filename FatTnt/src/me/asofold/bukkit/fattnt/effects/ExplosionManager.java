@@ -118,9 +118,9 @@ public class ExplosionManager {
 		for (final Block block : blocks){
 			int id = propagation.getTypeId(block.getX(), block.getY(), block.getZ());
 			if (id == -1) id = block.getTypeId();
-			if (settings.stepPhysics) block.setTypeId(0, false);
-			else block.setTypeId(0, true);
 			if (id == tntId){
+				if (!settings.stepPhysics) block.setTypeId(0, true);
+				else block.setTypeId(0, false);
 				Location loc = blockCenter(world, block);
 				if (settings.scheduleEntities) schedulers.spawnEntities.addEntry(getScheduledTnt(world, x, defaultYield, z, loc, realRadius, settings, propagation));
 				else addTNTPrimed(world, x, y, z, loc, realRadius, settings, propagation);
@@ -128,6 +128,8 @@ public class ExplosionManager {
 			else{
 				// All other blocks:
 				Collection<ItemStack> drops = block.getDrops();
+				if (!settings.stepPhysics) block.setTypeId(0, true);
+				else block.setTypeId(0, false);
 				for (ItemStack drop : drops){
 					// TODO: another way than yield to control number ?
 					if (random.nextFloat()<=defaultYield){
