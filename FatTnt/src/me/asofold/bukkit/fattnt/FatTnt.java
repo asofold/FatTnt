@@ -308,12 +308,11 @@ public class FatTnt extends JavaPlugin implements Listener {
 		final World world = loc.getWorld();
 		final String worldName = world.getName();
 		final Entity entity = event.getEntity();
-		if (settings.preventsExplosions(worldName, (entity==null)?null:entity.getType())){
+		if (settings.preventsOtherExplosions(worldName, (entity==null)?null:entity.getType())){
 			event.setCancelled(true);
 			return;
 		}
 		if (event instanceof FatExplodeEvent) return; // do not handle these
-		// TODO: check greedy settings !
 	}
 	
 	@EventHandler(priority=EventPriority.HIGHEST)
@@ -327,7 +326,7 @@ public class FatTnt extends JavaPlugin implements Listener {
 		if ( stack.getType() != Material.TNT) return;
 		final Location loc = entity.getLocation();
 		ExplosionSettings es = settings.getApplicableExplosionSettings(loc.getWorld().getName(), null);
-		if (!es.itemTnt) return;
+		if (!es.itemTnt || es.preventExplosions) return;
 		event.setCancelled(true);
 		// TODO might have to be scheduled
 		if (es.scheduleEntities) schedulers.spawnEntities.addEntry(ExplosionManager.getScheduledTnt(item));

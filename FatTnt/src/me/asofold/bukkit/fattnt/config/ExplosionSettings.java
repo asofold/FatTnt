@@ -181,15 +181,20 @@ public class ExplosionSettings extends PrioritySettings{
 	 */
 	public float randRadius = 0.2f;
 	
-	public boolean scheduleExplosions = true;
-	public boolean scheduleItems = true;
-	public boolean scheduleEntities = true;
 	
 	/**
 	 * Experimental:Currently does explosions without applying physics (not good),
 	 * intended: apply physics after setting blocks to air.
 	 */
 	public boolean stepPhysics = false;
+	
+	// TODO: The following need paths !
+	public boolean scheduleExplosions = true;
+	public boolean scheduleItems = true;
+	public boolean scheduleEntities = true;
+	
+	public boolean preventOtherExplosions = true;
+	public boolean preventExplosions = false;
 	
 	public ExplosionSettings(int priority) {
 		confine = new ConfinementSettings(priority);

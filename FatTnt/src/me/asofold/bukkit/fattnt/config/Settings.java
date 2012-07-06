@@ -150,7 +150,15 @@ public class Settings {
 	
 	public boolean preventsExplosions(String worldName, EntityType type){
 		// TODO: query settings / cache etc.
-		return preventExplosions; // global override.
+		if (preventExplosions) return true; // global override.
+		ExplosionSettings es = getCacheEntry(worldName, type);
+		if (es.preventExplosions) return true;
+		return false;
+	}
+	
+	public boolean preventsOtherExplosions(String worldName, EntityType type){
+		if (preventsExplosions(worldName, type)) return true;
+		return getCacheEntry(worldName, type).preventOtherExplosions;
 	}
 
 }
