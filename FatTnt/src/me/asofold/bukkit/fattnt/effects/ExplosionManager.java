@@ -50,6 +50,8 @@ public class ExplosionManager {
 	
 	private static Stats stats = null;
 	
+	private static Location lastEffect = null;
+	
 	
 	/**
 	 * This does not create the explosion effect (FX) but calculates and applies the world changes !
@@ -455,7 +457,8 @@ public class ExplosionManager {
 	 */
 	public static void createExplosionEffect(World world, double x, double y,
 			double z, float radius, boolean fire) {
-		world.createExplosion(new Location(world,x,y,z), 0.0F); 
+		lastEffect = new Location(world,x,y,z);
+		world.createExplosion(lastEffect, 0.0F); 
 	}
 	
 	public static void setStats(Stats stats){
@@ -496,6 +499,18 @@ public class ExplosionManager {
 		if (item == null) return null;
 		item.setVelocity(v);
 		return item;
+	}
+
+	/**
+	 * Only for intenal use to let through the explosion effect.
+	 * @param loc
+	 * @return
+	 */
+	public static boolean invalidateLastEffect(Location loc) {
+		if (lastEffect == null) return false;
+		boolean res = lastEffect.equals(loc);
+		lastEffect = null;
+		return res;
 	}
 
 }

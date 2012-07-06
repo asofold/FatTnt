@@ -285,7 +285,7 @@ public class FatTnt extends JavaPlugin implements Listener {
 		final Location loc = explEntity.getLocation();
 		final World world = loc.getWorld();
 		final String worldName = world.getName();
-		final EntityType entityType = (explEntity == null) ? null:explEntity.getType();
+		final EntityType entityType = Utils.usedEntityType(explEntity, null);
 		if (settings.preventsExplosions(worldName, entityType)){
 			event.setCancelled(true);
 			return;
@@ -314,21 +314,21 @@ public class FatTnt extends JavaPlugin implements Listener {
 		final World world = loc.getWorld();
 		final String worldName = world.getName();
 		final Entity entity = event.getEntity();
-		if (settings.preventsExplosions(worldName, (entity==null)?null:entity.getType())){
+		final EntityType entityType = Utils.usedEntityType(entity, null);
+		if (settings.preventsExplosions(worldName, entityType)){
 			event.setCancelled(true);
 			return;
 		}
 		if (event instanceof FatExplodeEvent) return; // do not handle these
-		if (settings.preventsOtherExplosions(worldName, (entity==null)?null:entity.getType())){
+		if (settings.preventsOtherExplosions(worldName, entityType)){
+			if (ExplosionManager.invalidateLastEffect(loc)) return;
 			event.setCancelled(true);
 			return;
 		}
 	}
 	
-	@EventHandler(priority=EventPriority.HIGHEST)
+	@EventHandler(priority=EventPriority.HIGHEST, ignoreCancelled=true)
 	final void onEntityCombust(final EntityCombustEvent event){
-		// TODO:
-		if (event.isCancelled()) return;
 		final Entity entity = event.getEntity();
 		if ( !(entity instanceof Item)) return;
 		final Item item = (Item) entity;
