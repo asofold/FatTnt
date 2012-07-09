@@ -225,7 +225,8 @@ get fuseTick settings in place everywhere.
  ! (add) remove [<radius>] command 
  
  
- *** Settings testing + cleanup
+ *** Settings finish all PRioValues + testing + cleanup
+ ? if handlesExplosions == false: should this overrider prevent-explosions ?
 
 VERSION HISTORY (only done changes)
 -----------------------------------------------------------------
@@ -233,6 +234,7 @@ VERSION HISTORY (only done changes)
 *** [Beta/Dev stage]
 
 (0.2.0-DEV-3)
+- (add) Commands for enable disable panic unpanic.
 - (add) Explosion scheduling, Entity scheduling, Item scheduling.
 - (refactor) Configuration structure: Explosion settings are used and can be used per world per entity and default. For exploding entity same way: default, per world.
 - (optimize) Store ids of visited blocks.
