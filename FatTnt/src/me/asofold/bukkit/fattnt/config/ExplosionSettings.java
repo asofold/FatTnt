@@ -312,7 +312,7 @@ public class ExplosionSettings extends PrioritySettings{
 			if (v == null) pf.value = null;
 			else pf.setValue(v.floatValue(), priority);
 		}
-		if (pv instanceof PriorityInteger) ((PriorityInteger) pv).setValue(cfg.getInt(path, null), priority);
+		else if (pv instanceof PriorityInteger) ((PriorityInteger) pv).setValue(cfg.getInt(path, null), priority);
 		else if (pv instanceof PriorityBoolean)	((PriorityBoolean) pv).setValue(cfg.getBoolean(path, null), priority);
 		else throw new IllegalArgumentException("Bad PriorityValue type given: " + ((pv==null)?null:pv.getClass().getSimpleName()));
 	}
