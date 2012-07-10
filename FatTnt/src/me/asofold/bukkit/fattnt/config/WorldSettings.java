@@ -58,7 +58,7 @@ public class WorldSettings {
 				continue;
 			}
 			ExplosionSettings ees = new ExplosionSettings(priority);
-			ees.applyConfig(cfg, prefix + Path.explodingEntities + Path.sep + key, priority);
+			ees.applyConfig(cfg, prefix + Path.explodingEntities + Path.sep + key + Path.sep, priority);
 			entities.put(type, ees);
 		}
 	}
@@ -90,7 +90,9 @@ public class WorldSettings {
 		other.applySettings(explosion);
 		if (type == null) return;
 		ExplosionSettings ees = entities.get(type);
-		if (ees != null) other.applySettings(ees);
+		if (ees != null){
+			other.applySettings(ees);
+		}
 	}
 	
 }
