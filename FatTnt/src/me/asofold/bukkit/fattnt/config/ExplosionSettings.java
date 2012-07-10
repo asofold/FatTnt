@@ -340,7 +340,6 @@ public class ExplosionSettings extends PrioritySettings{
 		super.applySettings(other);
 		confine.applySettings(other.confine);
 		minResistance = Math.min(minResistance, other.minResistance); // Always on every priority.
-		// TODO: minresistance
 	}
 
 	@Override
