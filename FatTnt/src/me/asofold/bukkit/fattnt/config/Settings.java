@@ -102,14 +102,19 @@ public class Settings {
 	}
 	
 	public ExplosionSettings getApplicableExplosionSettings(String worldName, EntityType type){
-		ExplosionSettings out = getCacheEntry(worldName, type);
+		ExplosionSettings out = getCacheEntry(worldName, type); // Here null entries are fine.
 		if (out != null) return out;
 		out = new ExplosionSettings(Integer.MIN_VALUE);
+		// Apply hard coded defaults:_
 		out.applySettings(Defaults.defaultExplosionSettings);
+		// Apply defaults from settings:
 		defaultWorldSettings.applyToExplosionSettings(out, type);
-		WorldSettings ref = worldSettings.get(worldName.trim().toLowerCase());
-		if (ref != null){
-			ref.applyToExplosionSettings(out, type);
+		// Apply world specific defaults:
+		if (worldName != null){
+			WorldSettings ref = worldSettings.get(worldName.trim().toLowerCase());
+			if (ref != null){
+				ref.applyToExplosionSettings(out, type);
+			}
 		}
 		setCacheEntry(worldName, type, out);
 		return out;
