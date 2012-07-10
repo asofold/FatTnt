@@ -88,11 +88,11 @@ public class WorldSettings {
 		return maxRadius;
 	}
 
-	public void applyExplosionSettings(ExplosionSettings out, EntityType type) {
-		out.applySettings(explosion);
+	public void applyToExplosionSettings(ExplosionSettings other, EntityType type) {
+		other.applySettings(explosion);
 		if (type == null) return;
 		ExplosionSettings ees = entities.get(type);
-		if (ees != null) out.applySettings(ees);
+		if (ees != null) other.applySettings(ees);
 	}
 	
 }

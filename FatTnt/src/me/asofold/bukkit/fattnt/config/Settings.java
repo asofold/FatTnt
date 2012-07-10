@@ -106,10 +106,10 @@ public class Settings {
 		if (out != null) return out;
 		out = new ExplosionSettings(Integer.MIN_VALUE);
 		out.applySettings(Defaults.defaultExplosionSettings);
-		defaultWorldSettings.applyExplosionSettings(out, type);
+		defaultWorldSettings.applyToExplosionSettings(out, type);
 		WorldSettings ref = worldSettings.get(worldName.trim().toLowerCase());
 		if (ref != null){
-			ref.applyExplosionSettings(out, type);
+			ref.applyToExplosionSettings(out, type);
 		}
 		setCacheEntry(worldName, type, out);
 		return out;

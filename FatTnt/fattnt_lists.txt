@@ -226,7 +226,8 @@ get fuseTick settings in place everywhere.
  
  
  *** Settings finish all PRioValues + testing + cleanup
- ? if handlesExplosions == false: should this overrider prevent-explosions ?
+ ? make handle explosions settable ingame
+ ? if handlesExplosions == false: should this overrider prevent-explosions ? => rather not.
 
 VERSION HISTORY (only done changes)
 -----------------------------------------------------------------
@@ -234,6 +235,7 @@ VERSION HISTORY (only done changes)
 *** [Beta/Dev stage]
 
 (0.2.0-DEV-3)
+- (change) By default all explosion types are handled by FatTnt (if they use events).
 - (add) Commands for enable disable panic unpanic.
 - (add) Explosion scheduling, Entity scheduling, Item scheduling.
 - (refactor) Configuration structure: Explosion settings are used and can be used per world per entity and default. For exploding entity same way: default, per world.
