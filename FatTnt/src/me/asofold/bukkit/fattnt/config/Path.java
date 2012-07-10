@@ -78,12 +78,13 @@ public class Path {
 	public static final String priority = "priority";
 	public static final String worldSettings = "world-settings";
 	
-	// Scheduler:
+	// Scheduler settings:
 	public static final String sched = "scheduler";
 	public static final String schedExplosions = sched + sep + "explosions";
 	public static final String schedEntities = sched + sep + "entities";
 	public static final String schedItems = sched + sep + "items";
 	
+	// Scheduler use flags (Explosion settings):
 	public static final String schedExplosionsUse = "schedule-explosions";
 	public static final String schedEntitiesUse = "schedule-entities";
 	public static final String schedItemsUse = "schedule-items";
