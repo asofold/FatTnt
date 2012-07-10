@@ -253,7 +253,7 @@ public class ArrayPropagation extends Propagation {
 			}
 			
 			final float maxPath = settings.maxPathMultiplier.value.floatValue();
-			final float minRes = settings.minResistance;
+			final float minRes = (settings.minResistance == Float.MAX_VALUE)?0:settings.minResistance;
 			
 			if ( this.blocks != null) this.blocks.clear(); // maybe gc :), should only happen on errors.
 			final List<Block> blocks = new LinkedList<Block>(); // could change this to an array, but ....
