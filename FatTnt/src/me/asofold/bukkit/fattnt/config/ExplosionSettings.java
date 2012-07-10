@@ -264,7 +264,7 @@ public class ExplosionSettings extends PrioritySettings{
 		
 	
 		for (String[] pair : fields){
-			updateFromCfg(pair[0], priority, cfg, pair[1]);
+			updateFromCfg(pair[0], priority, cfg, prefix + pair[1]);
 		}
 		
 //		ExplosionSettings ref = new ExplosionSettings(0); // default settings.
