@@ -225,8 +225,10 @@ get fuseTick settings in place everywhere.
  ! (add) remove [<radius>] command 
  
  
+ 
+  *** Bugfix schedulerset for each world !
  *** Settings finish all PRioValues + testing + cleanup
- *** mind: minresistance is set to Float.MAxVAlue if not set.
+ 
  ? the defaults concept is maybe not optimal (defaults should contain entity specific settings?).
  ? make handle explosions settable ingame
  ? if handlesExplosions == false: should this overrider prevent-explosions ? => rather not.
@@ -234,9 +236,7 @@ get fuseTick settings in place everywhere.
  
  !all settings / PV : defaults have different priorities, must use from ref !
  
- !explosionsettings: default values should be null, but ref
- 
- !expplosionsettings: fromconfig: use predefined arrys with field, path + make 
+ *** schedule flags Path + read + set 
 
 VERSION HISTORY (only done changes)
 -----------------------------------------------------------------
