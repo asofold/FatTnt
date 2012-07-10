@@ -69,9 +69,9 @@ public class ExplosionManager {
 	 */
 	public static boolean applyExplosionEffects(World world, double x, double y, double z, float realRadius, boolean fire, Entity explEntity, EntityType entityType,
 			List<Entity> nearbyEntities, float damageMultiplier, ExplosionSettings settings, Propagation propagation, DamageProcessor damageProcessor, SchedulerSet schedulers) {
-		if ( realRadius > settings.maxRadius){
+		if ( realRadius > settings.maxRadius.value.floatValue()){
 			// TODO: settings ?
-			realRadius = settings.maxRadius;
+			realRadius = settings.maxRadius.value.floatValue();
 		} else if (realRadius == 0.0f) return false;
 		PluginManager pm = Bukkit.getPluginManager();
 		
@@ -83,7 +83,7 @@ public class ExplosionManager {
 		stats.addStats(FatTnt.statsStrength, (long) realRadius); // just counting average explosion strength !
 		ns = System.nanoTime();
 		FatExplosionSpecs specs = new FatExplosionSpecs(world.getName(), Utils.usedEntityType(explEntity, entityType));
-		EntityExplodeEvent exE = new FatEntityExplodeEvent(explEntity, new Location(world,x,y,z), affected, settings.yield , specs);
+		EntityExplodeEvent exE = new FatEntityExplodeEvent(explEntity, new Location(world,x,y,z), affected, settings.yield.value.floatValue() , specs);
 		pm.callEvent(exE);
 		stats.addStats(FatTnt.statsExplodeEvent, System.nanoTime()-ns);
 		if (exE.isCancelled()) return false;
@@ -121,23 +121,23 @@ public class ExplosionManager {
 			int id = propagation.getTypeId(block.getX(), block.getY(), block.getZ());
 			if (id == -1) id = block.getTypeId();
 			if (id == tntId){
-				if (!settings.stepPhysics) block.setTypeId(0, true);
+				if (!settings.stepPhysics.value) block.setTypeId(0, true);
 				else block.setTypeId(0, false);
 				Location loc = blockCenter(world, block);
-				if (settings.scheduleEntities) schedulers.spawnEntities.addEntry(getScheduledTnt(world, x, defaultYield, z, loc, realRadius, settings, propagation));
+				if (settings.scheduleEntities.value) schedulers.spawnEntities.addEntry(getScheduledTnt(world, x, defaultYield, z, loc, realRadius, settings, propagation));
 				else addTNTPrimed(world, x, y, z, loc, realRadius, settings, propagation);
 			}
 			else{
 				// All other blocks:
 				Collection<ItemStack> drops = block.getDrops();
-				if (!settings.stepPhysics) block.setTypeId(0, true);
+				if (!settings.stepPhysics.value) block.setTypeId(0, true);
 				else block.setTypeId(0, false);
 				for (ItemStack drop : drops){
 					// TODO: another way than yield to control number ?
 					if (random.nextFloat()<=defaultYield){
 						// TODO: settings !
 						//getSomeRandomVelocity(item, loc, x,y,z, realRadius);
-						if (settings.scheduleItems){
+						if (settings.scheduleItems.value){
 							ItemStack item = drop.clone();
 							item.setAmount(1);
 							schedulers.spawnItems.addEntry(new ScheduledItemSpawn(block, item));
@@ -151,7 +151,7 @@ public class ExplosionManager {
 				}
 			}
 		}
-		if (settings.stepPhysics){
+		if (settings.stepPhysics.value){
 			for ( Block block : blocks){
 				block.getState().update();
 			}
@@ -166,13 +166,13 @@ public class ExplosionManager {
 			Location loc, float realRadius, ExplosionSettings settings, Propagation propagation) {
 		final float effRad = propagation.getStrength(loc); // effective strength/radius
 		int fuseTicks = 80; 
-		if (settings.minPrime > 0  && settings.maxPrime > 0){
+		if (settings.minPrime.value.floatValue() > 0  && settings.maxPrime.value.floatValue() > 0){
 			
-			if ( settings.minPrime <settings.maxPrime) fuseTicks = settings.minPrime + random.nextInt((settings.maxPrime-settings.minPrime+1));
-			else fuseTicks = Math.max(settings.minPrime, settings.maxPrime);
+			if ( settings.minPrime.value.intValue() <settings.maxPrime.value.intValue()) fuseTicks = settings.minPrime.value.intValue() + random.nextInt((settings.maxPrime.value.intValue()-settings.minPrime.value.intValue()+1));
+			else fuseTicks = Math.max(settings.minPrime.value.intValue(), settings.maxPrime.value.intValue());
 		}
 		Vector v = null; // not affected
-		if (settings.velOnPrime) v = getRandomVelocityToAdd(EntityType.PRIMED_TNT, loc, x,y,z, effRad, realRadius, settings);
+		if (settings.velOnPrime.value) v = getRandomVelocityToAdd(EntityType.PRIMED_TNT, loc, x,y,z, effRad, realRadius, settings);
 		return spawnTNTPrimed(world, loc, fuseTicks, v);
 	}
 	
@@ -180,13 +180,13 @@ public class ExplosionManager {
 			Location loc, float realRadius, ExplosionSettings settings, Propagation propagation) {
 		final float effRad = propagation.getStrength(loc); // effective strength/radius
 		int fuseTicks = 80; 
-		if (settings.minPrime > 0  && settings.maxPrime > 0){
+		if (settings.minPrime.value.intValue() > 0  && settings.maxPrime.value.intValue() > 0){
 			
-			if ( settings.minPrime <settings.maxPrime) fuseTicks = settings.minPrime + random.nextInt((settings.maxPrime-settings.minPrime+1));
-			else fuseTicks = Math.max(settings.minPrime, settings.maxPrime);
+			if ( settings.minPrime.value.intValue() <settings.maxPrime.value.intValue()) fuseTicks = settings.minPrime.value.intValue() + random.nextInt((settings.maxPrime.value.intValue()-settings.minPrime.value.intValue()+1));
+			else fuseTicks = Math.max(settings.minPrime.value.intValue(), settings.maxPrime.value.intValue());
 		}
 		Vector v = null; // not affected
-		if (settings.velOnPrime) v = getRandomVelocityToAdd(EntityType.PRIMED_TNT, loc, x,y,z, effRad, realRadius, settings);
+		if (settings.velOnPrime.value) v = getRandomVelocityToAdd(EntityType.PRIMED_TNT, loc, x,y,z, effRad, realRadius, settings);
 		return new ScheduledTntSpawn(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), fuseTicks, v);
 	}
 	
@@ -225,8 +225,8 @@ public class ExplosionManager {
 		Vector fromCenter = new Vector(loc.getX()-x,loc.getY()-y,loc.getZ()-z).normalize().multiply(0.5);
 		if ( loc.getBlock().getRelative(BlockFace.DOWN).getType()!=Material.AIR) fromCenter.setY(Math.abs(fromCenter.getY())+0.7);
 		
-		if (settings.velOnPrime) fromCenter = addRandomVelocity(EntityType.ARROW, fromCenter, loc, x,y,z, effRad, realRadius, settings);
-		if (settings.scheduleEntities){
+		if (settings.velOnPrime.value) fromCenter = addRandomVelocity(EntityType.ARROW, fromCenter, loc, x,y,z, effRad, realRadius, settings);
+		if (settings.scheduleEntities.value){
 			schedulers.spawnEntities.addEntry(new ScheduledArrowSpawn(loc, fromCenter));
 			return null; // hmm
 		}
@@ -267,14 +267,14 @@ public class ExplosionManager {
 	 * @param schedulers 
 	 */
 	public static void applyEntityEffects(World world, double x, double y, double z, float realRadius, List<Entity> nearbyEntities, float damageMultiplier, ExplosionSettings settings, Propagation propagation, FatExplosionSpecs specs, DamageProcessor damageProcessor, SchedulerSet schedulers) {
-		if ( realRadius > settings.maxRadius){
+		if ( realRadius > settings.maxRadius.value.floatValue()){
 			// TODO: settings ?
-			realRadius = settings.maxRadius;
+			realRadius = settings.maxRadius.value.floatValue();
 		} else if (realRadius == 0.0f) return;
 		PluginManager pm = Bukkit.getPluginManager();
 		Location expCenter = new Location(world, x, y, z);
 		
-		float maxD = realRadius * settings.entityRadiusMultiplier;
+		float maxD = realRadius * settings.entityRadiusMultiplier.value.floatValue();
 		
 		// entities:
 		for ( Entity entity : nearbyEntities){
@@ -291,11 +291,11 @@ public class ExplosionManager {
 			
 			
 			// ADD DISTANCE DAMAGE ASPECT (currently to effStr)
-			if ( settings.simpleDistanceDamage && effStr > 0.0); // ignore distance damage
+			if ( settings.simpleDistanceDamage.value && effStr > 0.0); // ignore distance damage
 			else if (isAlive){
 				// TODO: maybe also allow for all 
 				// TODO: add distance aspect
-				if (settings.useDistanceDamage){
+				if (settings.useDistanceDamage.value){
 					// currently only the simple method:
 					if (FatTnt.DEBUG_LOTS) System.out.println("[FatTnt] Checking distance damage...");
 					final float d = (float) loc.distance(expCenter);
@@ -317,8 +317,8 @@ public class ExplosionManager {
 								// modify effStr according to settings.
 								final float ed = (float) loc.distance(current);
 								if ( ed <= 0.0f) break;
-								effStr += str * settings.entityDistanceMultiplier*(maxD - ed) / maxD;
-								if ( FatTnt.DEBUG_LOTS) System.out.println("[FatTnt] Modified effStr at "+ed+ ": "+settings.entityDistanceMultiplier*(maxD - ed) / maxD);
+								effStr += str * settings.entityDistanceMultiplier.value.floatValue()*(maxD - ed) / maxD;
+								if ( FatTnt.DEBUG_LOTS) System.out.println("[FatTnt] Modified effStr at "+ed+ ": "+settings.entityDistanceMultiplier.value.floatValue()*(maxD - ed) / maxD);
 								break;
 							}
 							current.add(dir);
@@ -334,7 +334,7 @@ public class ExplosionManager {
 			
 			
 			
-			if (settings.sparePrimed && (entity instanceof TNTPrimed)){
+			if (settings.sparePrimed.value && (entity instanceof TNTPrimed)){
 				addVelocity = true;
 				useDamage = false;
 			} 
@@ -343,19 +343,19 @@ public class ExplosionManager {
 				Item item = (Item) entity;
 				ItemStack stack = item.getItemStack();
 				final Material mat = stack.getType();
-				if ( mat == Material.TNT && settings.itemTnt){
+				if ( mat == Material.TNT && settings.itemTnt.value){
 					// create primed tnt according to settings
 					item.remove();
-					for ( int i = 0; i< Math.min(settings.maxItems, stack.getAmount()); i++){
+					for ( int i = 0; i< Math.min(settings.maxItems.value.intValue(), stack.getAmount()); i++){
 						// TODO: FUSE TICKS !
-						if (settings.scheduleExplosions) schedulers.spawnEntities.addEntry(getScheduledTnt(world, maxD, y, z, loc, realRadius, settings, propagation));
+						if (settings.scheduleExplosions.value) schedulers.spawnEntities.addEntry(getScheduledTnt(world, maxD, y, z, loc, realRadius, settings, propagation));
 						else addTNTPrimed(world, x, y, z, loc.add(new Vector(0.0,0.5,0.0)), realRadius, settings, propagation);
 					}
 					continue;
 				} 
-				else if (mat == Material.ARROW && settings.itemArrows){
+				else if (mat == Material.ARROW && settings.itemArrows.value){
 					item.remove();
-					for ( int i = 0; i< Math.min(settings.maxItems, stack.getAmount()); i++){
+					for ( int i = 0; i< Math.min(settings.maxItems.value.intValue(), stack.getAmount()); i++){
 						addArrow(world, x, y, z, loc, realRadius, settings, propagation, schedulers);
 					}
 				} 
@@ -370,7 +370,7 @@ public class ExplosionManager {
 			} else if (entity instanceof FallingSand){
 				applyEntityYield = true;
 			} else if (entity instanceof Projectile){
-				if ( settings.projectiles){
+				if ( settings.projectiles.value){
 					if ( entity instanceof Arrow){
 						Arrow arrow = (Arrow) entity;
 						if ( arrow.isDead() || arrow.getVelocity().length()<0.25){
@@ -387,12 +387,12 @@ public class ExplosionManager {
 				}
 			}
 			if (applyEntityYield){
-				if ( random.nextFloat()>settings.entityYield) entity.remove();
+				if ( random.nextFloat()>settings.entityYield.value.floatValue()) entity.remove();
 				continue;
 			}
 			if (useDamage){
 				// TODO: damage entities according to type [currently almost only living entities]
-				int damage = 1 + (int) (effStr*settings.damageMultiplier*damageMultiplier); // core damage
+				int damage = 1 + (int) (effStr*settings.damageMultiplier.value.floatValue()*damageMultiplier); // core damage
 				// TODO: add distance damage [maybe above]
 				EntityDamageEvent event = new FatEntityDamageEvent(entity, DamageCause.ENTITY_EXPLOSION, damage, specs);
 				pm.callEvent(event);
@@ -433,13 +433,13 @@ public class ExplosionManager {
 			double z, float part, float max, ExplosionSettings settings) {
 		// TODO: make some things configurable, possible entity dependent and !
 		Vector v = new Vector(0,0,0);
-		if (!settings.velUse) return v;
+		if (!settings.velUse.value) return v;
 		Vector fromCenter = new Vector(loc.getX()-x,loc.getY()-y,loc.getZ()-z).normalize();
-		Vector rv = v.add((fromCenter.multiply(settings.velMin+random.nextFloat()*settings.velCen)).add(Vector.getRandom().multiply(settings.velRan)).multiply(part/max));
-		if( settings.velCap>0){
-			if (rv.lengthSquared()>settings.velCap*settings.velCap) rv = rv.normalize().multiply(settings.velCap);
+		Vector rv = v.add((fromCenter.multiply(settings.velMin.value.floatValue()+random.nextFloat()*settings.velCen.value.floatValue())).add(Vector.getRandom().multiply(settings.velRan.value.floatValue())).multiply(part/max));
+		if( settings.velCap.value.floatValue()>0){
+			if (rv.lengthSquared()>settings.velCap.value.floatValue()*settings.velCap.value.floatValue()) rv = rv.normalize().multiply(settings.velCap.value.floatValue());
 		}
-		if ( entityType == EntityType.ARROW || entityType == EntityType.FIREBALL || entityType == EntityType.SPLASH_POTION || entityType == EntityType.SMALL_FIREBALL || entityType == EntityType.SNOWBALL || entityType == EntityType.THROWN_EXP_BOTTLE) rv = rv.multiply(settings.projectileMultiplier);
+		if ( entityType == EntityType.ARROW || entityType == EntityType.FIREBALL || entityType == EntityType.SPLASH_POTION || entityType == EntityType.SMALL_FIREBALL || entityType == EntityType.SNOWBALL || entityType == EntityType.THROWN_EXP_BOTTLE) rv = rv.multiply(settings.projectileMultiplier.value.floatValue());
 		return rv;
 	}
 

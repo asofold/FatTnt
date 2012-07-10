@@ -127,9 +127,9 @@ public class DamageProcessor {
 	public int[] getArmorDamage(LivingEntity living, EntityType damager, DamageCause cause, int damage, ExplosionSettings settings) {
 		if ( cause != DamageCause.ENTITY_EXPLOSION) return null; // current limit.
 		if ( living instanceof HumanEntity){
-			int base = settings.armorBaseDepletion; // TODO: entity specific ?
-			if (settings.armorUseDamage){
-				base += (int) (settings.armorMultDamage * (float) damage);
+			int base = settings.armorBaseDepletion.value.intValue(); // TODO: entity specific ?
+			if (settings.armorUseDamage.value){
+				base += (int) (settings.armorMultDamage.value.floatValue() * (float) damage);
 			}
 			int[] out = new int[]{damage, base, base, base, base};
 			// TODO: reduce the damage for enchanted parts.

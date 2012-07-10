@@ -301,7 +301,7 @@ public class FatTnt extends JavaPlugin implements Listener {
 		event.setCancelled(true);
 		if (!explEntity.isDead()) explEntity.remove();
 		final ExplosionSettings explSettings = settings.getApplicableExplosionSettings(worldName, Utils.usedEntityType(explEntity, entityType));
-		if (explSettings.scheduleExplosions){
+		if (explSettings.scheduleExplosions.value){
 			schedulers.explosions.addEntry(new ScheduledExplosion(world, loc.getX(), loc.getY(), loc.getZ(), event.getRadius(), event.getFire(), explEntity, entityType));
 			checkSchedulers();
 		}
@@ -336,10 +336,10 @@ public class FatTnt extends JavaPlugin implements Listener {
 		if ( stack.getType() != Material.TNT) return;
 		final Location loc = entity.getLocation();
 		ExplosionSettings es = settings.getApplicableExplosionSettings(loc.getWorld().getName(), null);
-		if (!es.itemTnt || es.preventExplosions) return;
+		if (!es.itemTnt.value || es.preventExplosions.value) return;
 		event.setCancelled(true);
 		// TODO might have to be scheduled
-		if (es.scheduleEntities) schedulers.spawnEntities.addEntry(ExplosionManager.getScheduledTnt(item));
+		if (es.scheduleEntities.value) schedulers.spawnEntities.addEntry(ExplosionManager.getScheduledTnt(item));
 		else ExplosionManager.replaceByTNTPrimed(item);		
 	}
 	
@@ -378,11 +378,11 @@ public class FatTnt extends JavaPlugin implements Listener {
 		// calculate effects
 		// WORKAROUND:
 		ExplosionSettings explSettings = settings.getApplicableExplosionSettings(world.getName(), Utils.usedEntityType(explEntity, entityType));
-		float realRadius = radius*explSettings.radiusMultiplier;
+		float realRadius = radius*explSettings.radiusMultiplier.value.floatValue();
 		List<Entity> nearbyEntities;
 		long ms = System.nanoTime();
-		if (explEntity==null) nearbyEntities = Utils.getNearbyEntities(world, x,y,z, realRadius*explSettings.entityRadiusMultiplier);
-		else nearbyEntities = explEntity.getNearbyEntities(realRadius, realRadius, realRadius*explSettings.entityRadiusMultiplier);
+		if (explEntity==null) nearbyEntities = Utils.getNearbyEntities(world, x,y,z, realRadius*explSettings.entityRadiusMultiplier.value.floatValue());
+		else nearbyEntities = explEntity.getNearbyEntities(realRadius, realRadius, realRadius*explSettings.entityRadiusMultiplier.value.floatValue());
 		stats.addStats(statsNearbyEntities, System.nanoTime()-ms);
 		applyExplosionEffects(world, x, y, z, realRadius, fire, explEntity, entityType, nearbyEntities);
 	}

@@ -5,6 +5,8 @@ import java.util.List;
 
 import me.asofold.bukkit.fattnt.config.compatlayer.CompatConfig;
 import me.asofold.bukkit.fattnt.config.priorityvalues.OverridePolicy;
+import me.asofold.bukkit.fattnt.config.priorityvalues.PriorityBoolean;
+import me.asofold.bukkit.fattnt.config.priorityvalues.PriorityNumber;
 import me.asofold.bukkit.fattnt.config.priorityvalues.PriorityObject;
 import me.asofold.bukkit.fattnt.config.priorityvalues.PrioritySettings;
 import me.asofold.bukkit.fattnt.config.priorityvalues.PriorityValue;
@@ -21,124 +23,125 @@ public class ExplosionSettings extends PrioritySettings{
 	/**
 	 * Explosion strength is cut off there.
 	 */
-	public float maxRadius = 20.0f;
+//	public float maxRadius = 20.0f;
+	public final PriorityNumber maxRadius = (PriorityNumber) addValue("maxRadius", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
 	
 	/**
 	 * Handle and alter explosions at all.
 	 * TODO: also put to config.
 	 */
-	public boolean handleExplosions = true;
+	public final PriorityBoolean handleExplosions = (PriorityBoolean) addValue("handleExplosions", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));
 	
 	/**
 	 * Multiplier for strength (radius)
 	 */
-	public float radiusMultiplier = 2.125f;
+	public final PriorityNumber radiusMultiplier = (PriorityNumber) addValue("radiusMultiplier", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
 	
 	/**
 	 * Multiplier for entity damage.
 	 */
-	public float damageMultiplier =  5.0f; // TODO: add some ray damage !
+	public final PriorityNumber damageMultiplier = (PriorityNumber) addValue("damageMultiplier", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE)); // TODO: add some ray damage !
 	
 	/**
 	 * Radius multiplier to modify range for collecting affected entities.
 	 * 
 	 */
-	public float entityRadiusMultiplier = 2.0f;
+	public final PriorityNumber entityRadiusMultiplier = (PriorityNumber) addValue("entityRadiusMultiplier", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
 	
 	/**
 	 * Default explosion  resistance value for all materials that are not in one of the resistance-lists.
 	 */
-	public float defaultResistance = 2.0f;
+	public final PriorityNumber defaultResistance = (PriorityNumber) addValue("defaultResistance", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
 	
 	/**
 	 * Default pass-through resistance.
 	 */
-	public float defaultPassthrough = Float.MAX_VALUE; 
+	public final PriorityNumber defaultPassthrough = (PriorityNumber) addValue("defaultPassthrough", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE)); 
 	
 	/**
 	 * Use ignored settings inverted, i.e. blacklist (not-ignored).
 	 */
-	public boolean invertIgnored = false;
+	public final PriorityBoolean invertIgnored = (PriorityBoolean) addValue("invertIgnored", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));
 	
 	/**
 	 * If to not apply damage to primed tnt.
 	 */
-	public boolean sparePrimed = true;
+	public final PriorityBoolean sparePrimed = (PriorityBoolean) addValue("sparePrimed", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));
 	
 	/**
 	 * Allow tnt items to change to primed tnt if combusted or hit by explosions.
 	 */
-	public boolean itemTnt = false;
+	public final PriorityBoolean itemTnt = (PriorityBoolean) addValue("itemTnt", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));
 	
 	/**
 	 * Currently unused [aimed at fast explosions]
 	 */
-	public  double thresholdTntDirect = 2.0;
+	public  final PriorityNumber thresholdTntDirect = (PriorityNumber) addValue("thresholdTntDirect", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
 	
 	// velocity settings
-	public boolean velUse = true;
-	public float velMin = 0.2f;
-	public float velCen = 1.0f;
-	public float velRan = 0.5f;
-	public boolean velOnPrime = false;
-	public float velCap = 3.0f;
+	public final PriorityBoolean velUse = (PriorityBoolean) addValue("velUse", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));;
+	public final PriorityNumber velMin = (PriorityNumber) addValue("velMin", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
+	public final PriorityNumber velCen = (PriorityNumber) addValue("velCen", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
+	public final PriorityNumber velRan = (PriorityNumber) addValue("velRan", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
+	public final PriorityBoolean velOnPrime = (PriorityBoolean) addValue("velOnPrime", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));;
+	public final PriorityNumber velCap = (PriorityNumber) addValue("velCap", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
 	
 	/**
 	 * Maximal number of Item entities created from an ItemStack.
 	 */
-	public int maxItems = 15;
+	public final PriorityNumber maxItems = (PriorityNumber) addValue("maxItems", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
 	
 	/**
 	 * Transform arrow items to real arrows (explosions).
 	 */
-	public boolean itemArrows = false;
+	public final PriorityBoolean itemArrows = (PriorityBoolean) addValue("itemArrows", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));
 	
 	/**
 	 * Affect projectiles velocity.
 	 */
-	public boolean projectiles = false;
+	public final PriorityBoolean projectiles = (PriorityBoolean) addValue("projectiles", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));
 	
 	/**
 	 * Minimum fuse ticks, if primed tnt is created.
 	 * Set  to <=0 to have default fuse ticks.
 	 */
-	public int minPrime = 30;
+	public final PriorityNumber minPrime = (PriorityNumber) addValue("minPrime", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
 	/**
 	 * Maximum fuse ticks, if primed tnt is created.
 	 * Set  to <=0 to have default fuse ticks.
 	 * If set to a value greater than minPrime, the fuse ticks will be set randomly using that interval.
 	 */
-	public int maxPrime = 80;
+	public final PriorityNumber maxPrime = (PriorityNumber) addValue("maxPrime", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
 	
 	/**
 	 * Drop chance from destroyed blocks.
 	 */
-	public float yield = 0.2f;
+	public final PriorityNumber yield = (PriorityNumber) addValue("yield", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
 	/**
 	 * Survival chance for items/entities hit by an explosion.
 	 */
-	public float entityYield = 0.2f;
+	public final PriorityNumber entityYield = (PriorityNumber) addValue("entityYield", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
 	
 	/**
 	 * Use extra distance based damage.
 	 */
-	public boolean useDistanceDamage = true;
+	public final PriorityBoolean useDistanceDamage = (PriorityBoolean) addValue("useDistanceDamage", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));
 	
 	/**
 	 * Use a simple distance damage model.
 	 */
-	public boolean simpleDistanceDamage = false;
+	public final PriorityBoolean simpleDistanceDamage = (PriorityBoolean) addValue("simpleDistanceDamage", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));
 	
 	/**
 	 * Multiply projectiles velocity by this, if affected.
 	 */
-	public float projectileMultiplier = 3.0f;
+	public final PriorityNumber projectileMultiplier = (PriorityNumber) addValue("projectileMultiplier", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
 	
 	/**
 	 * The minimal present resistance value.
 	 * Set automatically from configuration input.
 	 */
-	public float minResistance = 0.0f;
+	public float minResistance = Float.MIN_VALUE; // TODO
 	
 	/**
 	 * If a block can not be destroyed this will be checked for further propagation.
@@ -157,44 +160,83 @@ public class ExplosionSettings extends PrioritySettings{
 	/**
 	 * Multiplier for the distance based damage to entities.
 	 */
-	public float entityDistanceMultiplier = 0.4f; // TODO: adjust
+	public final PriorityNumber entityDistanceMultiplier = (PriorityNumber) addValue("entityDistanceMultiplier", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE)); // TODO: adjust
 	
 	/**
 	 * If to damage the armor on base of damage amount.
 	 */
-	public boolean armorUseDamage = false;
-	public float armorMultDamage = 0.5f;
-	public int armorBaseDepletion = 3;
+	public final PriorityBoolean armorUseDamage = (PriorityBoolean) addValue("armorUseDamage", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));
+	public final PriorityNumber armorMultDamage = (PriorityNumber) addValue("armorMultDamage", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
+	public final PriorityNumber armorBaseDepletion = (PriorityNumber) addValue("armorBaseDepletion", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
 	
 	/**
 	 * Restrict maximal path length for propagation multiplied by explosion strength.
 	 */
-	public float maxPathMultiplier = 1.7f;
+	public final PriorityNumber maxPathMultiplier = (PriorityNumber) addValue("maxPathMultiplier", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
 	
 	/**
 	 * Strength changes with this factor, for explosion paths advancing in the same direction again.
 	 */
-	public float fStraight = 0.85f;
+	public final PriorityNumber fStraight = (PriorityNumber) addValue("fStraight", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
 	
 	/**
 	 * UNUSED (was: random resistance added to blocks)
 	 */
-	public float randRadius = 0.2f;
+	public final PriorityNumber randRadius = (PriorityNumber) addValue("randRadius", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
 	
 	
 	/**
 	 * Experimental:Currently does explosions without applying physics (not good),
 	 * intended: apply physics after setting blocks to air.
 	 */
-	public boolean stepPhysics = false;
+	public final PriorityBoolean stepPhysics = (PriorityBoolean) addValue("stepPhysics", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));
 	
 	// TODO: The following need paths !
-	public boolean scheduleExplosions = true;
-	public boolean scheduleItems = true;
-	public boolean scheduleEntities = true;
+	public final PriorityBoolean scheduleExplosions = (PriorityBoolean) addValue("scheduleExplosions", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));
+	public final PriorityBoolean scheduleItems = (PriorityBoolean) addValue("scheduleItems", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));
+	public final PriorityBoolean scheduleEntities = (PriorityBoolean) addValue("scheduleEntities", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));
 	
-	public boolean preventOtherExplosions = true;
-	public boolean preventExplosions = false;
+	public final PriorityBoolean preventOtherExplosions = (PriorityBoolean) addValue("preventOtherExplosions", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));
+	public final PriorityBoolean preventExplosions = (PriorityBoolean) addValue("preventExplosions", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));
+	
+	/**
+	 * field names to path.
+	 * TODO: consider using path as field name !
+	 */
+	static final String[][] fields = new String[][]{
+		{"radiusMultiplier", Path.multRadius},
+		{"damageMultiplier", Path.multDamage},
+		{"entityRadiusMultiplier", Path.multEntityRadius},
+		{"entityDistanceMultiplier", Path.multEntityDistance},
+		{"maxPathMultiplier", Path.multMaxPath},
+		{"defaultPassthrough", Path.defaultPassthrough},
+		{"defaultResistance", Path.defaultResistance},
+		{"maxRadius", Path.maxRadius},
+		{"randRadius", Path.randRadius},
+		{"velUse", Path.velUse},
+		{"velMin", Path.velMin},
+		{"velCen", Path.velCen},
+		{"velRan", Path.velRan},
+		{"velOnPrime", Path.velOnPrime},
+		{"velCap", Path.velCap},
+		{"fStraight", Path.fStraight},
+		{"thresholdTntDirect", Path.cthresholdTntDirect},
+		{"useDistanceDamage", Path.useDistanceDamage},
+		{"simpleDistanceDamage", Path.simpleDistanceDamage},
+		{"maxItems", Path.maxItems},
+		{"projectiles", Path.projectiles},
+		{"minPrime", Path.minPrime},
+		{"maxPrime", Path.maxPrime},
+		{"stepPhysics", Path.stepPhysics},
+		{"projectileMultiplier", Path.multProjectiles},
+		{"armorUseDamage", Path.armorUseDamage},
+		{"armorUseDamage", Path.armorMultDamage},
+		{"armorBaseDepletion", Path.armorBaseDepletion},
+		{"yield", Path.yield},
+		{"entityYield", Path.entityYield},
+		{"itemTnt", Path.itemTnt},
+		{"itemArrows", Path.itemArrows},
+	};
 	
 	public ExplosionSettings(int priority) {
 		confine = new ConfinementSettings(priority);
@@ -221,64 +263,32 @@ public class ExplosionSettings extends PrioritySettings{
 		confine = new ConfinementSettings(priority);
 		confine.applyConfig(cfg, prefix);
 		
-		ExplosionSettings ref = new ExplosionSettings(0); // default settings.
+	
+		for (String[] pair : fields){
+			updateFromCfg(pair[0], priority, cfg, pair[1]);
+		}
+		
+//		ExplosionSettings ref = new ExplosionSettings(0); // default settings.
 		if (cfg.contains(prefix + Path.defaultPassthrough)) passthrough.value = new float[Defaults.blockArraySize];
 		if (cfg.contains(prefix + Path.defaultResistance)) resistance.value = new float[Defaults.blockArraySize];
 		if (cfg.contains(prefix + Path.damagePropagate)) propagateDamage.value = new boolean[Defaults.blockArraySize];
+		
+
+		
 		minResistance = Float.MAX_VALUE;		
-		radiusMultiplier = cfg.getDouble(prefix + Path.multRadius, (double) ref.radiusMultiplier).floatValue();
-		damageMultiplier = cfg.getDouble(prefix + Path.multDamage, (double) ref.damageMultiplier).floatValue();
-		entityRadiusMultiplier = cfg.getDouble(prefix + Path.multEntityRadius, (double) ref.entityRadiusMultiplier).floatValue();
-		entityDistanceMultiplier = cfg.getDouble(prefix + Path.multEntityDistance, (double) ref.entityDistanceMultiplier).floatValue();
-		maxPathMultiplier = cfg.getDouble(prefix + Path.multMaxPath, (double) ref.maxPathMultiplier).floatValue();
-		defaultPassthrough = cfg.getDouble(prefix + Path.defaultPassthrough, (double) ref.defaultPassthrough).floatValue();
-		defaultResistance = cfg.getDouble(prefix + Path.defaultResistance, (double) ref.defaultResistance).floatValue();
-		minResistance = Math.min(Math.min(minResistance, defaultResistance), defaultPassthrough);
-		maxRadius = cfg.getDouble(prefix + Path.maxRadius, (double) ref.maxRadius).floatValue();
-		randRadius = cfg.getDouble(prefix + Path.randRadius, (double) ref.randRadius).floatValue();
-		
-		velUse = cfg.getBoolean(prefix + Path.velUse, ref.velUse);
-		velMin = cfg.getDouble(prefix + Path.velMin, (double) ref.velMin).floatValue();
-		velCen = cfg.getDouble(prefix + Path.velCen, (double) ref.velCen).floatValue();
-		velRan = cfg.getDouble(prefix + Path.velRan, (double) ref.velRan).floatValue();
-		velOnPrime = cfg.getBoolean(prefix + Path.velOnPrime, ref.velOnPrime);
-		velCap = cfg.getDouble(prefix + Path.velCap, (double) ref.velCap).floatValue();
-		
-		fStraight = cfg.getDouble(prefix + Path.fStraight, (double) ref.fStraight).floatValue();
-		
-		thresholdTntDirect = cfg.getDouble(prefix + Path.cthresholdTntDirect, ref.thresholdTntDirect);
+		// TODO: minresistance is special (might need to be set in applySettings)!
 		
 		
-		useDistanceDamage = cfg.getBoolean(prefix + Path.useDistanceDamage, ref.useDistanceDamage);
-		simpleDistanceDamage = cfg.getBoolean(prefix + Path.simpleDistanceDamage, ref.simpleDistanceDamage);
-		maxItems = cfg.getInt(prefix + Path.maxItems, ref.maxItems);
-		
-		projectiles = cfg.getBoolean(prefix + Path.projectiles, ref.projectiles);
-		minPrime = cfg.getInt(prefix + Path.minPrime, ref.minPrime);
-		maxPrime = cfg.getInt(prefix + Path.maxPrime, ref.maxPrime);
-		stepPhysics = cfg.getBoolean(prefix + Path.stepPhysics, ref.stepPhysics);
-		projectileMultiplier = cfg.getDouble(prefix + Path.multProjectiles, (double) ref.projectileMultiplier).floatValue();
-		
-		armorUseDamage = cfg.getBoolean(prefix + Path.armorUseDamage, ref.armorUseDamage);
-		armorMultDamage = cfg.getDouble(prefix + Path.armorMultDamage, (double) ref.armorMultDamage).floatValue();
-		armorBaseDepletion = cfg.getInt(prefix + Path.armorBaseDepletion, ref.armorBaseDepletion);
-		
-		yield = cfg.getDouble(prefix + Path.yield, (double) ref.yield).floatValue();
-		entityYield = cfg.getDouble(prefix + Path.entityYield, (double) ref.entityYield).floatValue();
-		itemTnt = cfg.getBoolean(prefix + Path.itemTnt, ref.itemTnt);
-		itemArrows = cfg.getBoolean(prefix + Path.itemArrows, ref.itemArrows);
-		 
-		
-		if ( maxRadius > Defaults.radiusLock) maxRadius = Defaults.radiusLock; // safety check
+		if ( maxRadius.getValue(0).floatValue() > Defaults.radiusLock) maxRadius.value = Defaults.radiusLock; // safety check
 		
 		// TODO: Lazy treatment of the follwing settings (keep null or set).
 		if (resistance.value != null){
-			initFloats(resistance.value, defaultResistance);
-			readResistance(cfg, prefix + Path.resistance, resistance.value, defaultResistance);
+			initFloats(resistance.value, defaultResistance.value.floatValue());
+			readResistance(cfg, prefix + Path.resistance, resistance.value, defaultResistance.value.floatValue());
 		}
 		if (passthrough.value != null){
-			initFloats(passthrough.value, defaultPassthrough);
-			readResistance(cfg, prefix + Path.passthrough, passthrough.value, defaultPassthrough);
+			initFloats(passthrough.value, defaultPassthrough.value.floatValue());
+			readResistance(cfg, prefix + Path.passthrough, passthrough.value, defaultPassthrough.value.floatValue());
 		}
 		if (propagateDamage.value != null){
 			initBools(propagateDamage.value, false);
@@ -287,6 +297,16 @@ public class ExplosionSettings extends PrioritySettings{
 				propagateDamage.value[id] = true;
 			}
 		}
+		
+		if (defaultResistance.value != null) minResistance = Math.min(minResistance, defaultResistance.value.floatValue());
+		if (defaultPassthrough.value != null) minResistance = Math.min(minResistance, defaultPassthrough.value.floatValue());
+	}
+
+	protected void updateFromCfg(String field, int priority, CompatConfig cfg, String path){
+		PriorityValue<?> pv = nameValueMap.get(field); // Assume it to be present.
+		if (pv instanceof PriorityNumber) ((PriorityNumber) pv).setValue(cfg.getDouble(path, null), priority);
+		else if (pv instanceof PriorityBoolean)	((PriorityBoolean) pv).setValue(cfg.getBoolean(path, null), priority);
+		else throw new IllegalArgumentException("Bad PriorityValue type given: " + ((pv==null)?null:pv.getClass().getSimpleName()));
 	}
 
 	private void readResistance(CompatConfig cfg, String path, float[] array, float defaultResistance){
@@ -304,12 +324,14 @@ public class ExplosionSettings extends PrioritySettings{
 	}
 
 	public void setHandleExplosions(boolean handle) {
-		handleExplosions = handle;
+		handleExplosions.value = handle;
 	}
 	
 	public void applySettings(ExplosionSettings other) {
 		super.applySettings(other);
 		confine.applySettings(other.confine);
+		minResistance = Math.min(minResistance, other.minResistance); // Always on every priority.
+		// TODO: minresistance
 	}
 
 	@Override
@@ -327,12 +349,12 @@ public class ExplosionSettings extends PrioritySettings{
 	public void resetAllValues(int priority) {
 		confine.resetAllValues(priority);
 		super.resetAllValues(priority);
+		minResistance = Float.MAX_VALUE;
 	}
 
-	public void toConfig(Configuration cfg, String prefix) {
-		// TODO Auto-generated method stub
-		
-	}
+//	public void toConfig(Configuration cfg, String prefix) {
+//		throw new RuntimeException("Not implemented: toConfig");
+//	}
 
 	
 	

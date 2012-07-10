@@ -2,12 +2,10 @@ package me.asofold.bukkit.fattnt.config;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import me.asofold.bukkit.fattnt.config.compatlayer.CompatConfig;
 
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.EntityType;
 
 /**
@@ -65,25 +63,25 @@ public class WorldSettings {
 		}
 	}
 	
-	public void toConfig(Configuration cfg, String prefix){
-		if (priority != 0) cfg.set(prefix + Path.confine, priority);
-		
-		explosion.toConfig(cfg, prefix);
-		
-		for (Entry<EntityType, ExplosionSettings> entry : entities.entrySet()){
-			entry.getValue().toConfig(cfg, prefix + Path.explodingEntities + Path.sep + entry.getKey().toString() + Path.sep);
-		}
-		
-	}
+//	public void toConfig(Configuration cfg, String prefix){
+//		if (priority != 0) cfg.set(prefix + Path.confine, priority);
+//		
+//		explosion.toConfig(cfg, prefix);
+//		
+//		for (Entry<EntityType, ExplosionSettings> entry : entities.entrySet()){
+//			entry.getValue().toConfig(cfg, prefix + Path.explodingEntities + Path.sep + entry.getKey().toString() + Path.sep);
+//		}
+//		
+//	}
 
 	/**
 	 * Get maximal maxRadius.
 	 * @return
 	 */
 	public float getMaxRadius(){
-		float maxRadius = explosion.maxRadius;
+		float maxRadius = explosion.maxRadius.getValue(0).floatValue(); // TODO
 		for (ExplosionSettings ees : entities.values()){
-			maxRadius = Math.max(maxRadius, ees.maxRadius);
+			maxRadius = Math.max(maxRadius, ees.maxRadius.getValue(0).floatValue());
 		}
 		return maxRadius;
 	}

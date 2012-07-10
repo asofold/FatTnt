@@ -130,7 +130,7 @@ public class Settings {
 		if (!handleExplosions) return false;
 		// adds to the cache, could be abused to query chicken.
 		final ExplosionSettings settings = getApplicableExplosionSettings(worldName, type);
-		return settings.handleExplosions;
+		return settings.handleExplosions.getValue(true);
 	}
 	
 	private ExplosionSettings getCacheEntry(String worldName, EntityType type){
@@ -157,13 +157,13 @@ public class Settings {
 		// TODO: query settings / cache etc.
 		if (preventExplosions) return true; // global override.
 		ExplosionSettings es = getApplicableExplosionSettings(worldName, type);
-		if (es.preventExplosions) return true;
+		if (es.preventExplosions.getValue(false)) return true;
 		return false;
 	}
 	
 	public boolean preventsOtherExplosions(String worldName, EntityType type){
 		if (preventsExplosions(worldName, type)) return true;
-		return getApplicableExplosionSettings(worldName, type).preventOtherExplosions;
+		return getApplicableExplosionSettings(worldName, type).preventOtherExplosions.getValue(true);
 	}
 
 }

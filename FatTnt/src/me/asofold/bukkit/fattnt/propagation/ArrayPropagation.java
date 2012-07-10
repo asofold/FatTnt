@@ -252,7 +252,7 @@ public class ArrayPropagation extends Propagation {
 				return new LinkedList<Block>();
 			}
 			
-			final float maxPath = settings.maxPathMultiplier;
+			final float maxPath = settings.maxPathMultiplier.value.floatValue();
 			final float minRes = settings.minResistance;
 			
 			if ( this.blocks != null) this.blocks.clear(); // maybe gc :), should only happen on errors.
@@ -323,10 +323,10 @@ public class ArrayPropagation extends Propagation {
 		final int is = rand.length-1;
 		final int iinc = ExplosionManager.random.nextInt(4) + 1;
 		
-		final float defaultResistance = settings.defaultResistance;
-		final boolean useRand = settings.randRadius > 0;
-		final float randRadius = settings.randRadius;
-		final float fStraight = settings.fStraight;
+		final float defaultResistance = settings.defaultResistance.value.floatValue();
+		final boolean useRand = settings.randRadius.value.floatValue() > 0;
+		final float randRadius = settings.randRadius.value.floatValue();
+		final float fStraight = settings.fStraight.value.floatValue();
 		final float minRes = settings.minResistance;
 		// TODO: use minPassthrough ?
 
