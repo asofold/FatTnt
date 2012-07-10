@@ -121,6 +121,168 @@ public class Defaults {
 	 */
 	public static final int blockArraySize = 4096;
 	
+	
+	public static final float maxRadius = 20.0f;
+	
+	/**
+	 * Handle and alter explosions at all.
+	 * TODO: also put to config.
+	 */
+	public static final boolean handleExplosions = true;
+	
+	/**
+	 * Multiplier for strength (radius)
+	 */
+	public static final float radiusMultiplier = 2.125f;
+	
+	/**
+	 * Multiplier for entity damage.
+	 */
+	public static final float damageMultiplier =  5.0f; // TODO: add some ray damage !
+	
+	/**
+	 * Radius multiplier to modify range for collecting affected entities.
+	 * 
+	 */
+	public static final float entityRadiusMultiplier = 2.0f;
+	
+	/**
+	 * Default explosion  resistance value for all materials that are not in one of the resistance-lists.
+	 */
+	public static final float defaultResistance = 2.0f;
+	
+	/**
+	 * Default pass-through resistance.
+	 */
+	public static float defaultPassthrough = Float.MAX_VALUE; 
+	
+	/**
+	 * Use ignored settings inverted, i.e. blacklist (not-ignored).
+	 */
+	public static final boolean invertIgnored = false;
+	
+	/**
+	 * If to not apply damage to primed tnt.
+	 */
+	public static final boolean sparePrimed = true;
+	
+	/**
+	 * Allow tnt items to change to primed tnt if combusted or hit by explosions.
+	 */
+	public static final boolean itemTnt = false;
+	
+	/**
+	 * Currently unused [aimed at fast explosions]
+	 */
+	public static final  double thresholdTntDirect = 2.0;
+	
+	// velocity settings
+	public static final boolean velUse = true;
+	public static final float velMin = 0.2f;
+	public static final float velCen = 1.0f;
+	public static final float velRan = 0.5f;
+	public static final boolean velOnPrime = false;
+	public static final float velCap = 3.0f;
+	
+	/**
+	 * Maximal number of Item entities created from an ItemStack.
+	 */
+	public static final int maxItems = 15;
+	
+	/**
+	 * Transform arrow items to real arrows (explosions).
+	 */
+	public static final boolean itemArrows = false;
+	
+	/**
+	 * Affect projectiles velocity.
+	 */
+	public static final boolean projectiles = false;
+	
+	/**
+	 * Minimum fuse ticks, if primed tnt is created.
+	 * Set  to <=0 to have default fuse ticks.
+	 */
+	public static final int minPrime = 30;
+	/**
+	 * Maximum fuse ticks, if primed tnt is created.
+	 * Set  to <=0 to have default fuse ticks.
+	 * If set to a value greater than minPrime, the fuse ticks will be set randomly using that interval.
+	 */
+	public static final int maxPrime = 80;
+	
+	/**
+	 * Drop chance from destroyed blocks.
+	 */
+	public static final float yield = 0.2f;
+	/**
+	 * Survival chance for items/entities hit by an explosion.
+	 */
+	public static final float entityYield = 0.2f;
+	
+	/**
+	 * Use extra distance based damage.
+	 */
+	public static final boolean useDistanceDamage = true;
+	
+	/**
+	 * Use a simple distance damage model.
+	 */
+	public static final boolean simpleDistanceDamage = false;
+	
+	/**
+	 * Multiply projectiles velocity by this, if affected.
+	 */
+	public static final float projectileMultiplier = 3.0f;
+	
+//	/**
+//	 * The minimal present resistance value.
+//	 * Set automatically from configuration input.
+//	 */
+//	public float minResistance = 0.0f;
+	
+	/**
+	 * Multiplier for the distance based damage to entities.
+	 */
+	public static final float entityDistanceMultiplier = 0.4f; // TODO: adjust
+	
+	/**
+	 * If to damage the armor on base of damage amount.
+	 */
+	public static final boolean armorUseDamage = false;
+	public static final float armorMultDamage = 0.5f;
+	public static final int armorBaseDepletion = 3;
+	
+	/**
+	 * Restrict maximal path length for propagation multiplied by explosion strength.
+	 */
+	public static final float maxPathMultiplier = 1.7f;
+	
+	/**
+	 * Strength changes with this factor, for explosion paths advancing in the same direction again.
+	 */
+	public static final float fStraight = 0.85f;
+	
+	/**
+	 * UNUSED (was: random resistance added to blocks)
+	 */
+	public static final float randRadius = 0.2f;
+	
+	
+	/**
+	 * Experimental:Currently does explosions without applying physics (not good),
+	 * intended: apply physics after setting blocks to air.
+	 */
+	public static final boolean stepPhysics = false;
+	
+	// TODO: The following need paths !
+	public static final boolean scheduleExplosions = true;
+	public static final boolean scheduleItems = true;
+	public static final boolean scheduleEntities = true;
+	
+	public static final boolean preventOtherExplosions = true;
+	public static final boolean preventExplosions = false;
+	
 	/**
 	 * Simple default values.
 	 */
@@ -130,6 +292,9 @@ public class Defaults {
 	 * Default config with all necessary values set.
 	 */
 	public static ExplosionSettings defaultExplosionSettings;
+	
+	
+	
 	
 	static{
 		simpleDefaults = getSimpleDefaultConfiguration();
@@ -141,14 +306,14 @@ public class Defaults {
 	 * @return
 	 */
 	public static CompatConfig getSimpleDefaultConfiguration(){
-		ExplosionSettings defaults = new ExplosionSettings(0); // read defaults from here.
+//		ExplosionSettings defaults = new ExplosionSettings(Integer.MIN_VALUE); // read defaults from here.
 		CompatConfig cfg = new NewConfig(null);
 		
 		// entities: 
 		// TODO: just set the greedy flags !
 		
 		// passthrough
-		cfg.set(Path.defaultPassthrough, defaults.defaultPassthrough);
+		cfg.set(Path.defaultPassthrough, defaultPassthrough);
 		
 		// resistance
 		float[] v = new float[]{1.0f, 4.0f, 20.0f, Float.MAX_VALUE};
@@ -163,62 +328,62 @@ public class Defaults {
 			cfg.set(base+".value", v[i]);
 			cfg.set(base+".ids", resSet);
 		}
-		cfg.set(Path.defaultResistance, defaults.defaultResistance);
+		cfg.set(Path.defaultResistance, defaultResistance);
 		
 		// damage propagation
 		List<Integer> entries = new LinkedList<Integer>();
-		for (int i : Defaults.defaultPropagateDamage){
+		for (int i : defaultPropagateDamage){
 			entries.add(i);
 		}
 		cfg.set(Path.damagePropagate, entries);
 			
 		// explosion basics:
-		cfg.set(Path.maxRadius, defaults.maxRadius);
-		cfg.set(Path.multDamage, defaults.damageMultiplier);
-		cfg.set(Path.multRadius, defaults.radiusMultiplier);
-		cfg.set(Path.multMaxPath, defaults.maxPathMultiplier);
-		cfg.set(Path.randRadius, defaults.randRadius); // TODO DEPRECATED ?
-		cfg.set(Path.yield, defaults.yield);
-		cfg.set(Path.entityYield, defaults.entityYield);
+		cfg.set(Path.maxRadius, maxRadius);
+		cfg.set(Path.multDamage, damageMultiplier);
+		cfg.set(Path.multRadius, radiusMultiplier);
+		cfg.set(Path.multMaxPath, maxPathMultiplier);
+		cfg.set(Path.randRadius, randRadius); // TODO DEPRECATED ?
+		cfg.set(Path.yield, yield);
+		cfg.set(Path.entityYield, entityYield);
 		
 		// velocity:
-		cfg.set(Path.velUse, defaults.velUse);
-		cfg.set(Path.velMin, defaults.velMin);
-		cfg.set(Path.velCen, defaults.velCen);			
-		cfg.set(Path.velRan, defaults.velRan);
-		cfg.set(Path.velOnPrime, defaults.velOnPrime);	
-		cfg.set(Path.velCap, defaults.velCap);
+		cfg.set(Path.velUse, velUse);
+		cfg.set(Path.velMin, velMin);
+		cfg.set(Path.velCen, velCen);			
+		cfg.set(Path.velRan, velRan);
+		cfg.set(Path.velOnPrime, velOnPrime);	
+		cfg.set(Path.velCap, velCap);
 		
 		// array propagation specific
-		cfg.set(Path.fStraight, defaults.fStraight);			
+		cfg.set(Path.fStraight, fStraight);			
 			
 		// item transformationz
-		cfg.set(Path.itemTnt, defaults.itemTnt);
-		cfg.set(Path.maxItems, defaults.maxItems);
-		cfg.set(Path.itemArrows, defaults.itemArrows);
+		cfg.set(Path.itemTnt, itemTnt);
+		cfg.set(Path.maxItems, maxItems);
+		cfg.set(Path.itemArrows, itemArrows);
 		
 		// Projectiles:
-		cfg.set(Path.multProjectiles, defaults.projectileMultiplier);
-		cfg.set(Path.projectiles, defaults.projectiles);
+		cfg.set(Path.multProjectiles, projectileMultiplier);
+		cfg.set(Path.projectiles, projectiles);
 			
 		// tnt specific
-		cfg.set(Path.minPrime, defaults.minPrime);
-		cfg.set(Path.maxPrime, defaults.maxPrime);
-		cfg.set(Path.cthresholdTntDirect, defaults.thresholdTntDirect); // unused ?	
+		cfg.set(Path.minPrime, minPrime);
+		cfg.set(Path.maxPrime, maxPrime);
+		cfg.set(Path.cthresholdTntDirect, thresholdTntDirect); // unused ?	
 			
 		// physics
-		cfg.set(Path.stepPhysics, defaults.stepPhysics);
+		cfg.set(Path.stepPhysics, stepPhysics);
 			
 		// armor
-		cfg.set(Path.armorBaseDepletion, defaults.armorBaseDepletion);
-		cfg.set(Path.armorMultDamage, defaults.armorMultDamage);
-		cfg.set(Path.armorUseDamage, defaults.armorUseDamage);
+		cfg.set(Path.armorBaseDepletion, armorBaseDepletion);
+		cfg.set(Path.armorMultDamage, armorMultDamage);
+		cfg.set(Path.armorUseDamage, armorUseDamage);
 			
 		// entity damage - beyond block damage)
-		cfg.set(Path.multEntityDistance, defaults.entityDistanceMultiplier);
-		cfg.set(Path.multEntityRadius, defaults.entityRadiusMultiplier);
-		cfg.set(Path.simpleDistanceDamage, defaults.simpleDistanceDamage);
-		cfg.set(Path.useDistanceDamage, defaults.useDistanceDamage);
+		cfg.set(Path.multEntityDistance, entityDistanceMultiplier);
+		cfg.set(Path.multEntityRadius, entityRadiusMultiplier);
+		cfg.set(Path.simpleDistanceDamage, simpleDistanceDamage);
+		cfg.set(Path.useDistanceDamage, useDistanceDamage);
 		
 		// TODO: these are a workaround:
 		cfg.set(Path.confineEnabled, false);
@@ -230,10 +395,17 @@ public class Defaults {
 	
 	public static ExplosionSettings getDefaultExplosionSettings(){
 		ExplosionSettings out = new ExplosionSettings(Integer.MIN_VALUE);
+		
+		// ??
 		out.confine = new ConfinementSettings(Integer.MIN_VALUE);
+		
+		// ??
 		out.passthrough.value = new float[Defaults.blockArraySize];
 		out.resistance.value = new float[Defaults.blockArraySize];
 		out.propagateDamage.value = new boolean[Defaults.blockArraySize];
+		
+		
+		
 		out.applyConfig(simpleDefaults, "", Integer.MIN_VALUE);
 		return out;
 	}
