@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Random;
 
 import me.asofold.bukkit.fattnt.FatTnt;
-import me.asofold.bukkit.fattnt.config.Defaults;
 import me.asofold.bukkit.fattnt.config.ExplosionSettings;
 import me.asofold.bukkit.fattnt.config.Settings;
 import me.asofold.bukkit.fattnt.effects.ExplosionManager;
@@ -253,20 +252,18 @@ public class ArrayPropagation extends Propagation {
 			}
 			
 			final float maxPath = settings.maxPathMultiplier.value.floatValue();
-			final float minRes = (settings.minResistance == Float.MAX_VALUE)?0:settings.minResistance;
+//			final float minRes = (settings.minResistance == Float.MAX_VALUE)?0:settings.minResistance;
 			
 			if ( this.blocks != null) this.blocks.clear(); // maybe gc :), should only happen on errors.
 			final List<Block> blocks = new LinkedList<Block>(); // could change this to an array, but ....
 			this.blocks = blocks;
 			seqMax ++; // new round !
 			// starting at center block decrease weight and check neighbor blocks recursively, while weight > durability continue, only check
-			if (FatTnt.DEBUG) System.out.println(Defaults.msgPrefix+"Explosion at: "+world.getName()+" / "+cx+","+cy+","+cz);
 			this.cx = Utils.floor(cx);
 			this.cy = Utils.floor(cy);
 			this.cz = Utils.floor(cz);
 			n = 0;
 			propagate(world, this.cx, this.cy, this.cz, iCenter, 0, 1+(int)(realRadius*maxPath), realRadius, settings);
-			if (FatTnt.DEBUG) System.out.println(Defaults.msgPrefix+"Strength="+realRadius+"("+maxRadius+"/"+minRes+"), visited="+n+", blocks="+blocks.size());
 			stats.addStats(FatTnt.statsBlocksVisited, n);
 			this.blocks = null;
 			return blocks;
@@ -327,7 +324,7 @@ public class ArrayPropagation extends Propagation {
 		final boolean useRand = settings.randRadius.value.floatValue() > 0;
 		final float randRadius = settings.randRadius.value.floatValue();
 		final float fStraight = settings.fStraight.value.floatValue();
-		final float minRes = settings.minResistance;
+		final float minRes = (settings.minResistance == Float.MAX_VALUE)?0:settings.minResistance;
 		// TODO: use minPassthrough ?
 
 		// iterate while points to check are there:

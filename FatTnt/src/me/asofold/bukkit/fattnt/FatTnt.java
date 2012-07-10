@@ -53,9 +53,6 @@ import org.bukkit.scheduler.BukkitScheduler;
  */
 public class FatTnt extends JavaPlugin implements Listener {
 	
-	public static final boolean DEBUG = false;
-	public static final boolean DEBUG_LOTS = false;
-	
 	private static final Stats stats = new Stats(Defaults.msgPrefix.trim()+"[STATS]");
 	
 	// Calculate one explosion
@@ -85,7 +82,6 @@ public class FatTnt extends JavaPlugin implements Listener {
 	
 	
 	static {
-		stats.setLogStats(DEBUG);
 		ExplosionManager.setStats(stats);
 	}
 	

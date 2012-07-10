@@ -219,7 +219,10 @@ TODO: use schedulers everywhere. applyENtityeffects adn applyBlockEffects: item 
 get fuseTick settings in place everywhere.
 
 ***
-!
+
+
+? (add) Capability to run the getBlocks completely asynchronus (schedule many, apply blocks successively). 
+
  ? SchedulerSet -> Runnable + taskId + register(Plugin) + cancel.
  
  ! (add) remove [<radius>] command 
@@ -239,7 +242,7 @@ get fuseTick settings in place everywhere.
  
  !all settings / PV : defaults have different priorities, must use from ref !
  
- *** schedule flags Path + read + set 
+ !add: profiling option ! -> create a test cube + create an explosion there (either normal or fattnt) 
 
 VERSION HISTORY (only done changes)
 -----------------------------------------------------------------

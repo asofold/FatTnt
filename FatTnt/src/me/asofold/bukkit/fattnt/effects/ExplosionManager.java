@@ -297,7 +297,6 @@ public class ExplosionManager {
 				// TODO: add distance aspect
 				if (settings.useDistanceDamage.value){
 					// currently only the simple method:
-					if (FatTnt.DEBUG_LOTS) System.out.println("[FatTnt] Checking distance damage...");
 					final float d = (float) loc.distance(expCenter);
 					// TODO: more precise / efficient (using block coordinates right away, diagonal transition checks, ... )
 					if (d < maxD){
@@ -310,7 +309,6 @@ public class ExplosionManager {
 						Location current = loc.clone().add(new Vector(0.0, h ,0.0)); 
 						for ( int i = 0 ; i< max; i++){
 							int id = world.getBlockTypeIdAt(current);
-							if (FatTnt.DEBUG_LOTS) System.out.println("[FatTnt] dist-damage at id: "+id);
 							if (!settings.propagateDamage.value[id]) break;
 							float str = propagation.getStrength(current);
 							if (str > 0.0f){
@@ -318,7 +316,6 @@ public class ExplosionManager {
 								final float ed = (float) loc.distance(current);
 								if ( ed <= 0.0f) break;
 								effStr += str * settings.entityDistanceMultiplier.value*(maxD - ed) / maxD;
-								if ( FatTnt.DEBUG_LOTS) System.out.println("[FatTnt] Modified effStr at "+ed+ ": "+settings.entityDistanceMultiplier.value*(maxD - ed) / maxD);
 								break;
 							}
 							current.add(dir);

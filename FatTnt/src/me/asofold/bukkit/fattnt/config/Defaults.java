@@ -136,6 +136,13 @@ public class Defaults {
 	public static final float radiusMultiplier = 2.125f;
 	
 	/**
+	 * TODO: experiment
+	 */
+	public static final float radiusMultiplierFireball = 3.5f;
+	
+	
+	
+	/**
 	 * Multiplier for entity damage.
 	 */
 	public static final float damageMultiplier =  5.0f; // TODO: add some ray damage !
@@ -341,6 +348,7 @@ public class Defaults {
 		cfg.set(Path.maxRadius, maxRadius);
 		cfg.set(Path.multDamage, damageMultiplier);
 		cfg.set(Path.multRadius, radiusMultiplier);
+		cfg.set(Path.explodingEntities + Path.sep + "FIREBALL" + Path.sep + Path.multRadius, radiusMultiplierFireball);
 		cfg.set(Path.multMaxPath, maxPathMultiplier);
 		cfg.set(Path.randRadius, randRadius); // TODO DEPRECATED ?
 		cfg.set(Path.yield, yield);
