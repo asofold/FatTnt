@@ -390,6 +390,9 @@ public class Defaults {
 		cfg.set(Path.confineYMin, 0);
 		cfg.set(Path.confineYMax, 255);
 		
+		cfg.set(Path.schedExplosionsUse, scheduleExplosions);
+		cfg.set(Path.schedEntitiesUse, scheduleEntities);
+		cfg.set(Path.schedItemsUse, scheduleItems);
 		return cfg;
 	}
 	

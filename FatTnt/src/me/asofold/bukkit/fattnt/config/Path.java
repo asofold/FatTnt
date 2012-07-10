@@ -84,6 +84,10 @@ public class Path {
 	public static final String schedEntities = sched + sep + "entities";
 	public static final String schedItems = sched + sep + "items";
 	
+	public static final String schedExplosionsUse = "schedule-explosions";
+	public static final String schedEntitiesUse = "schedule-entities";
+	public static final String schedItemsUse = "schedule-items";
+	
 	public static final String process = "process";
 	public static final String store = "store";
 	public static final String chunkSize = "chunk-size"; 

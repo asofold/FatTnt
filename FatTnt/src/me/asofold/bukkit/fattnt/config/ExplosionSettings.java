@@ -200,7 +200,7 @@ public class ExplosionSettings extends PrioritySettings{
 	
 	/**
 	 * field names to path.
-	 * TODO: consider using path as field name !
+	 * TODO: consider using path as field name ! (rather risky, though)
 	 */
 	static final String[][] fields = new String[][]{
 		{"radiusMultiplier", Path.multRadius},
@@ -235,6 +235,9 @@ public class ExplosionSettings extends PrioritySettings{
 		{"entityYield", Path.entityYield},
 		{"itemTnt", Path.itemTnt},
 		{"itemArrows", Path.itemArrows},
+		{"scheduleExplosions", Path.schedExplosionsUse},
+		{"scheduleEntities", Path.schedEntitiesUse},
+		{"scheduleItems", Path.schedItemsUse},
 	};
 	
 	public ExplosionSettings(int priority) {
