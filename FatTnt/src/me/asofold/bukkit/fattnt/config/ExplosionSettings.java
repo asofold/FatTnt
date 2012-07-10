@@ -238,6 +238,7 @@ public class ExplosionSettings extends PrioritySettings{
 		{"scheduleExplosions", Path.schedExplosionsUse},
 		{"scheduleEntities", Path.schedEntitiesUse},
 		{"scheduleItems", Path.schedItemsUse},
+		{"sparePrimed", Path.sparePrimed},
 	};
 	
 	public ExplosionSettings(int priority) {

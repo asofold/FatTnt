@@ -358,6 +358,7 @@ public class Defaults {
 		cfg.set(Path.fStraight, fStraight);			
 			
 		// item transformationz
+		cfg.set(Path.sparePrimed, sparePrimed);
 		cfg.set(Path.itemTnt, itemTnt);
 		cfg.set(Path.maxItems, maxItems);
 		cfg.set(Path.itemArrows, itemArrows);

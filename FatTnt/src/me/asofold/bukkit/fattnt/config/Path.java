@@ -41,6 +41,7 @@ public class Path {
 	public static final String stepPhysics= "step-physics";
 	
 	// tnt specific
+	public static final String sparePrimed = "spare-primed";
 	public static final String minPrime = "min-prime";
 	public static final String maxPrime = "max-prime";
 	public static final String cthresholdTntDirect = "tnt"+ sep + "thresholds"+ sep + "direct-explode"; // UNUSED
