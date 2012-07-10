@@ -28,112 +28,112 @@ public class ExplosionSettings extends PrioritySettings{
 	 * Handle and alter explosions at all.
 	 * TODO: also put to config.
 	 */
-	public final PriorityBoolean handleExplosions = (PriorityBoolean) addValue("handleExplosions", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));
+	public final PriorityBoolean handleExplosions = addValue("handleExplosions", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));
 	
 	/**
 	 * Multiplier for strength (radius)
 	 */
-	public final PriorityNumber radiusMultiplier = (PriorityNumber) addValue("radiusMultiplier", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
+	public final PriorityNumber radiusMultiplier = addValue("radiusMultiplier", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
 	
 	/**
 	 * Multiplier for entity damage.
 	 */
-	public final PriorityNumber damageMultiplier = (PriorityNumber) addValue("damageMultiplier", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE)); // TODO: add some ray damage !
+	public final PriorityNumber damageMultiplier = addValue("damageMultiplier", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE)); // TODO: add some ray damage !
 	
 	/**
 	 * Radius multiplier to modify range for collecting affected entities.
 	 * 
 	 */
-	public final PriorityNumber entityRadiusMultiplier = (PriorityNumber) addValue("entityRadiusMultiplier", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
+	public final PriorityNumber entityRadiusMultiplier = addValue("entityRadiusMultiplier", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
 	
 	/**
 	 * Default explosion  resistance value for all materials that are not in one of the resistance-lists.
 	 */
-	public final PriorityNumber defaultResistance = (PriorityNumber) addValue("defaultResistance", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
+	public final PriorityNumber defaultResistance = addValue("defaultResistance", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
 	
 	/**
 	 * Default pass-through resistance.
 	 */
-	public final PriorityNumber defaultPassthrough = (PriorityNumber) addValue("defaultPassthrough", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE)); 
+	public final PriorityNumber defaultPassthrough = addValue("defaultPassthrough", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE)); 
 	
 	/**
 	 * Use ignored settings inverted, i.e. blacklist (not-ignored).
 	 */
-	public final PriorityBoolean invertIgnored = (PriorityBoolean) addValue("invertIgnored", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));
+	public final PriorityBoolean invertIgnored = addValue("invertIgnored", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));
 	
 	/**
 	 * If to not apply damage to primed tnt.
 	 */
-	public final PriorityBoolean sparePrimed = (PriorityBoolean) addValue("sparePrimed", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));
+	public final PriorityBoolean sparePrimed = addValue("sparePrimed", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));
 	
 	/**
 	 * Allow tnt items to change to primed tnt if combusted or hit by explosions.
 	 */
-	public final PriorityBoolean itemTnt = (PriorityBoolean) addValue("itemTnt", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));
+	public final PriorityBoolean itemTnt = addValue("itemTnt", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));
 	
 	/**
 	 * Currently unused [aimed at fast explosions]
 	 */
-	public  final PriorityNumber thresholdTntDirect = (PriorityNumber) addValue("thresholdTntDirect", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
+	public  final PriorityNumber thresholdTntDirect = addValue("thresholdTntDirect", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
 	
 	// velocity settings
-	public final PriorityBoolean velUse = (PriorityBoolean) addValue("velUse", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));;
-	public final PriorityNumber velMin = (PriorityNumber) addValue("velMin", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
-	public final PriorityNumber velCen = (PriorityNumber) addValue("velCen", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
-	public final PriorityNumber velRan = (PriorityNumber) addValue("velRan", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
-	public final PriorityBoolean velOnPrime = (PriorityBoolean) addValue("velOnPrime", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));;
-	public final PriorityNumber velCap = (PriorityNumber) addValue("velCap", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
+	public final PriorityBoolean velUse = addValue("velUse", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));;
+	public final PriorityNumber velMin = addValue("velMin", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
+	public final PriorityNumber velCen = addValue("velCen", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
+	public final PriorityNumber velRan = addValue("velRan", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
+	public final PriorityBoolean velOnPrime = addValue("velOnPrime", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));;
+	public final PriorityNumber velCap = addValue("velCap", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
 	
 	/**
 	 * Maximal number of Item entities created from an ItemStack.
 	 */
-	public final PriorityNumber maxItems = (PriorityNumber) addValue("maxItems", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
+	public final PriorityNumber maxItems = addValue("maxItems", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
 	
 	/**
 	 * Transform arrow items to real arrows (explosions).
 	 */
-	public final PriorityBoolean itemArrows = (PriorityBoolean) addValue("itemArrows", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));
+	public final PriorityBoolean itemArrows = addValue("itemArrows", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));
 	
 	/**
 	 * Affect projectiles velocity.
 	 */
-	public final PriorityBoolean projectiles = (PriorityBoolean) addValue("projectiles", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));
+	public final PriorityBoolean projectiles = addValue("projectiles", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));
 	
 	/**
 	 * Minimum fuse ticks, if primed tnt is created.
 	 * Set  to <=0 to have default fuse ticks.
 	 */
-	public final PriorityNumber minPrime = (PriorityNumber) addValue("minPrime", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
+	public final PriorityNumber minPrime = addValue("minPrime", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
 	/**
 	 * Maximum fuse ticks, if primed tnt is created.
 	 * Set  to <=0 to have default fuse ticks.
 	 * If set to a value greater than minPrime, the fuse ticks will be set randomly using that interval.
 	 */
-	public final PriorityNumber maxPrime = (PriorityNumber) addValue("maxPrime", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
+	public final PriorityNumber maxPrime = addValue("maxPrime", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
 	
 	/**
 	 * Drop chance from destroyed blocks.
 	 */
-	public final PriorityNumber yield = (PriorityNumber) addValue("yield", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
+	public final PriorityNumber yield = addValue("yield", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
 	/**
 	 * Survival chance for items/entities hit by an explosion.
 	 */
-	public final PriorityNumber entityYield = (PriorityNumber) addValue("entityYield", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
+	public final PriorityNumber entityYield = addValue("entityYield", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
 	
 	/**
 	 * Use extra distance based damage.
 	 */
-	public final PriorityBoolean useDistanceDamage = (PriorityBoolean) addValue("useDistanceDamage", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));
+	public final PriorityBoolean useDistanceDamage = addValue("useDistanceDamage", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));
 	
 	/**
 	 * Use a simple distance damage model.
 	 */
-	public final PriorityBoolean simpleDistanceDamage = (PriorityBoolean) addValue("simpleDistanceDamage", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));
+	public final PriorityBoolean simpleDistanceDamage = addValue("simpleDistanceDamage", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));
 	
 	/**
 	 * Multiply projectiles velocity by this, if affected.
 	 */
-	public final PriorityNumber projectileMultiplier = (PriorityNumber) addValue("projectileMultiplier", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
+	public final PriorityNumber projectileMultiplier = addValue("projectileMultiplier", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
 	
 	/**
 	 * The minimal present resistance value.
@@ -158,44 +158,44 @@ public class ExplosionSettings extends PrioritySettings{
 	/**
 	 * Multiplier for the distance based damage to entities.
 	 */
-	public final PriorityNumber entityDistanceMultiplier = (PriorityNumber) addValue("entityDistanceMultiplier", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE)); // TODO: adjust
+	public final PriorityNumber entityDistanceMultiplier = addValue("entityDistanceMultiplier", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE)); // TODO: adjust
 	
 	/**
 	 * If to damage the armor on base of damage amount.
 	 */
-	public final PriorityBoolean armorUseDamage = (PriorityBoolean) addValue("armorUseDamage", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));
-	public final PriorityNumber armorMultDamage = (PriorityNumber) addValue("armorMultDamage", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
-	public final PriorityNumber armorBaseDepletion = (PriorityNumber) addValue("armorBaseDepletion", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
+	public final PriorityBoolean armorUseDamage = addValue("armorUseDamage", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));
+	public final PriorityNumber armorMultDamage = addValue("armorMultDamage", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
+	public final PriorityNumber armorBaseDepletion = addValue("armorBaseDepletion", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
 	
 	/**
 	 * Restrict maximal path length for propagation multiplied by explosion strength.
 	 */
-	public final PriorityNumber maxPathMultiplier = (PriorityNumber) addValue("maxPathMultiplier", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
+	public final PriorityNumber maxPathMultiplier = addValue("maxPathMultiplier", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
 	
 	/**
 	 * Strength changes with this factor, for explosion paths advancing in the same direction again.
 	 */
-	public final PriorityNumber fStraight = (PriorityNumber) addValue("fStraight", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
+	public final PriorityNumber fStraight = addValue("fStraight", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
 	
 	/**
 	 * UNUSED (was: random resistance added to blocks)
 	 */
-	public final PriorityNumber randRadius = (PriorityNumber) addValue("randRadius", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
+	public final PriorityNumber randRadius = addValue("randRadius", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
 	
 	
 	/**
 	 * Experimental:Currently does explosions without applying physics (not good),
 	 * intended: apply physics after setting blocks to air.
 	 */
-	public final PriorityBoolean stepPhysics = (PriorityBoolean) addValue("stepPhysics", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));
+	public final PriorityBoolean stepPhysics = addValue("stepPhysics", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));
 	
 	// TODO: The following need paths !
-	public final PriorityBoolean scheduleExplosions = (PriorityBoolean) addValue("scheduleExplosions", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));
-	public final PriorityBoolean scheduleItems = (PriorityBoolean) addValue("scheduleItems", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));
-	public final PriorityBoolean scheduleEntities = (PriorityBoolean) addValue("scheduleEntities", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));
+	public final PriorityBoolean scheduleExplosions = addValue("scheduleExplosions", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));
+	public final PriorityBoolean scheduleItems = addValue("scheduleItems", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));
+	public final PriorityBoolean scheduleEntities = addValue("scheduleEntities", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));
 	
-	public final PriorityBoolean preventOtherExplosions = (PriorityBoolean) addValue("preventOtherExplosions", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));
-	public final PriorityBoolean preventExplosions = (PriorityBoolean) addValue("preventExplosions", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));
+	public final PriorityBoolean preventOtherExplosions = addValue("preventOtherExplosions", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));
+	public final PriorityBoolean preventExplosions = addValue("preventExplosions", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));
 	
 	/**
 	 * field names to path.
