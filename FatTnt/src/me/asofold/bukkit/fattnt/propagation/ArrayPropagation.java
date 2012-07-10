@@ -245,7 +245,7 @@ public class ArrayPropagation extends Propagation {
 	public List<Block> getExplodingBlocks(World world, double cx, double cy,
 			double cz, float realRadius, ExplosionSettings settings) {
 		{
-			if (realRadius > settings.maxRadius) realRadius = settings.maxRadius;
+			if (realRadius > settings.maxRadius.value.floatValue()) realRadius = settings.maxRadius.value.floatValue();
 			if (realRadius > maxRadius) realRadius = maxRadius;
 			if (realRadius == 0.0){
 				// TODO: maybe more checks (minRes).
