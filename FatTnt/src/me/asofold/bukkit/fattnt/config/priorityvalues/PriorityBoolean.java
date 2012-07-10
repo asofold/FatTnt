@@ -13,11 +13,6 @@ public class PriorityBoolean extends PriorityValue<Boolean>{
 		case AND:
 			value = value && other.value;
 			break;
-		case KEEP:
-			break;
-		case OVERRIDE:
-			value = other.value;
-			break;
 		default:
 			throw new IllegalArgumentException("Override policy not supported: "+eqPolicy);
 		}

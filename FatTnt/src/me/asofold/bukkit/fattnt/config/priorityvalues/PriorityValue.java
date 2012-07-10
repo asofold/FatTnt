@@ -1,7 +1,7 @@
 package me.asofold.bukkit.fattnt.config.priorityvalues;
 
 /**
- * 
+ * Value holding an object and a priority, for applying other values of the same type and adapting concerning to an OverridePolicy and priorities. 
  * @author mc_dev
  *
  * @param <T>
@@ -60,7 +60,16 @@ public abstract class PriorityValue <T>{
 			priority = ref.priority;
 			return;
 		}
-		else onEqPriority(ref);
+		else{
+			switch(eqPolicy){
+			case KEEP:
+				return;
+			case OVERRIDE:
+				value = ref.value;
+				return;
+			}
+			onEqPriority(ref);
+		}
 	}
 	/**
 	 * Get the value, return preset if value is null.
@@ -81,7 +90,7 @@ public abstract class PriorityValue <T>{
 	}
 	
 	/**
-	 * Override this.
+	 * Override this, called on applyValue if values are both not null and priorities are equal.
 	 * @param other
 	 */
 	abstract void onEqPriority(PriorityValue<T> other);

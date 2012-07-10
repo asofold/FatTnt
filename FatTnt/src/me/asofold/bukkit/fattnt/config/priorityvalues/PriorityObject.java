@@ -14,23 +14,7 @@ public class PriorityObject<T> extends PriorityValue<T> {
 
 	@Override
 	void onEqPriority(PriorityValue<T> other) {
-		if (!(other instanceof PriorityObject<?>)) return;
-		T otherVal;
-		try{
-			otherVal = other.getValue(null);
-		}
-		catch (Throwable t){
-			// bad object 
-			return;
-		}
-		switch (eqPolicy) {
-		case KEEP:
-			break;
-		case OVERRIDE:
-			value = otherVal;
-		default:
-			throw new IllegalArgumentException("Unsupported override policy: "+eqPolicy);
-		}
+		throw new IllegalArgumentException("Unsupported override policy: "+eqPolicy);
 	}
 
 	@Override

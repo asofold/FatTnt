@@ -22,7 +22,7 @@ public class ExplosionSettings extends PrioritySettings{
 	 * Explosion strength is cut off there.
 	 */
 //	public float maxRadius = 20.0f;
-	public final PriorityNumber maxRadius = (PriorityNumber) addValue("maxRadius", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
+	public final PriorityNumber maxRadius = addValue("maxRadius", new PriorityNumber(null, 0, OverridePolicy.OVERRIDE));
 	
 	/**
 	 * Handle and alter explosions at all.

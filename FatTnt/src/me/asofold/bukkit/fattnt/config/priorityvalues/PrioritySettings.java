@@ -12,7 +12,7 @@ import java.util.Map;
 public class PrioritySettings{
 	protected Map<String, PriorityValue<?>> nameValueMap = new HashMap<String, PriorityValue<?>>();
 	
-	public <T> PriorityValue<T> addValue(String name, PriorityValue<T> value){
+	public <T1 extends PriorityValue<?>> T1 addValue(String name, T1 value){
 		nameValueMap.put(name, value);
 		return value;
 	}
