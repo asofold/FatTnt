@@ -11,8 +11,6 @@ import me.asofold.bukkit.fattnt.config.priorityvalues.PriorityObject;
 import me.asofold.bukkit.fattnt.config.priorityvalues.PrioritySettings;
 import me.asofold.bukkit.fattnt.config.priorityvalues.PriorityValue;
 
-import org.bukkit.configuration.Configuration;
-
 /**
  * General explosion settings, may have sub settings, may appear as default, world specific and entity specific.
  */
