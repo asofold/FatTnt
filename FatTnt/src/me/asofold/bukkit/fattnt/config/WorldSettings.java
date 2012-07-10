@@ -79,9 +79,9 @@ public class WorldSettings {
 	 * @return
 	 */
 	public float getMaxRadius(){
-		float maxRadius = explosion.maxRadius.getValue(0).floatValue(); // TODO
+		float maxRadius = explosion.maxRadius.getValue(0.0f); // TODO
 		for (ExplosionSettings ees : entities.values()){
-			maxRadius = Math.max(maxRadius, ees.maxRadius.getValue(0).floatValue());
+			maxRadius = Math.max(maxRadius, ees.maxRadius.getValue(0.0f));
 		}
 		return maxRadius;
 	}

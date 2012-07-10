@@ -226,7 +226,10 @@ get fuseTick settings in place everywhere.
  
  
  
-  *** Bugfix schedulerset for each world !
+  *** Bugfix schedulerset for each world (optional do use only one  )!
+  *** refactor : CWSchedSettings ! (store settings, use for all schedulers of the same kind).
+  
+  
  *** Settings finish all PRioValues + testing + cleanup
  
  ? the defaults concept is maybe not optimal (defaults should contain entity specific settings?).
