@@ -60,11 +60,6 @@ public class ExplosionSettings extends PrioritySettings{
 	public final PriorityFloat defaultPassthrough = addValue("defaultPassthrough", new PriorityFloat(null, 0, OverridePolicy.OVERRIDE)); 
 	
 	/**
-	 * Use ignored settings inverted, i.e. blacklist (not-ignored).
-	 */
-	public final PriorityBoolean invertIgnored = addValue("invertIgnored", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));
-	
-	/**
 	 * If to not apply damage to primed tnt.
 	 */
 	public final PriorityBoolean sparePrimed = addValue("sparePrimed", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));

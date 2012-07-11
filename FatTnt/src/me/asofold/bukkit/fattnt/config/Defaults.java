@@ -28,13 +28,6 @@ public class Defaults {
 	
 	// Block id presets (resistance) -------------------------------------------------
 	
-	private static final int[] defaultIgnoreBlocks = new int[]{
-	//			7, // bedrock
-				8,9, // water
-				10,11, // lava
-	//			49,90, // obsidian/nether portal
-	//			119,120 // end portal / frame
-				};
 	private static final int[] defaultLowResistance = new int[]{
 			0, // air
 			8, 18, 30, 31, 32, 37,38, 39, 40, 50, 51, 55,
@@ -162,11 +155,6 @@ public class Defaults {
 	 * Default pass-through resistance.
 	 */
 	private static float defaultPassthrough = Float.MAX_VALUE; 
-	
-	/**
-	 * Use ignored settings inverted, i.e. blacklist (not-ignored).
-	 */
-	private static final boolean invertIgnored = false;
 	
 	/**
 	 * If to not apply damage to primed tnt.
