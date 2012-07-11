@@ -227,7 +227,7 @@ get fuseTick settings in place everywhere.
  
  ! (add) remove [<radius>] command 
  
- 
+ !(add) Material modifier (explode in water = ... explode in lava = ...
  
   *** Bugfix schedulerset for each world (optional do use only one  )!
   *** refactor : CWSchedSettings ! (store settings, use for all schedulers of the same kind).
@@ -239,10 +239,13 @@ get fuseTick settings in place everywhere.
  ? make handle explosions settable ingame
  ? if handlesExplosions == false: should this overrider prevent-explosions ? => rather not.
  
+ ? simple flag for treating resistance as passthrough + prevent all block damage
  
  !all settings / PV : defaults have different priorities, must use from ref !
  
  !add: profiling option ! -> create a test cube + create an explosion there (either normal or fattnt) 
+
+? refactor Defaults: a) set all values in getSimpledefaultConfig or so
 
 VERSION HISTORY (only done changes)
 -----------------------------------------------------------------
@@ -253,7 +256,7 @@ VERSION HISTORY (only done changes)
 - (change) By default all explosion types are handled by FatTnt (if they use events).
 - (add) Commands for enable disable panic unpanic.
 - (add) Explosion scheduling, Entity scheduling, Item scheduling.
-- (refactor) Configuration structure: Explosion settings are used and can be used per world per entity and default. For exploding entity same way: default, per world.
+- (refactor) Configuration structure: Explosion can be set directly and per exploding entity, this goes for top level (default) and world-settings, individually.
 - (optimize) Store ids of visited blocks.
 - (adjust) Adjust getNearbyEntities to spawn an arrow as fake entity instead of a chicken.
 - (update) config/compatlayer
