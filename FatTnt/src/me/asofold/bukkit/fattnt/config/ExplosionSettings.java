@@ -224,7 +224,7 @@ public class ExplosionSettings extends PrioritySettings{
 		{"stepPhysics", Path.stepPhysics},
 		{"projectileMultiplier", Path.multProjectiles},
 		{"armorUseDamage", Path.armorUseDamage},
-		{"armorUseDamage", Path.armorMultDamage},
+		{"armorMultDamage", Path.armorMultDamage},
 		{"armorBaseDepletion", Path.armorBaseDepletion},
 		{"yield", Path.yield},
 		{"entityYield", Path.entityYield},
