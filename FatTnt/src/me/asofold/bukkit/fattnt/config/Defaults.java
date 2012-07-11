@@ -193,7 +193,7 @@ public class Defaults {
 		// tnt specific
 		cfg.set(Path.minPrime, 30);
 		cfg.set(Path.maxPrime, 80);
-		cfg.set(Path.cthresholdTntDirect, 2.0); // unused ?	
+		cfg.set(Path.cthresholdTntDirect, 3.0); // unused ?	
 			
 		// physics
 		cfg.set(Path.stepPhysics, false);

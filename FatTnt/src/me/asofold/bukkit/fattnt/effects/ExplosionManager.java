@@ -124,8 +124,16 @@ public class ExplosionManager {
 				if (!settings.stepPhysics.value) block.setTypeId(0, true);
 				else block.setTypeId(0, false);
 				Location loc = blockCenter(world, block);
-				if (settings.scheduleEntities.value) schedulers.spawnEntities.addEntry(getScheduledTnt(world, x, defaultYield, z, loc, realRadius, settings, propagation));
-				else addTNTPrimed(world, x, y, z, loc, realRadius, settings, propagation);
+				// TODO: check for direct explode threshold and generation
+				// TODO: Curently: 
+				if (propagation.getStrength(block.getX(), block.getY(), block.getZ()) > settings.thresholdTntDirect.value){
+					if (settings.scheduleEntities.value) schedulers.spawnEntities.addEntry(getScheduledTnt(world, x, defaultYield, z, loc, realRadius, settings, propagation, 1));
+					else addTNTPrimed(world, x, y, z, loc, realRadius, settings, propagation, 1);
+				}
+				else{
+					if (settings.scheduleEntities.value) schedulers.spawnEntities.addEntry(getScheduledTnt(world, x, defaultYield, z, loc, realRadius, settings, propagation));
+					else addTNTPrimed(world, x, y, z, loc, realRadius, settings, propagation);
+				}
 			}
 			else{
 				// All other blocks:
@@ -161,15 +169,34 @@ public class ExplosionManager {
 	public static final Location blockCenter(final World world, final Block block){
 		return new Location(world, 0.5 + (double) block.getX(), 0.5 + (double) block.getY(), 0.5 + (double) block.getZ());
 	}
-	
 	public static TNTPrimed addTNTPrimed(World world, double x, double y, double z,
 			Location loc, float realRadius, ExplosionSettings settings, Propagation propagation) {
+		return addTNTPrimed(world, x, y, z, loc, realRadius, settings, propagation, -1);
+	}
+	
+	/**
+	 * 
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param loc
+	 * @param realRadius
+	 * @param settings
+	 * @param propagation
+	 * @param fuseTicks -1 = according to settings or 80, otherwise used.
+	 * @return
+	 */
+	public static TNTPrimed addTNTPrimed(World world, double x, double y, double z,
+			Location loc, float realRadius, ExplosionSettings settings, Propagation propagation, int fuseTicks) {
 		final float effRad = propagation.getStrength(loc); // effective strength/radius
-		int fuseTicks = 80; 
-		if (settings.minPrime.value > 0  && settings.maxPrime.value > 0){
-			
-			if ( settings.minPrime.value <settings.maxPrime.value) fuseTicks = settings.minPrime.value + random.nextInt((settings.maxPrime.value-settings.minPrime.value+1));
-			else fuseTicks = Math.max(settings.minPrime.value, settings.maxPrime.value);
+		if (fuseTicks == -1){
+			fuseTicks = 80; 
+			if (settings.minPrime.value > 0  && settings.maxPrime.value > 0){
+				
+				if ( settings.minPrime.value <settings.maxPrime.value) fuseTicks = settings.minPrime.value + random.nextInt((settings.maxPrime.value-settings.minPrime.value+1));
+				else fuseTicks = Math.max(settings.minPrime.value, settings.maxPrime.value);
+			}
 		}
 		Vector v = null; // not affected
 		if (settings.velOnPrime.value) v = getRandomVelocityToAdd(EntityType.PRIMED_TNT, loc, x,y,z, effRad, realRadius, settings);
@@ -178,18 +205,33 @@ public class ExplosionManager {
 	
 	public static ScheduledTntSpawn getScheduledTnt(World world, double x, double y, double z,
 			Location loc, float realRadius, ExplosionSettings settings, Propagation propagation) {
+		return getScheduledTnt(world, x, y, z, loc, realRadius, settings, propagation, -1);
+	}
+	
+	public static ScheduledTntSpawn getScheduledTnt(World world, double x, double y, double z,
+			Location loc, float realRadius, ExplosionSettings settings, Propagation propagation, int fuseTicks) {
 		final float effRad = propagation.getStrength(loc); // effective strength/radius
+		if (fuseTicks == -1) fuseTicks = getFuseTicks(settings);
+		Vector v = null; // not affected
+		if (settings.velOnPrime.value) v = getRandomVelocityToAdd(EntityType.PRIMED_TNT, loc, x,y,z, effRad, realRadius, settings);
+		return new ScheduledTntSpawn(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), fuseTicks, v);
+	}
+	
+	/**
+	 * Get randomized fuse-ticks according to settings (or 80 as default).
+	 * @param settings
+	 * @return
+	 */
+	public static int getFuseTicks(ExplosionSettings settings) {
 		int fuseTicks = 80; 
 		if (settings.minPrime.value > 0  && settings.maxPrime.value > 0){
 			
 			if ( settings.minPrime.value <settings.maxPrime.value) fuseTicks = settings.minPrime.value + random.nextInt((settings.maxPrime.value-settings.minPrime.value+1));
 			else fuseTicks = Math.max(settings.minPrime.value, settings.maxPrime.value);
 		}
-		Vector v = null; // not affected
-		if (settings.velOnPrime.value) v = getRandomVelocityToAdd(EntityType.PRIMED_TNT, loc, x,y,z, effRad, realRadius, settings);
-		return new ScheduledTntSpawn(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), fuseTicks, v);
+		return fuseTicks;
 	}
-	
+
 	/**
 	 * Just spawn it.
 	 * @param world
