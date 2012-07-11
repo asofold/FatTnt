@@ -405,7 +405,7 @@ public class Defaults {
 		return cfg;
 	}
 	
-	private static ExplosionSettings getDefaultExplosionSettings(){
+	public static ExplosionSettings getDefaultExplosionSettings(){
 		ExplosionSettings out = new ExplosionSettings(Integer.MIN_VALUE);
 		
 		// ??
