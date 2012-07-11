@@ -8,28 +8,38 @@ Supposedly this would range from public domain (probably not) to somewhere aroun
 Actually it is safe to assume MIT license, but if the license can be "less", i will probably make it so.
 
 
-ACTUAL LISTS
+FEATURES
 ----------------
 
 Features: 
-- Relatively fine grained settings possible with defaults, entity specific, world specific, world+entity.
-- configure: block resistance (strength)
-- modifiers for explosion radius and damage
-- some armor handling, allow heavier armor damage.
+- Control what can explode in which world, or is handled by FatTnt at all.
+- Confine explosions to a range of y-coordinates for each world.
+- Configurable block explosion resistance.
 - Let explosions go through blocks without destruction (configurable, defaults to: lava, water, bedrock, other).
 - Damage living entities according to the arriving strength of the explosion, not just the distance to the center, configurable blocks that pass on damage.
+- Some armor handling, allow heavier armor damage.
+- Affect projectiles, let tnt get primed with velocity right away, create real tnt or arrows from items or ignited tnt.
+- Modifiers for explosion radius and damage
+- Many other aspects are configurable.
+- Schedules explosions and entity spawning, allowing to reduce the number based on thresholds for total number and per chunk plus timeout, "relatively fair" scheduling.
+- Relatively fine grained settings possible with defaults, entity specific, world specific, world+entity.
 - Fires EntityExplodeEvent and EntityDamageEvent and allows canceling by other plugins.
 - API might be used by other plugins to trigger explosions.
  
-Issues:
+REAL ISSUES
+----------------
+
 ! Re-think event priorities and canceling to allow other plugins canceling the ExplosionPrimeEvent as well [Probably ok with highest].
 ! ALWAYS: keep adjusting  default values to something realistic...
   
+  
+CLEANUP THESE
+------------------
+
 Planned:
-! Must add: fire, if fire is set.
 ? Damage or change  entities according to their type (TNT->Explode, ItemStacks - damage)
 ! More fine grained vector manipulation 
-! Use velocity events if possible !
+? Use velocity events if possible !
 ! add explosions on water : do allow config option to only damage entities.
 ! More events (+configurable if, also for the old ones !) like ItemSpawn or similar.
 ! direct explode feature (threshold + possibly with probabilities: 1. p(direct) -> if not... maybe prime) [Might better be a lower ignition value for primed tnt, rather than exploding it directly]
@@ -202,13 +212,12 @@ TODO: use schedulers everywhere. applyENtityeffects adn applyBlockEffects: item 
 
 ? somehow log the removed N ? 
 get fuseTick settings in place everywhere.
-
+?(add) Fast item despawn: set random despawn time.
 ***
  ? the defaults concept is maybe not optimal (defaults should contain entity specific settings?).
  !add: profiling option ! -> create a test cube + create an explosion there (either normal or fattnt) 
 ? (add) Capability to run the getBlocks completely asynchronus (schedule many, apply blocks successively). 
 
- ? SchedulerSet -> Runnable + taskId + register(Plugin) + cancel.
  
  ! (add) remove [<radius>] command 
  
@@ -219,19 +228,36 @@ get fuseTick settings in place everywhere.
  ?(add) general modifiers ?
  !(add) Material modifier (explode in water = ... explode in lava = ...
   
-  *** Bugfix schedulerset for each world (optional do use only one  )!
-  *** refactor : CWSchedSettings ! (store settings, use for all schedulers of the same kind).
+(0.2.0-DEV-4)  SCHEDULER UPDATE
+*** General schedulers ?
+?(add) Scheduler for block changes or general purpose ?
+?consider: a general random scheduler: schedules with random x,z but does reduction.
+?(change) Change to several schedulers and assign according to config (!).
+!(refactor) One more interface to do the action for the object (like Runnable)
+
+*** World specific schedulers ?
+Bugfix schedulerset for each world (optional do use only one  )!
+refactor : CWSchedSettings ! (store settings, use for all schedulers of the same kind).
   
 (0.2.0-DEV-3) RELEASE
-?(add) Fast item despawn: set random despawn time.
-!(add) Fire: yield = chance to set a removed block on fire + number of tries to add fire randomly within explosion radius or near center + events !
-*** Default settings: a workable set ! 
 
-*** Settings: test + ?cleanup 
+*** ANYTHING ELSE ?
 
-!all settings / PV : defaults have different priorities, must use from ref !
-!Test greedy flags
+*** Default settings: a first detailed version!
+
+*** Settings: consider other changes to configuration paths ! [maybe an extra update for that]
+
+*** Settings: test + ?cleanup
+
+? what was this : all settings / PV : defaults have different priorities, must use from ref ! [maybe already done]
 !Test all sorts of overrides (including confine, worlds, entities, priorities)
+
+*** FIRE
+
+?(add) FIRE 
+!(add) Explosionsettings: fire: always => probability: overrides the fire value from ExplosionPrime events ? (or all..)
+!(add) Fire: p-removed + n-random = chance to set a removed block on fire + number of tries to add fire randomly within explosion radius or near center + events !
+
 
 
 VERSION HISTORY (only done changes)
