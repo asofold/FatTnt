@@ -219,8 +219,8 @@ TODO: use schedulers everywhere. applyENtityeffects adn applyBlockEffects: item 
 get fuseTick settings in place everywhere.
 
 ***
-
-
+ ? the defaults concept is maybe not optimal (defaults should contain entity specific settings?).
+ !add: profiling option ! -> create a test cube + create an explosion there (either normal or fattnt) 
 ? (add) Capability to run the getBlocks completely asynchronus (schedule many, apply blocks successively). 
 
  ? SchedulerSet -> Runnable + taskId + register(Plugin) + cancel.
@@ -228,24 +228,23 @@ get fuseTick settings in place everywhere.
  ! (add) remove [<radius>] command 
  
  !(add) Material modifier (explode in water = ... explode in lava = ...
- 
+  ? simple flag for treating resistance as passthrough + prevent all block damage
+  
+  
   *** Bugfix schedulerset for each world (optional do use only one  )!
   *** refactor : CWSchedSettings ! (store settings, use for all schedulers of the same kind).
   
   
- *** Settings finish all PRioValues + testing + cleanup
- 
- ? the defaults concept is maybe not optimal (defaults should contain entity specific settings?).
- ? make handle explosions settable ingame
- ? if handlesExplosions == false: should this overrider prevent-explosions ? => rather not.
- 
- ? simple flag for treating resistance as passthrough + prevent all block damage
- 
- !all settings / PV : defaults have different priorities, must use from ref !
- 
- !add: profiling option ! -> create a test cube + create an explosion there (either normal or fattnt) 
+(0.2.0-DEV-3) RELEASE
 
-? refactor Defaults: a) set all values in getSimpledefaultConfig or so
+*** Default settings: a workable set ! 
+
+*** Settings: test + ?cleanup 
+
+!all settings / PV : defaults have different priorities, must use from ref !
+!Test greedy flags
+!Test all sorts of overrides (including confine, worlds, entities, priorities)
+
 
 VERSION HISTORY (only done changes)
 -----------------------------------------------------------------
