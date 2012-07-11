@@ -149,10 +149,7 @@ STACK
 
 *** ITERATION -------------------------------------------------------------------------------------
 
-*** Greedy / handle-explosions settings !
-WorldSettings: handle-explosions: entities+entities-as-blacklist, handle-all-explosions, prevent-other-explosions, replace-other-explosions
-? also cancel other explosions -> config flag !
-! prevent-all-explosions [-> Entity Settings + handle Explosions = part of world settings ?]
+*** LOL ITERATION
 
 *** SPECIFIC/CONFINEMENT SETTINGS
 ? name for confinement
@@ -165,21 +162,18 @@ WorldSettings: handle-explosions: entities+entities-as-blacklist, handle-all-exp
 - defaults, world-specific, entity-specific, 
 - ?(add) PriorityValue with filter technique for effective settings (defaults, worlds, entities: exploding+affected, ...)?
 
-*** BUGS
+*** UNCATEGORIZED
 
 
 ? maybe consider FatExplosionCancelEvent (reason: SCHED_MAX_CHUNK SCHED_MAX_TOTAL CONFIG and similar.)
 ? check: Schedule the explosion handling for a tick later (effect on stats, better consistency)? + allows for number of explosions / tick control. => ExplosionScheduler
 
-
-
 ! check : where to remove the explEntity and other stuff that is not needed for ExplosionSettings passing.
 
 consider: keep track of spawned entities (including tnt) + make caps + keep track of worlds, in terms of intensity of tnt.
-consider: panic command (set all caps as max , remove tnt,  clear scheduler, stop new explosions).
 consider: cleanup command: remove tnt + scheduled explosions
 consider: world item cap (risky: could remove any sort of items, probably restrict to dirt, stone, sand, gravel, netherrack)
-
+consider: fast item despawn (another scheduler ??) or set ticks lived or similar (!) to let them despawn
 ***
 
 *** get entities from chunks maybe.
@@ -219,17 +213,18 @@ get fuseTick settings in place everywhere.
  ! (add) remove [<radius>] command 
  
  ?(add) Settings: shooting-entitiy for projectiles (ghast fireballs vs player fireballs) !
- !(add) Material modifier (explode in water = ... explode in lava = ...
+
   ? simple flag for treating resistance as passthrough + prevent all block damage
   
+ ?(add) general modifiers ?
+ !(add) Material modifier (explode in water = ... explode in lava = ...
   
   *** Bugfix schedulerset for each world (optional do use only one  )!
   *** refactor : CWSchedSettings ! (store settings, use for all schedulers of the same kind).
-  !(add) direct-explode of tnt (now that the scheduler is there)
   
 (0.2.0-DEV-3) RELEASE
-
-
+?(add) Fast item despawn: set random despawn time.
+!(add) Fire: yield = chance to set a removed block on fire + number of tries to add fire randomly within explosion radius or near center + events !
 *** Default settings: a workable set ! 
 
 *** Settings: test + ?cleanup 
@@ -245,6 +240,7 @@ VERSION HISTORY (only done changes)
 *** [Beta/Dev stage]
 
 (0.2.0-DEV-3)
+- (add) Direct explode threshold (scheduled for next tick).
 - (change) By default all explosion types are handled by FatTnt (if they use events).
 - (add) Commands for enable disable panic unpanic.
 - (add) Explosion scheduling, Entity scheduling, Item scheduling.
