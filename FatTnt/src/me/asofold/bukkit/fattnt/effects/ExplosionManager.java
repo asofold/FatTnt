@@ -223,15 +223,26 @@ public class ExplosionManager {
 	 * @return
 	 */
 	public static int getFuseTicks(ExplosionSettings settings) {
-		int fuseTicks = 80; 
-		if (settings.minPrime.value > 0  && settings.maxPrime.value > 0){
-			
-			if ( settings.minPrime.value <settings.maxPrime.value) fuseTicks = settings.minPrime.value + random.nextInt((settings.maxPrime.value-settings.minPrime.value+1));
-			else fuseTicks = Math.max(settings.minPrime.value, settings.maxPrime.value);
-		}
-		return fuseTicks;
+		return getRandomValue(settings.minPrime.value, settings.maxPrime.value, 80); 
+		
 	}
 
+	/**
+	 * Randomization will only be used if minValue > maxValue, otherwise the maximum if >= 0, otherwise the defaultValue.
+	 * @param minValue
+	 * @param maxValue
+	 * @param defaultValue
+	 * @return
+	 */
+	public static int getRandomValue(int minValue, int maxValue, int defaultValue){
+		if (minValue > 0 && maxValue > 0){
+			if ( minValue < maxValue) return minValue + random.nextInt((maxValue - minValue + 1));
+		}
+		int value = Math.max(minValue, maxValue);
+		if (value >= 0) return value;
+		return defaultValue;
+	}
+	
 	/**
 	 * Just spawn it.
 	 * @param world
