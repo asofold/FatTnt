@@ -130,10 +130,25 @@ public class FatTnt extends JavaPlugin implements Listener {
 			public void run() {
 				boolean needRun = false;
 				// TODO: consider order ! 
-				if (schedulers.explosions.onTick(explosionHandler, stats, statsProcessExpl, statsNExpl, statsNExplStore)) needRun = true;
-				if (schedulers.spawnEntities.onTick(entityHandler, stats, statsProcessEnt, statsNEnt, statsNEntStore)) needRun = true;
-				if (schedulers.spawnItems.onTick(itemHandler, stats, statsProcessItem, statsNItem, statsNItemStore)) needRun = true;
-				// TODO: other schedulers.
+				try{
+					if (schedulers.explosions.onTick(explosionHandler, stats, statsProcessExpl, statsNExpl, statsNExplStore)) needRun = true;
+				}
+				catch (Throwable t){
+					schedSevere("explosion", t);
+				}
+				try{
+					if (schedulers.spawnEntities.onTick(entityHandler, stats, statsProcessEnt, statsNEnt, statsNEntStore)) needRun = true;
+				}
+				catch (Throwable t){
+					schedSevere("entities", t);
+				}
+				try{
+					if (schedulers.spawnItems.onTick(itemHandler, stats, statsProcessItem, statsNItem, statsNItemStore)) needRun = true;
+				}
+				catch (Throwable t){
+					schedSevere("items", t);
+				}
+				// TODO: other schedulers? schedulers differently?
 				if (!needRun){
 					getServer().getScheduler().cancelTask(taskIdScheduler);
 					taskIdScheduler = -1;
@@ -144,6 +159,11 @@ public class FatTnt extends JavaPlugin implements Listener {
 			getLogger().severe("[FatTnt] Failed to schedule the scheduler task, clear all waiting explosions!");
 			schedulers.clear();
 		}
+	}
+	
+	private void schedSevere(String tag, Throwable t) {
+		getLogger().severe("[FatTnt] Scheduler(" + tag + ") encountered an exception:");
+		t.printStackTrace(); // TODO: maybe on severe level.
 	}
 	
 	@Override
