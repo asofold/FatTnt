@@ -12,27 +12,21 @@ ACTUAL LISTS
 ----------------
 
 Features: 
-- select what entities are handled (tnt, creeper?)
+- Relatively fine grained settings possible with defaults, entity specific, world specific, world+entity.
 - configure: block resistance (strength)
 - modifiers for explosion radius and damage
+- some armor handling, allow heavier armor damage.
 - Let explosions go through blocks without destruction (configurable, defaults to: lava, water, bedrock, other).
-- damage living entities according to the arriving strength of the explosion, not the distance to the center.
+- Damage living entities according to the arriving strength of the explosion, not just the distance to the center, configurable blocks that pass on damage.
 - Fires EntityExplodeEvent and EntityDamageEvent and allows canceling by other plugins.
 - API might be used by other plugins to trigger explosions.
  
 Issues:
-! Sand glitches: Not sure this can be done with physics...
-! TNT glitches: Might be related as to when exactly the entity is removed (currently before starting the explosion, thus the dead entity is passed with the Explosion event). 
 ! Re-think event priorities and canceling to allow other plugins canceling the ExplosionPrimeEvent as well [Probably ok with highest].
-! Re-think which events to intercept: [Currently for performance reason TNTPrimed is canceled always, to prevent calculations for the explosion being done by CraftBukkit or MC]
-? propagation differs slightly concerning x / z ? [Will change anyway, seems to be about right now.] 
 ! ALWAYS: keep adjusting  default values to something realistic...
   
 Planned:
-! add: limit explosions to certain y-coordinates (upper / lower limit).
 ! Must add: fire, if fire is set.
-! add configuration flag for enabled (need not be changed by commands).
-! MAKE SETTINGE DETACHED , default, world specific, ... further ...
 ? Damage or change  entities according to their type (TNT->Explode, ItemStacks - damage)
 ! More fine grained vector manipulation 
 ! Use velocity events if possible !
@@ -41,11 +35,9 @@ Planned:
 ! direct explode feature (threshold + possibly with probabilities: 1. p(direct) -> if not... maybe prime) [Might better be a lower ignition value for primed tnt, rather than exploding it directly]
 ! Explosion API: add call with exploding entitytype as argument [exists already], but with flag to create that entity temporarily
 ? flag: alwaysIncludeTNT -> even if resistance of tnt is to high still add tnt.
-! Option to prevent explosion events for certain configurations, if they slipped past the net of FatTnt.
 ! Check for creative mode on players (seems not to cancel damage events but have effect).
 ! creation of entities from blocks: generic defs for velocity etc.
 ! Transformations for entities (hit) ... also generic setups, from(conditions, minStr, entity specific)...ro(velocity, entity specific, removal)
-? (add) EntityCombust for tnt : create primed tnt for item
   
 Maybe:
 optimize: consider direct hacks to get entities: use the chunk wise storage of entities for faster getting (only affects servers with MANY entities)?
@@ -100,14 +92,13 @@ SCHEDULE (Might include ideas, points to check.)
     b) (.) maybe use preset directions map
     c) (x) maximum path length for propagation [Less blocks visited by recursion - actually ineffective with default settings!]
     d) (.) maximum number of direction changes
-    e) (.) all in one method, no recursion (at the cost of permanently used memory, though) 
+    e) (x) all in one method, no recursion (at the cost of permanently used memory, though) 
     f) (.) if e) used: one might release the memory if not used, so the next explosion will take more time. [RATHER NOT]
     g) (.) decrease direction changes with each step anyway but keep at some minimum if going into the same direction !
     h) (.) Use direction change and path length independently (decrease on base of what happens, change or stay).
     j) (.) Add moving heuristic, that gives possible continuations according to already chosen path !
     z) (...) Boil all down to some algorithm that does it in another way, just faster :)
-! Make some settings dependent on entities (damage multiplier at least)
-! (add) spare entities instead of a spare tnt flag. [maybe as part of specific configurations]
+! (add) spare entities + spare items instead of a spare tnt flag. [maybe as part of specific configurations]
 ! (add) EntityDamageByEntity event ?
 ! (add) blocks that let the explosion through but can be destroyed (alter to ignore, destructible)
 ! (add) various options to manipulate tnt that gets primed: randomized duration, fast explode (fixed start), decrease of duration (fixed) 
@@ -227,15 +218,17 @@ get fuseTick settings in place everywhere.
  
  ! (add) remove [<radius>] command 
  
+ ?(add) Settings: shooting-entitiy for projectiles (ghast fireballs vs player fireballs) !
  !(add) Material modifier (explode in water = ... explode in lava = ...
   ? simple flag for treating resistance as passthrough + prevent all block damage
   
   
   *** Bugfix schedulerset for each world (optional do use only one  )!
   *** refactor : CWSchedSettings ! (store settings, use for all schedulers of the same kind).
-  
+  !(add) direct-explode of tnt (now that the scheduler is there)
   
 (0.2.0-DEV-3) RELEASE
+
 
 *** Default settings: a workable set ! 
 
