@@ -28,30 +28,30 @@ public class Defaults {
 	
 	// Block id presets (resistance) -------------------------------------------------
 	
-	public static final int[] defaultIgnoreBlocks = new int[]{
+	private static final int[] defaultIgnoreBlocks = new int[]{
 	//			7, // bedrock
 				8,9, // water
 				10,11, // lava
 	//			49,90, // obsidian/nether portal
 	//			119,120 // end portal / frame
 				};
-	public static final int[] defaultLowResistance = new int[]{
+	private static final int[] defaultLowResistance = new int[]{
 			0, // air
 			8, 18, 30, 31, 32, 37,38, 39, 40, 50, 51, 55,
 			59,	63, 75,76, 78, 83, 102, 104, 105, 106, 111,
 	};
-	public static final int[] defaultHigherResistance = new int[]{
+	private static final int[] defaultHigherResistance = new int[]{
 			23, 41,42, 45, 54, 57, 95,
 			98, 108, 109
 	};
-	public static final int[] defaultStrongResistance = new int[]{
+	private static final int[] defaultStrongResistance = new int[]{
 			49, 116, 
 	};
-	public static final int[] defaultMaxResistance = new int[]{
+	private static final int[] defaultMaxResistance = new int[]{
 			7, // bedrock
 	};
 	
-	public static final int[] defaultPropagateDamage = new int[]{
+	private static final int[] defaultPropagateDamage = new int[]{
 		0, 
 		6,
 		8,9,
@@ -100,16 +100,14 @@ public class Defaults {
 	};
 	
 	// entitiy presets -------------------------------------------------
-	public static final String[] handledEntities = new String[]{
-		"PRIMED_TNT",
-	};
+
 	
 	// some default settings ------------------------------------
 	
 	/**
 	 * Maximum explosion strength that will be accepted by config.
 	 */
-	public static final float radiusLock = 100.0f;
+	static final float radiusLock = 100.0f;
 	
 	/**
 	 * Center of a block (for addition to a block coordinate).
@@ -122,125 +120,127 @@ public class Defaults {
 	public static final int blockArraySize = 4096;
 	
 	
-	public static final float maxRadius = 20.0f;
-	
 	/**
 	 * Handle and alter explosions at all.
 	 * TODO: also put to config.
 	 */
-	public static final boolean handleExplosions = true;
+	private static final boolean handleExplosions = true;
+	private static final boolean preventOtherExplosions = true;
+	private static final boolean preventExplosions = false;
+	
+	private static final float maxRadius = 20.0f;
 	
 	/**
 	 * Multiplier for strength (radius)
 	 */
-	public static final float radiusMultiplier = 2.125f;
+	private static final float radiusMultiplier = 2.125f;
 	
 	/**
 	 * TODO: experiment
 	 */
-	public static final float radiusMultiplierFireball = 3.5f;
+	private static final float radiusMultiplierFireball = 3.5f;
 	
 	
 	
 	/**
 	 * Multiplier for entity damage.
 	 */
-	public static final float damageMultiplier =  5.0f; // TODO: add some ray damage !
+	private static final float damageMultiplier =  5.0f; // TODO: add some ray damage !
 	
 	/**
 	 * Radius multiplier to modify range for collecting affected entities.
 	 * 
 	 */
-	public static final float entityRadiusMultiplier = 2.0f;
+	private static final float entityRadiusMultiplier = 2.0f;
 	
 	/**
 	 * Default explosion  resistance value for all materials that are not in one of the resistance-lists.
 	 */
-	public static final float defaultResistance = 2.0f;
+	private static final float defaultResistance = 2.0f;
 	
 	/**
 	 * Default pass-through resistance.
 	 */
-	public static float defaultPassthrough = Float.MAX_VALUE; 
+	private static float defaultPassthrough = Float.MAX_VALUE; 
 	
 	/**
 	 * Use ignored settings inverted, i.e. blacklist (not-ignored).
 	 */
-	public static final boolean invertIgnored = false;
+	private static final boolean invertIgnored = false;
 	
 	/**
 	 * If to not apply damage to primed tnt.
 	 */
-	public static final boolean sparePrimed = true;
+	private static final boolean sparePrimed = true;
 	
 	/**
 	 * Allow tnt items to change to primed tnt if combusted or hit by explosions.
 	 */
-	public static final boolean itemTnt = false;
+	private static final boolean itemTnt = false;
 	
 	/**
 	 * Currently unused [aimed at fast explosions]
 	 */
-	public static final  double thresholdTntDirect = 2.0;
+	private static final  double thresholdTntDirect = 2.0;
 	
 	// velocity settings
-	public static final boolean velUse = true;
-	public static final float velMin = 0.2f;
-	public static final float velCen = 1.0f;
-	public static final float velRan = 0.5f;
-	public static final boolean velOnPrime = false;
-	public static final float velCap = 3.0f;
+	private static final boolean velUse = true;
+	private static final float velMin = 0.2f;
+	private static final float velCen = 1.0f;
+	private static final float velRan = 0.5f;
+	private static final boolean velOnPrime = false;
+	private static final float velCap = 3.0f;
 	
 	/**
 	 * Maximal number of Item entities created from an ItemStack.
 	 */
-	public static final int maxItems = 15;
+	private static final int maxItems = 15;
 	
 	/**
 	 * Transform arrow items to real arrows (explosions).
 	 */
-	public static final boolean itemArrows = false;
+	private static final boolean itemArrows = false;
 	
 	/**
 	 * Affect projectiles velocity.
 	 */
-	public static final boolean projectiles = false;
+	private static final boolean projectiles = false;
 	
 	/**
 	 * Minimum fuse ticks, if primed tnt is created.
 	 * Set  to <=0 to have default fuse ticks.
 	 */
-	public static final int minPrime = 30;
+	private static final int minPrime = 30;
 	/**
 	 * Maximum fuse ticks, if primed tnt is created.
 	 * Set  to <=0 to have default fuse ticks.
 	 * If set to a value greater than minPrime, the fuse ticks will be set randomly using that interval.
 	 */
-	public static final int maxPrime = 80;
+	private static final int maxPrime = 80;
 	
 	/**
 	 * Drop chance from destroyed blocks.
 	 */
-	public static final float yield = 0.2f;
+	private static final float yield = 0.2f;
 	/**
 	 * Survival chance for items/entities hit by an explosion.
 	 */
-	public static final float entityYield = 0.2f;
+	private static final float entityYield = 0.2f;
 	
 	/**
 	 * Use extra distance based damage.
 	 */
-	public static final boolean useDistanceDamage = true;
+	private static final boolean useDistanceDamage = true;
 	
 	/**
 	 * Use a simple distance damage model.
 	 */
-	public static final boolean simpleDistanceDamage = false;
+	private static final boolean simpleDistanceDamage = false;
 	
 	/**
 	 * Multiply projectiles velocity by this, if affected.
 	 */
-	public static final float projectileMultiplier = 3.0f;
+	private static final float projectileMultiplier = 3.0f;
 	
 //	/**
 //	 * The minimal present resistance value.
@@ -251,44 +251,42 @@ public class Defaults {
 	/**
 	 * Multiplier for the distance based damage to entities.
 	 */
-	public static final float entityDistanceMultiplier = 0.4f; // TODO: adjust
+	private static final float entityDistanceMultiplier = 0.4f; // TODO: adjust
 	
 	/**
 	 * If to damage the armor on base of damage amount.
 	 */
-	public static final boolean armorUseDamage = false;
-	public static final float armorMultDamage = 0.5f;
-	public static final int armorBaseDepletion = 3;
+	private static final boolean armorUseDamage = false;
+	private static final float armorMultDamage = 0.5f;
+	private static final int armorBaseDepletion = 3;
 	
 	/**
 	 * Restrict maximal path length for propagation multiplied by explosion strength.
 	 */
-	public static final float maxPathMultiplier = 1.7f;
+	private static final float maxPathMultiplier = 1.7f;
 	
 	/**
 	 * Strength changes with this factor, for explosion paths advancing in the same direction again.
 	 */
-	public static final float fStraight = 0.85f;
+	private static final float fStraight = 0.85f;
 	
 	/**
 	 * UNUSED (was: random resistance added to blocks)
 	 */
-	public static final float randRadius = 0.2f;
+	private static final float randRadius = 0.2f;
 	
 	
 	/**
 	 * Experimental:Currently does explosions without applying physics (not good),
 	 * intended: apply physics after setting blocks to air.
 	 */
-	public static final boolean stepPhysics = false;
+	private static final boolean stepPhysics = false;
 	
 	// TODO: The following need paths !
-	public static final boolean scheduleExplosions = true;
-	public static final boolean scheduleItems = true;
-	public static final boolean scheduleEntities = true;
-	
-	public static final boolean preventOtherExplosions = true;
-	public static final boolean preventExplosions = false;
+	private static final boolean scheduleExplosions = true;
+	private static final boolean scheduleItems = true;
+	private static final boolean scheduleEntities = true;
+
 	
 	/**
 	 * Simple default values.
@@ -298,7 +296,7 @@ public class Defaults {
 	/**
 	 * Default config with all necessary values set.
 	 */
-	public static ExplosionSettings defaultExplosionSettings;
+	static ExplosionSettings defaultExplosionSettings;
 	
 	
 	
@@ -312,12 +310,14 @@ public class Defaults {
 	 * Used for all entries that can be checked with if (!Configuration.contains(path)) ... (add it as a whole).
 	 * @return
 	 */
-	public static CompatConfig getSimpleDefaultConfiguration(){
+	private static CompatConfig getSimpleDefaultConfiguration(){
 //		ExplosionSettings defaults = new ExplosionSettings(Integer.MIN_VALUE); // read defaults from here.
 		CompatConfig cfg = new NewConfig(null);
 		
-		// entities: 
-		// TODO: just set the greedy flags !
+		// General:
+		cfg.set(Path.handleExplosions, handleExplosions);
+		cfg.set(Path.preventExplosions, preventExplosions);
+		cfg.set(Path.preventOtherExplosions, preventOtherExplosions);
 		
 		// passthrough
 		cfg.set(Path.defaultPassthrough, defaultPassthrough);
@@ -405,7 +405,7 @@ public class Defaults {
 		return cfg;
 	}
 	
-	public static ExplosionSettings getDefaultExplosionSettings(){
+	private static ExplosionSettings getDefaultExplosionSettings(){
 		ExplosionSettings out = new ExplosionSettings(Integer.MIN_VALUE);
 		
 		// ??

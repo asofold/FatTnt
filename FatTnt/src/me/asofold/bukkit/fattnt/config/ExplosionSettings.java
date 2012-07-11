@@ -18,18 +18,20 @@ import me.asofold.bukkit.fattnt.config.priorityvalues.PriorityValue;
 public class ExplosionSettings extends PrioritySettings{
 	
 	public ConfinementSettings confine;
-
-	/**
-	 * Explosion strength is cut off there.
-	 */
-//	public float maxRadius = 20.0f;
-	public final PriorityFloat maxRadius = addValue("maxRadius", new PriorityFloat(null, 0, OverridePolicy.OVERRIDE));
 	
 	/**
 	 * Handle and alter explosions at all.
 	 * TODO: also put to config.
 	 */
 	public final PriorityBoolean handleExplosions = addValue("handleExplosions", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));
+	public final PriorityBoolean preventOtherExplosions = addValue("preventOtherExplosions", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));
+	public final PriorityBoolean preventExplosions = addValue("preventExplosions", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));
+	
+
+	/**
+	 * Explosion strength is cut off there.
+	 */
+	public final PriorityFloat maxRadius = addValue("maxRadius", new PriorityFloat(null, 0, OverridePolicy.OVERRIDE));
 	
 	/**
 	 * Multiplier for strength (radius)
@@ -195,9 +197,7 @@ public class ExplosionSettings extends PrioritySettings{
 	public final PriorityBoolean scheduleItems = addValue("scheduleItems", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));
 	public final PriorityBoolean scheduleEntities = addValue("scheduleEntities", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));
 	
-	public final PriorityBoolean preventOtherExplosions = addValue("preventOtherExplosions", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));
-	public final PriorityBoolean preventExplosions = addValue("preventExplosions", new PriorityBoolean(null, 0, OverridePolicy.OVERRIDE));
-	
+
 	/**
 	 * field names to path.
 	 * TODO: consider using path as field name ! (rather risky, though)
@@ -239,6 +239,9 @@ public class ExplosionSettings extends PrioritySettings{
 		{"scheduleEntities", Path.schedEntitiesUse},
 		{"scheduleItems", Path.schedItemsUse},
 		{"sparePrimed", Path.sparePrimed},
+		{"handleExplosions", Path.handleExplosions},
+		{"preventExplosions", Path.preventExplosions},
+		{"preventOtherExplosions", Path.preventOtherExplosions},
 	};
 	
 	public ExplosionSettings(int priority) {
@@ -330,10 +333,6 @@ public class ExplosionSettings extends PrioritySettings{
 				}
 			}
 		}
-	}
-
-	public void setHandleExplosions(boolean handle) {
-		handleExplosions.value = handle;
 	}
 	
 	public void applySettings(ExplosionSettings other) {

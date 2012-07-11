@@ -8,6 +8,13 @@ package me.asofold.bukkit.fattnt.config;
  */
 public class Path {
 	public static final char sep = '.';
+	
+	
+	// Greedy flags:
+	public static final String handleExplosions = "handle-explosions";
+	public static final String preventExplosions = "prevent-explosions";
+	public static final String preventOtherExplosions = "prevent-other-explosions";
+	
 	// multipliers:
 	// TODO: maybe split this section"+ sep + "
 	public static final String mult = "multiplier";
