@@ -184,20 +184,13 @@ public class ExplosionManager {
 	 * @param realRadius
 	 * @param settings
 	 * @param propagation
-	 * @param fuseTicks -1 = according to settings or 80, otherwise used.
+	 * @param fuseTicks < 0: according to settings, 80.
 	 * @return
 	 */
 	public static TNTPrimed addTNTPrimed(World world, double x, double y, double z,
 			Location loc, float realRadius, ExplosionSettings settings, Propagation propagation, int fuseTicks) {
 		final float effRad = propagation.getStrength(loc); // effective strength/radius
-		if (fuseTicks == -1){
-			fuseTicks = 80; 
-			if (settings.minPrime.value > 0  && settings.maxPrime.value > 0){
-				
-				if ( settings.minPrime.value <settings.maxPrime.value) fuseTicks = settings.minPrime.value + random.nextInt((settings.maxPrime.value-settings.minPrime.value+1));
-				else fuseTicks = Math.max(settings.minPrime.value, settings.maxPrime.value);
-			}
-		}
+		if (fuseTicks < 0) fuseTicks = getFuseTicks(settings);
 		Vector v = null; // not affected
 		if (settings.velOnPrime.value) v = getRandomVelocityToAdd(EntityType.PRIMED_TNT, loc, x,y,z, effRad, realRadius, settings);
 		return spawnTNTPrimed(world, loc, fuseTicks, v);
@@ -208,10 +201,23 @@ public class ExplosionManager {
 		return getScheduledTnt(world, x, y, z, loc, realRadius, settings, propagation, -1);
 	}
 	
+	/**
+	 * 
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param loc
+	 * @param realRadius
+	 * @param settings
+	 * @param propagation
+	 * @param fuseTicks For < 0: according to settings, 80 otherwise.
+	 * @return
+	 */
 	public static ScheduledTntSpawn getScheduledTnt(World world, double x, double y, double z,
 			Location loc, float realRadius, ExplosionSettings settings, Propagation propagation, int fuseTicks) {
 		final float effRad = propagation.getStrength(loc); // effective strength/radius
-		if (fuseTicks == -1) fuseTicks = getFuseTicks(settings);
+		if (fuseTicks < 0) fuseTicks = getFuseTicks(settings);
 		Vector v = null; // not affected
 		if (settings.velOnPrime.value) v = getRandomVelocityToAdd(EntityType.PRIMED_TNT, loc, x,y,z, effRad, realRadius, settings);
 		return new ScheduledTntSpawn(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), fuseTicks, v);
