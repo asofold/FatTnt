@@ -402,10 +402,17 @@ public class ExplosionManager {
 				if ( mat == Material.TNT && settings.itemTnt.value){
 					// create primed tnt according to settings
 					item.remove();
+					boolean direct = propagation.getStrength(loc.getX(), loc.getY(), loc.getZ()) > settings.thresholdTntDirect.value;
 					for ( int i = 0; i< Math.min(settings.maxItems.value, stack.getAmount()); i++){
 						// TODO: FUSE TICKS !
-						if (settings.scheduleExplosions.value) schedulers.spawnEntities.addEntry(getScheduledTnt(world, maxD, y, z, loc, realRadius, settings, propagation));
-						else addTNTPrimed(world, x, y, z, loc.add(new Vector(0.0,0.5,0.0)), realRadius, settings, propagation);
+						if (direct){
+							if (settings.scheduleExplosions.value) schedulers.spawnEntities.addEntry(getScheduledTnt(world, maxD, y, z, loc, realRadius, settings, propagation, 1));
+							else addTNTPrimed(world, x, y, z, loc.add(new Vector(0.0,0.5,0.0)), realRadius, settings, propagation, 1);
+						}
+						else{
+							if (settings.scheduleExplosions.value) schedulers.spawnEntities.addEntry(getScheduledTnt(world, maxD, y, z, loc, realRadius, settings, propagation));
+							else addTNTPrimed(world, x, y, z, loc.add(new Vector(0.0,0.5,0.0)), realRadius, settings, propagation);	
+						}
 					}
 					continue;
 				} 
@@ -536,7 +543,6 @@ public class ExplosionManager {
 	public static ScheduledTntSpawn getScheduledTnt(Item item){
 		// TODO: fuse ticks
 		Location loc = item.getLocation();
-		item.remove();
 		return new ScheduledTntSpawn(loc.getWorld(), loc.getX(), loc.getY() + 0.5, loc.getZ(), 80, item.getVelocity().clone());
 	}
 
