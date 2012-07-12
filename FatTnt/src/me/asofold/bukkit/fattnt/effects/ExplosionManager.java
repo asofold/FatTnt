@@ -114,7 +114,7 @@ public class ExplosionManager {
 	 * @param specs 
 	 * @param schedulers 
 	 */
-	public static void applyBlockEffects(World world, double x, double y, double z, float realRadius, List<Block> blocks, float defaultYield, ExplosionSettings settings, Propagation propagation, FatExplosionSpecs specs, SchedulerSet schedulers){
+	public static final void applyBlockEffects(final World world, final double x, final double y, final double z, final float realRadius, final List<Block> blocks, final float defaultYield, final ExplosionSettings settings, final Propagation propagation, final FatExplosionSpecs specs, final SchedulerSet schedulers){
 //		final List<block> directExplode = new LinkedList<block>(); // if set in config. - maybe later (split method to avoid recursion !)
 		final int tntId = Material.TNT.getId();
 		for (final Block block : blocks){
@@ -123,7 +123,7 @@ public class ExplosionManager {
 			if (id == tntId){
 				if (!settings.stepPhysics.value) block.setTypeId(0, true);
 				else block.setTypeId(0, false);
-				Location loc = blockCenter(world, block);
+				final Location loc = blockCenter(world, block);
 				// TODO: check for direct explode threshold and generation
 				// TODO: Curently: 
 				if (propagation.getStrength(block.getX(), block.getY(), block.getZ()) > settings.thresholdTntDirect.value){
@@ -137,7 +137,7 @@ public class ExplosionManager {
 			}
 			else{
 				// All other blocks:
-				Collection<ItemStack> drops = block.getDrops();
+				final Collection<ItemStack> drops = block.getDrops();
 				if (!settings.stepPhysics.value) block.setTypeId(0, true);
 				else block.setTypeId(0, false);
 				for (ItemStack drop : drops){
@@ -146,12 +146,12 @@ public class ExplosionManager {
 						// TODO: settings !
 						//getSomeRandomVelocity(item, loc, x,y,z, realRadius);
 						if (settings.scheduleItems.value){
-							ItemStack item = drop.clone();
+							final ItemStack item = drop.clone();
 							item.setAmount(1);
 							schedulers.spawnItems.addEntry(new ScheduledItemSpawn(block, item));
 						}
 						else{
-							Location loc = blockCenter(world, block);
+							final Location loc = blockCenter(world, block);
 							world.dropItemNaturally(loc, drop); // .clone());
 						}
 						
@@ -160,7 +160,7 @@ public class ExplosionManager {
 			}
 		}
 		if (settings.stepPhysics.value){
-			for ( Block block : blocks){
+			for (final Block block : blocks){
 				block.getState().update();
 			}
 		}
@@ -325,18 +325,18 @@ public class ExplosionManager {
 	 * @param damageProcessor 
 	 * @param schedulers 
 	 */
-	public static void applyEntityEffects(World world, double x, double y, double z, float realRadius, List<Entity> nearbyEntities, float damageMultiplier, ExplosionSettings settings, Propagation propagation, FatExplosionSpecs specs, DamageProcessor damageProcessor, SchedulerSet schedulers) {
+	public static void applyEntityEffects(final World world, final double x, final double y, final double z, float realRadius, final List<Entity> nearbyEntities, final float damageMultiplier, final ExplosionSettings settings, final Propagation propagation, final FatExplosionSpecs specs, final DamageProcessor damageProcessor, final SchedulerSet schedulers) {
 		if ( realRadius > settings.maxRadius.value){
 			// TODO: settings ?
 			realRadius = settings.maxRadius.value;
 		} else if (realRadius == 0.0f) return;
-		PluginManager pm = Bukkit.getPluginManager();
-		Location expCenter = new Location(world, x, y, z);
+		final PluginManager pm = Bukkit.getPluginManager();
+		final Location expCenter = new Location(world, x, y, z);
 		
 		float maxD = realRadius * settings.entityRadiusMultiplier.value;
 		
 		// entities:
-		for ( Entity entity : nearbyEntities){
+		for ( final Entity entity : nearbyEntities){
 			// test damage:
 			final Location loc = entity.getLocation();
 			float effStr = propagation.getStrength(loc); // effective strength/radius
@@ -365,7 +365,7 @@ public class ExplosionManager {
 						if ( entity instanceof LivingEntity){
 							h = ((LivingEntity) entity).getEyeHeight();
 						}
-						Location current = loc.clone().add(new Vector(0.0, h ,0.0)); 
+						final Location current = loc.clone().add(new Vector(0.0, h ,0.0)); 
 						for ( int i = 0 ; i< max; i++){
 							int id = world.getBlockTypeIdAt(current);
 							if (!settings.propagateDamage.value[id]) break;
@@ -396,8 +396,8 @@ public class ExplosionManager {
 			} 
 			else if (isAlive); // just go with settings.
 			else if (entity instanceof Item){
-				Item item = (Item) entity;
-				ItemStack stack = item.getItemStack();
+				final Item item = (Item) entity;
+				final ItemStack stack = item.getItemStack();
 				final Material mat = stack.getType();
 				if ( mat == Material.TNT && settings.itemTnt.value){
 					// create primed tnt according to settings
@@ -450,7 +450,7 @@ public class ExplosionManager {
 				// TODO: damage entities according to type [currently almost only living entities]
 				int damage = 1 + (int) (effStr*settings.damageMultiplier.value*damageMultiplier); // core damage
 				// TODO: add distance damage [maybe above]
-				EntityDamageEvent event = new FatEntityDamageEvent(entity, DamageCause.ENTITY_EXPLOSION, damage, specs);
+				final EntityDamageEvent event = new FatEntityDamageEvent(entity, DamageCause.ENTITY_EXPLOSION, damage, specs);
 				pm.callEvent(event);
 				if (!event.isCancelled()){
 					if (damageProcessor.damageEntity(event, settings) > 0){
