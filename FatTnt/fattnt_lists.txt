@@ -228,7 +228,7 @@ get fuseTick settings in place everywhere.
  ?(add) general modifiers ?
  !(add) Material modifier (explode in water = ... explode in lava = ...
   
-(0.2.0-DEV-4)  SCHEDULER UPDATE
+(0.2.0-DEV-X)  SCHEDULER UPDATE
 *** General schedulers ?
 ?(add) Scheduler for block changes or general purpose ?
 ?consider: a general random scheduler: schedules with random x,z but does reduction.
@@ -242,11 +242,15 @@ refactor : CWSchedSettings ! (store settings, use for all schedulers of the same
 (0.2.0-DEV-3) RELEASE
 
 *** ANYTHING ELSE ?
+!(add) propagation.setTypeId(...)  + use getTypeId for entity damage as well!
+? Extra settings for explosions in materials ?
+!(add) Named sets of ids  + ability to reference those from passthrough and resistance.
+!(add) Possibility to reduce fuse ticks if tnt is hit by other explosions.
 
 *** Default settings: a first detailed version!
 
 *** Settings: consider other changes to configuration paths ! [maybe an extra update for that]
-
+? velocity settings
 *** Settings: test + ?cleanup
 
 ? what was this : all settings / PV : defaults have different priorities, must use from ref ! [maybe already done]
@@ -258,7 +262,18 @@ refactor : CWSchedSettings ! (store settings, use for all schedulers of the same
 !(add) Explosionsettings: fire: always => probability: overrides the fire value from ExplosionPrime events ? (or all..)
 !(add) Fire: p-removed + n-random = chance to set a removed block on fire + number of tries to add fire randomly within explosion radius or near center + events !
 
+*** Quick release in between (GitHub only)
+!(add) Control over ignition time in general !
+!(add) override fuse ticks for primed tnt (exclude that from fattnt) -> ?TntIgnition settings [min-prime, max-prime, item-tnt ?]
 
+*** config path renaming [rather use sub sections that group stuff, for instance propagation.array]
+- propagation.array section
+- tnt section ...
+- ignition settings or individual paths
+- ? projectiles section
+- items section
+
+!(add) apply direct explode threshold to item tnt if hit by an explosion
 
 VERSION HISTORY (only done changes)
 -----------------------------------------------------------------
