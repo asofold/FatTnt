@@ -228,7 +228,7 @@ get fuseTick settings in place everywhere.
  ?(add) general modifiers ?
  !(add) Material modifier (explode in water = ... explode in lava = ...
   
-(0.2.0-DEV-X)  SCHEDULER UPDATE
+*** SCHEDULER UPDATE
 *** General schedulers ?
 ?(add) Scheduler for block changes or general purpose ?
 ?consider: a general random scheduler: schedules with random x,z but does reduction.
@@ -239,7 +239,7 @@ get fuseTick settings in place everywhere.
 Bugfix schedulerset for each world (optional do use only one  )!
 refactor : CWSchedSettings ! (store settings, use for all schedulers of the same kind).
   
-(0.2.0-DEV-3) RELEASE
+*** ? RELEASE STEP
 
 *** ANYTHING ELSE ?
 !(add) propagation.setTypeId(...)  + use getTypeId for entity damage as well!
@@ -262,9 +262,15 @@ refactor : CWSchedSettings ! (store settings, use for all schedulers of the same
 !(add) Explosionsettings: fire: always => probability: overrides the fire value from ExplosionPrime events ? (or all..)
 !(add) Fire: p-removed + n-random = chance to set a removed block on fire + number of tries to add fire randomly within explosion radius or near center + events !
 
-*** Quick release in between (GitHub only)
-!(add) Control over ignition time in general !
+? item-arrows: arrows cant be picked up ?
+
+!(add) Control over ignition time in general ! [?needs blockredstone event ?]
 !(add) override fuse ticks for primed tnt (exclude that from fattnt) -> ?TntIgnition settings [min-prime, max-prime, item-tnt ?]
+
+
+
+*** Quick release in between (GitHub only)
+
 
 *** config path renaming [rather use sub sections that group stuff, for instance propagation.array]
 - propagation.array section
@@ -273,7 +279,9 @@ refactor : CWSchedSettings ! (store settings, use for all schedulers of the same
 - ? projectiles section
 - items section
 
-!(add) apply direct explode threshold to item tnt if hit by an explosion
+
+*** CLEANUP CONFIG + LISTS FILE
+
 
 VERSION HISTORY (only done changes)
 -----------------------------------------------------------------
