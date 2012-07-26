@@ -364,6 +364,16 @@ public class FatTnt extends JavaPlugin implements Listener {
 		else ExplosionManager.replaceByTNTPrimed(item);	
 	}
 	
+//	@EventHandler(priority=EventPriority.HIGHEST, ignoreCancelled=true)
+//	final void onTntActivation(final BlockRedstoneEvent event){
+//		if (ExplosionManager.skipSpawnTnt) return;
+//		System.out.println("BlockRedstone: " + event.getBlock());
+//		if (event.getNewCurrent() > 0 && event.getBlock().getTypeId() == Material.TNT.getId()){
+//			System.out.println("TNT activated: " + event.getBlock());
+//		}
+//	}
+
+	
 	/**
 	 * API
 	 * @param loc

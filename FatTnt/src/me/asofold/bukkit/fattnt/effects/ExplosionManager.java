@@ -46,6 +46,8 @@ import org.bukkit.util.Vector;
  */
 public class ExplosionManager {
 	
+//	public static boolean skipSpawnTnt = false;
+	
 	public static final Random random = new Random(System.currentTimeMillis()-1256875);
 	
 	private static Stats stats = null;
