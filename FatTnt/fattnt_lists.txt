@@ -297,7 +297,9 @@ VERSION HISTORY (only done changes)
 
 *** [Beta/Dev stage]
 
-(0.2.0-DEV-4)
+
+(1.0.0)
+- (CHANGE) Packet naming.
 
 (0.2.0-DEV-3)
 - (add) Direct explode threshold (scheduled for next tick).
