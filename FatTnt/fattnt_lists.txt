@@ -282,11 +282,17 @@ refactor : CWSchedSettings ! (store settings, use for all schedulers of the same
 
 *** CLEANUP CONFIG + LISTS FILE
 
+*** Fast convenience update: named sets of blocks + reference those !
+!(add) Sane default settings for the schedulers !
+!(bugfix) Include scheduler settings in the default configuration. 
+!(add) commands section to bukkitdev 
 
 VERSION HISTORY (only done changes)
 -----------------------------------------------------------------
 
 *** [Beta/Dev stage]
+
+(0.2.0-DEV-4)
 
 (0.2.0-DEV-3)
 - (add) Direct explode threshold (scheduled for next tick).
