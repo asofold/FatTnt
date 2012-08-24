@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import me.asofold.bpl.fattnt.FatTnt;
+import me.asofold.bpl.fattnt.config.Defaults;
 import me.asofold.bpl.fattnt.config.ExplosionSettings;
 import me.asofold.bpl.fattnt.events.FatEntityDamageEvent;
 import me.asofold.bpl.fattnt.events.FatEntityExplodeEvent;
@@ -26,7 +27,7 @@ import org.bukkit.craftbukkit.entity.CraftArrow;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.FallingSand;
+import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Projectile;
@@ -432,8 +433,11 @@ public class ExplosionManager {
 			} else if (entity instanceof Vehicle){
 				// TODO: StorageMinecart ?
 				applyEntityYield = true;
-			} else if (entity instanceof FallingSand){
-				applyEntityYield = true;
+			} else if (entity instanceof FallingBlock){
+				// TODO: configure !
+				final int id = ((FallingBlock) entity).getBlockId();
+				if (id > 0 && id < Defaults.blockArraySize && effStr > settings.resistance.value[id])
+					applyEntityYield = true;
 			} else if (entity instanceof Projectile){
 				if ( settings.projectiles.value){
 					if ( entity instanceof Arrow){
