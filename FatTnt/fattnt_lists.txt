@@ -297,6 +297,8 @@ VERSION HISTORY (only done changes)
 
 *** [Beta/Dev stage]
 
+(1.0.1)
+- (bugfix) Let FatExplosionSpecs implement Cloneable.
 
 (1.0.0)
 - (CHANGE) Packet naming.

@@ -8,7 +8,7 @@ import org.bukkit.entity.EntityType;
  * @author mc_dev
  *
  */
-public class FatExplosionSpecs {
+public class FatExplosionSpecs implements Cloneable{
 	
 	private final String worldName;
 	private final EntityType entityType;
