@@ -508,7 +508,7 @@ public class ExplosionManager {
 		if( settings.velCap.value>0){
 			if (rv.lengthSquared()>settings.velCap.value*settings.velCap.value) rv = rv.normalize().multiply(settings.velCap.value);
 		}
-		if ( entityType == EntityType.ARROW || entityType == EntityType.FIREBALL || entityType == EntityType.SPLASH_POTION || entityType == EntityType.SMALL_FIREBALL || entityType == EntityType.SNOWBALL || entityType == EntityType.THROWN_EXP_BOTTLE) rv = rv.multiply(settings.projectileMultiplier.value);
+		if ( entityType == EntityType.ARROW || entityType == EntityType.LARGE_FIREBALL || entityType == EntityType.SPLASH_POTION || entityType == EntityType.SMALL_FIREBALL || entityType == EntityType.SNOWBALL || entityType == EntityType.THROWN_EXP_BOTTLE) rv = rv.multiply(settings.projectileMultiplier.value);
 		return rv;
 	}
 
