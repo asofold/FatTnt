@@ -1,6 +1,6 @@
 name: FatTnt
 main: me.asofold.bpl.fattnt.FatTnt
-version: 1.0.2
+version: 1.0.3
 commands:
   fattnt:
     description: 'Reload, enable, disable etc.'
