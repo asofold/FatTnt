@@ -16,6 +16,7 @@ import me.asofold.bpl.fattnt.scheduler.ScheduledTntSpawn;
 import me.asofold.bpl.fattnt.scheduler.SchedulerSet;
 import me.asofold.bpl.fattnt.stats.Stats;
 import me.asofold.bpl.fattnt.utils.Utils;
+import net.minecraft.server.IBlockAccess;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -23,6 +24,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.craftbukkit.entity.CraftArrow;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
@@ -119,10 +121,18 @@ public class ExplosionManager {
 	 */
 	public static final void applyBlockEffects(final World world, final double x, final double y, final double z, final float realRadius, final List<Block> blocks, final float defaultYield, final ExplosionSettings settings, final Propagation propagation, final FatExplosionSpecs specs, final SchedulerSet schedulers){
 //		final List<block> directExplode = new LinkedList<block>(); // if set in config. - maybe later (split method to avoid recursion !)
+		IBlockAccess ba = null;
+		try{
+			ba = ((CraftWorld) world).getHandle();
+		}
+		catch(Throwable t){}
 		final int tntId = Material.TNT.getId();
 		for (final Block block : blocks){
-			int id = propagation.getTypeId(block.getX(), block.getY(), block.getZ());
-			if (id == -1) id = block.getTypeId();
+			final int cx = block.getX();
+			final int cy = block.getY();
+			final int cz = block.getZ();
+			int id = propagation.getTypeId(cx, cy, cz);
+			if (id == -1) id = ba == null ? world.getBlockTypeIdAt(cx, cy, cz) : ba.getTypeId(cx, cy, cz);
 			if (id == tntId){
 				if (!settings.stepPhysics.value) block.setTypeId(0, true);
 				else block.setTypeId(0, false);
@@ -338,6 +348,12 @@ public class ExplosionManager {
 		
 		float maxD = realRadius * settings.entityRadiusMultiplier.value;
 		
+		IBlockAccess ba = null;
+		try{
+			ba = ((CraftWorld) world).getHandle();
+		}
+		catch(Throwable t){}
+		
 		// entities:
 		for ( final Entity entity : nearbyEntities){
 			// test damage:
@@ -369,8 +385,12 @@ public class ExplosionManager {
 							h = ((LivingEntity) entity).getEyeHeight();
 						}
 						final Location current = loc.clone().add(new Vector(0.0, h ,0.0)); 
-						for ( int i = 0 ; i< max; i++){
-							int id = world.getBlockTypeIdAt(current);
+						for ( int i = 0 ; i < max; i++){
+							final int cx = current.getBlockX();
+							final int cy = current.getBlockY();
+							final int cz = current.getBlockZ();
+							int id = propagation.getTypeId(cx, cy, cz);
+							if (id == -1) id = ba == null ? world.getBlockTypeIdAt(cx, cy, cz) : ba.getTypeId(cx, cy, cz); 
 							if (!settings.propagateDamage.value[id]) break;
 							float str = propagation.getStrength(current);
 							if (str > 0.0f){

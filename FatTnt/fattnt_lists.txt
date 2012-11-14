@@ -297,6 +297,9 @@ VERSION HISTORY (only done changes)
 
 *** [Beta/Dev stage]
 
+(1.0.3)
+- (optimize) Use IBLockAccess if possible.
+
 (1.0.1)
 - (adjust) Check type id of falling blocks and only apply entity yield if strength is big enough.
 - (bugfix) Let FatExplosionSpecs implement Cloneable.
