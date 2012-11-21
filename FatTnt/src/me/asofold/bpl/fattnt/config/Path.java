@@ -35,6 +35,7 @@ public class Path {
 	public static final String randRadius = radius +  sep + "random"; // UNUSED
 	public static final String explodingEntities= "exploding-entities";
 	public static final String damagePropagate = "propagate-damage";
+	public static final String damagePreventBlocks = "prevent-block-damage";
 	
 	// confine:
 	public static final String confine = "confine";

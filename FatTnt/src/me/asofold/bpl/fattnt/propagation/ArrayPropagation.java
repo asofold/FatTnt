@@ -295,6 +295,10 @@ public class ArrayPropagation extends Propagation {
 			ba = ((CraftWorld) w).getHandle();
 		}
 		catch (Throwable t){}
+		
+		final int startId = ba == null ? w.getBlockTypeIdAt(x, y, z) : ba.getTypeId(x, y, z);
+		final boolean noBlockDamage = settings.preventBlockDamage.value[startId];
+		
 		final int wyMin = 0;
 		final int wyMax = w.getMaxHeight();
 		final int yMin;
@@ -409,7 +413,7 @@ public class ArrayPropagation extends Propagation {
 				}
 			} 
 			else{
-				if (!ign) blocks.add(w.getBlockAt(x,y,z));
+				if (!ign && !noBlockDamage) blocks.add(w.getBlockAt(x,y,z));
 				expStr -= dur; // decrease after setting the array
 			}
 			// Checks for propagation:

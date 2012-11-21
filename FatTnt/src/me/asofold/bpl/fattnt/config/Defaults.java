@@ -154,11 +154,11 @@ public class Defaults {
 		cfg.set(Path.defaultResistance, 2.0);
 		
 		// damage propagation
-		List<Integer> entries = new LinkedList<Integer>();
-		for (int i : defaultPropagateDamage){
-			entries.add(i);
-		}
-		cfg.set(Path.damagePropagate, entries);
+		cfg.set(Path.damagePropagate, ConfigUtil.asList(defaultPropagateDamage));
+		
+		// no blockdamage ?
+		// TODO: set minecraft defaults here ?
+		cfg.set(Path.damagePreventBlocks, new LinkedList<String>());
 			
 		// explosion basics:
 		cfg.set(Path.maxRadius, 20.0);

@@ -151,7 +151,15 @@ public class ExplosionSettings extends PrioritySettings{
 	 */
 	public final PriorityValue<float[]> resistance = addValue("resistance", new PriorityObject<float[]>(null, 0, OverridePolicy.OVERRIDE));
 	
+	/**
+	 * Propagate entity damage (living only) beond explosion radius. 
+	 */
 	public final PriorityValue<boolean[]> propagateDamage = addValue("propagateDamage", new PriorityObject<boolean[]>(null, 0, OverridePolicy.OVERRIDE));
+	
+	/**
+	 * If explosions go off in these blocks, no block damage will be dealt.
+	 */
+	public final PriorityValue<boolean[]> preventBlockDamage = addValue("preventBlockDamage", new PriorityObject<boolean[]>(null, 0, OverridePolicy.OVERRIDE));
 	
 	/**
 	 * Multiplier for the distance based damage to entities.
@@ -273,6 +281,7 @@ public class ExplosionSettings extends PrioritySettings{
 		if (cfg.contains(prefix + Path.defaultPassthrough)) passthrough.value = new float[Defaults.blockArraySize];
 		if (cfg.contains(prefix + Path.defaultResistance)) resistance.value = new float[Defaults.blockArraySize];
 		if (cfg.contains(prefix + Path.damagePropagate)) propagateDamage.value = new boolean[Defaults.blockArraySize];
+		if (cfg.contains(prefix + Path.damagePreventBlocks)) preventBlockDamage.value = new boolean[Defaults.blockArraySize];
 		
 
 		
@@ -296,6 +305,13 @@ public class ExplosionSettings extends PrioritySettings{
 			List<Integer> ids = Defaults.getIdList(cfg, prefix + Path.damagePropagate);
 			for ( Integer id : ids){
 				propagateDamage.value[id] = true;
+			}
+		}
+		if (preventBlockDamage.value != null){
+			initBools(preventBlockDamage.value, false);
+			List<Integer> ids = Defaults.getIdList(cfg, prefix + Path.damagePreventBlocks);
+			for ( Integer id : ids){
+				preventBlockDamage.value[id] = true;
 			}
 		}
 		

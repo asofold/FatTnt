@@ -292,10 +292,21 @@ refactor : CWSchedSettings ! (store settings, use for all schedulers of the same
 !(add) commands section to bukkitdev 
 
 
+*** VERY QUICK ADDITION
+
+!Add new blocks for propagate damage and other (or add note that it needs to be done).
+
+! Blocks that disable block damage if the tnt explodes on them.
+
+
+
 VERSION HISTORY (only done changes)
 -----------------------------------------------------------------
 
 *** [Beta/Dev stage]
+
+(1.1.0)
+- (add) prevent-block-damage: List of blocks, explosions that go off on one of those will calculate normally but not damage any blocks.
 
 (1.0.3)
 - (optimize) Use IBLockAccess if possible.
