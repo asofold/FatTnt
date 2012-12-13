@@ -9,11 +9,9 @@ import me.asofold.bpl.fattnt.config.ExplosionSettings;
 import me.asofold.bpl.fattnt.config.Settings;
 import me.asofold.bpl.fattnt.effects.ExplosionManager;
 import me.asofold.bpl.fattnt.utils.Utils;
-import net.minecraft.server.IBlockAccess;
 
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.CraftWorld;
 
 public class ArrayPropagation extends Propagation {
 	
@@ -290,13 +288,8 @@ public class ArrayPropagation extends Propagation {
 			int i, int dir, int mpl, float expStr, final ExplosionSettings settings){
 		// preparation:
 		// TODO: also set these from the configuration.
-		IBlockAccess ba = null;
-		try{
-			ba = ((CraftWorld) w).getHandle();
-		}
-		catch (Throwable t){}
 		
-		final int startId = ba == null ? w.getBlockTypeIdAt(x, y, z) : ba.getTypeId(x, y, z);
+		final int startId = w.getBlockTypeIdAt(x, y, z);
 		final boolean noBlockDamage = settings.preventBlockDamage.value[startId];
 		
 		final int wyMin = 0;
@@ -363,7 +356,7 @@ public class ArrayPropagation extends Propagation {
 			if ( y>=yMin && y <= yMax){// TODO: maybe +-1 ?
 				if (isSeq) id = ids[i];
 				else{
-					id = ba == null ? w.getBlockTypeIdAt(x,y,z) : ba.getTypeId(x, y, z);
+					id = w.getBlockTypeIdAt(x,y,z);
 					ids[i] = id;
 				}
 				
@@ -392,7 +385,7 @@ public class ArrayPropagation extends Propagation {
 				// TODO: Get stored id if available.
 				if (isSeq) id = ids[i];
 				else{
-					id = ba == null ? w.getBlockTypeIdAt(x,y,z) : ba.getTypeId(x, y, z);
+					id = w.getBlockTypeIdAt(x,y,z);
 					ids[i] = id;
 				}
 				dur = passthrough[id];

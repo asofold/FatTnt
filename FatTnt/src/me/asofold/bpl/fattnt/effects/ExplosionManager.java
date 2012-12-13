@@ -16,7 +16,6 @@ import me.asofold.bpl.fattnt.scheduler.ScheduledTntSpawn;
 import me.asofold.bpl.fattnt.scheduler.SchedulerSet;
 import me.asofold.bpl.fattnt.stats.Stats;
 import me.asofold.bpl.fattnt.utils.Utils;
-import net.minecraft.server.IBlockAccess;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -24,8 +23,6 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.craftbukkit.CraftWorld;
-import org.bukkit.craftbukkit.entity.CraftArrow;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -121,18 +118,13 @@ public class ExplosionManager {
 	 */
 	public static final void applyBlockEffects(final World world, final double x, final double y, final double z, final float realRadius, final List<Block> blocks, final float defaultYield, final ExplosionSettings settings, final Propagation propagation, final FatExplosionSpecs specs, final SchedulerSet schedulers){
 //		final List<block> directExplode = new LinkedList<block>(); // if set in config. - maybe later (split method to avoid recursion !)
-		IBlockAccess ba = null;
-		try{
-			ba = ((CraftWorld) world).getHandle();
-		}
-		catch(Throwable t){}
 		final int tntId = Material.TNT.getId();
 		for (final Block block : blocks){
 			final int cx = block.getX();
 			final int cy = block.getY();
 			final int cz = block.getZ();
 			int id = propagation.getTypeId(cx, cy, cz);
-			if (id == -1) id = ba == null ? world.getBlockTypeIdAt(cx, cy, cz) : ba.getTypeId(cx, cy, cz);
+			if (id == -1) id = world.getBlockTypeIdAt(cx, cy, cz);
 			if (id == tntId){
 				if (!settings.stepPhysics.value) block.setTypeId(0, true);
 				else block.setTypeId(0, false);
@@ -311,9 +303,9 @@ public class ExplosionManager {
 	}
 
 	public  static Arrow spawnArrow(World world, Location loc) {
-		Arrow arrow = world.spawn(loc, CraftArrow.class);
-		if (arrow == null) return null;
-		return arrow;
+		final Entity entity = world.spawnEntity(loc, EntityType.ARROW);
+		if (entity == null || !(entity instanceof Arrow)) return null;
+		return (Arrow) entity;
 	}
 	
 	public static Arrow spawnArrow(World world, Location location, Vector velocity) {
@@ -347,12 +339,6 @@ public class ExplosionManager {
 		final Location expCenter = new Location(world, x, y, z);
 		
 		float maxD = realRadius * settings.entityRadiusMultiplier.value;
-		
-		IBlockAccess ba = null;
-		try{
-			ba = ((CraftWorld) world).getHandle();
-		}
-		catch(Throwable t){}
 		
 		// entities:
 		for ( final Entity entity : nearbyEntities){
@@ -390,7 +376,7 @@ public class ExplosionManager {
 							final int cy = current.getBlockY();
 							final int cz = current.getBlockZ();
 							int id = propagation.getTypeId(cx, cy, cz);
-							if (id == -1) id = ba == null ? world.getBlockTypeIdAt(cx, cy, cz) : ba.getTypeId(cx, cy, cz); 
+							if (id == -1) id = world.getBlockTypeIdAt(cx, cy, cz); 
 							if (!settings.propagateDamage.value[id]) break;
 							float str = propagation.getStrength(current);
 							if (str > 0.0f){
