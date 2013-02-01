@@ -137,7 +137,7 @@ public class ExplosionSettings extends PrioritySettings{
 	 * The minimal present resistance value.
 	 * Set automatically from configuration input.
 	 */
-	public float minResistance = Float.MIN_VALUE; // TODO
+	public float minResistance = -Float.MAX_VALUE; // TODO
 	
 	/**
 	 * If a block can not be destroyed this will be checked for further propagation.
