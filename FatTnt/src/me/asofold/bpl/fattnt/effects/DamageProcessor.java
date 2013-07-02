@@ -76,8 +76,8 @@ public class DamageProcessor {
 	 * @param event
 	 * @return damage dealt, 0 if none or if not applicable.
 	 */
-	public int damageEntity(EntityDamageEvent event, ExplosionSettings settings) {
-		int damage = event.getDamage();
+	public double damageEntity(EntityDamageEvent event, ExplosionSettings settings) {
+		double damage = event.getDamage();
 		if ( damage == 0) return 0; // TODO: ret-hink this
 		Entity entity = event.getEntity();
 		if (entity == null) return 0; // impossible ?
@@ -87,7 +87,7 @@ public class DamageProcessor {
 		// TODO: check if in boat / minecart !
 		if ( type.isAlive()){
 			LivingEntity living = (LivingEntity) entity;
-			int[] armorDamage = getArmorDamage(living, type, cause, damage, settings);
+			double[] armorDamage = getArmorDamage(living, type, cause, damage, settings);
 			if (armorDamage != null ) damage = armorDamage[0];
 			
 			final int noDamageTicks = living.getNoDamageTicks() ;
@@ -124,14 +124,14 @@ public class DamageProcessor {
 	 * @param damage
 	 * @return null or an Array with to be dealt damage, then durability losses for: helmet, chestplate, leggings, boots.
 	 */
-	public int[] getArmorDamage(LivingEntity living, EntityType damager, DamageCause cause, int damage, ExplosionSettings settings) {
+	public double[] getArmorDamage(LivingEntity living, EntityType damager, DamageCause cause, double damage, ExplosionSettings settings) {
 		if ( cause != DamageCause.ENTITY_EXPLOSION) return null; // current limit.
 		if ( living instanceof HumanEntity){
 			int base = settings.armorBaseDepletion.value; // TODO: entity specific ?
 			if (settings.armorUseDamage.value){
 				base += (int) (settings.armorMultDamage.value * (float) damage);
 			}
-			int[] out = new int[]{damage, base, base, base, base};
+			double[] out = new double[]{damage, base, base, base, base};
 			// TODO: reduce the damage for enchanted parts.
 			HumanEntity human = (HumanEntity) living;
 			ItemStack[] stacks = human.getInventory().getArmorContents();
@@ -183,7 +183,7 @@ public class DamageProcessor {
 	 * Just damage the armor with the result of getArmorDamage.
 	 * @param living
 	 */
-	public void applyArmorDamage( LivingEntity living, int[] armorDamage){
+	public void applyArmorDamage( LivingEntity living, double[] armorDamage){
 		if (armorDamage == null) return;
 		if (living instanceof HumanEntity){
 			HumanEntity human = (HumanEntity) living;

@@ -9,8 +9,9 @@ public class FatEntityDamageEvent extends EntityDamageEvent implements FatDamage
 
 	private final FatExplosionSpecs specs;
 
-	public FatEntityDamageEvent(Entity damagee, DamageCause cause, int damage, FatExplosionSpecs specs) {
-		super(damagee, cause, damage);
+	@SuppressWarnings("deprecation")
+	public FatEntityDamageEvent(Entity damagee, DamageCause cause, double damage, FatExplosionSpecs specs) {
+		super(damagee, cause, (int) Math.round(damage));
 		this.specs = specs;
 	}
 

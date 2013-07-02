@@ -62,13 +62,14 @@ public abstract class PriorityValue <T>{
 		}
 		else{
 			switch(eqPolicy){
-			case KEEP:
-				return;
-			case OVERRIDE:
-				value = ref.value;
-				return;
+    			case KEEP:
+    				return;
+    			case OVERRIDE:
+    				value = ref.value;
+    				return;
+    			default:
+    				onEqPriority(ref);
 			}
-			onEqPriority(ref);
 		}
 	}
 	/**
